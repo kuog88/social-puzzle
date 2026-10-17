@@ -272,6 +272,9 @@ button{font-family:inherit;cursor:pointer}
 .kit-mnemonic h4{margin:0 0 4px;color:#b07800;font-size:18px;font-weight:900}
 .kit-mnemonic p{margin:0;font-size:18px;font-weight:900;line-height:1.7}
 .badge-wrap{margin-top:10px}
+.kit-btn{border:none;background:#ffecb3;color:var(--ink);font-weight:900;font-size:15px;padding:6px 12px;border-radius:99px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.15);white-space:nowrap}
+.kit-btn:active{transform:translateY(2px)}
+.kit-sub{text-align:center;margin:0 0 10px;font-weight:700;color:var(--ink-soft)}
 .badge-wrap summary{cursor:pointer;font-weight:900;font-size:16px}
 
 .spark{position:fixed;width:12px;height:12px;border-radius:3px;pointer-events:none;z-index:2500;animation:spark .9s ease-out forwards}
@@ -308,7 +311,11 @@ button{font-family:inherit;cursor:pointer}
   .game{display:flex;flex-direction:column;min-height:0}
   .map-panel{flex:1 1 0;min-height:220px;container-type:size;padding:6px}
   .map-wrap{width:min(100cqw, 75cqh)}
-  .topbar h1{font-size:17px}
+  .topbar h1{flex:1 1 0;min-width:0;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;order:0}
+  .kit-btn{order:1;font-size:14px;padding:5px 10px}
+  .topbar .icon-btn{order:2;width:34px;height:34px}
+  .progress-wrap{order:3}
+  .score{order:4}
   .mascot{width:50px;height:50px}
   .q-title{display:none}
   .q-prompt{font-size:16px}
@@ -391,6 +398,7 @@ button{font-family:inherit;cursor:pointer}
       <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="18" aria-valuenow="0" id="progressBar"><div class="progress-fill" id="progressFill"></div></div>
     </div>
     <div class="score" aria-live="polite" id="score">⭐ <span id="scoreNum">0</span> 分</div>
+    <button class="kit-btn" id="kitBtn" aria-label="打開白話知識急救包">🩹 急救包</button>
     <button class="icon-btn" id="muteBtn" aria-label="切換音效">🔊</button>
   </header>
 
@@ -475,6 +483,17 @@ button{font-family:inherit;cursor:pointer}
     <div class="tip exam"><h3>📝 考試大重點</h3><p id="examText"></p></div>
 
     <button class="big-btn" id="nextBtn">下一題 ➜</button>
+  </div>
+</div>
+
+<!-- ===== 白話知識急救包（隨時可開） ===== -->
+<div class="overlay result" id="kitOverlay">
+  <div class="modal result-modal" role="dialog" aria-modal="true" aria-labelledby="kitTitle">
+    <h2 id="kitTitle">🩹 白話知識急救包</h2>
+    <p class="kit-sub">卡關了嗎？選一個分頁，看圖、讀口訣，馬上補元氣！</p>
+    <div class="kit-tabs" role="tablist" id="kitTabs2"></div>
+    <div class="kit-panel" role="tabpanel" id="kitPanel2"></div>
+    <button class="big-btn" id="kitCloseBtn">回到遊戲 ➜</button>
   </div>
 </div>
 
@@ -934,6 +953,9 @@ const Game = {
     $('startBtn').addEventListener('click', () => { Sound.unlock(); Sound.pick(); closeOverlay('introOverlay'); this.start(); });
     $('nextBtn').addEventListener('click', () => { Sound.pick(); this.next(); });
     $('restartBtn').addEventListener('click', () => { Sound.pick(); closeOverlay('resultOverlay'); this.start(); });
+    $('kitBtn').addEventListener('click', () => { Sound.unlock(); Sound.pick(); Kit.openAnytime(); });
+    $('kitCloseBtn').addEventListener('click', () => { Sound.pick(); closeOverlay('kitOverlay'); });
+    $('kitOverlay').addEventListener('click', e => { if (e.target.id === 'kitOverlay') closeOverlay('kitOverlay'); });
     $('muteBtn').addEventListener('click', e => {
       const m = Sound.toggle(); e.currentTarget.textContent = m ? '🔇' : '🔊'; $('mediaVideo').muted = m;
     });
@@ -1088,15 +1110,26 @@ const Kit = {
     $('diagnoseText').innerHTML = weak
       ? `探險完成！石虎發現你在<b>【${KITS[weak].name}】</b>需要多補給一點元氣喔！特地幫你準備了專屬急救包，快打開看看 👇`
       : '探險完成！你一次都沒有拖錯，真是太厲害了！三個急救包都可以再複習一次，期中考穩穩拿高分 💯';
-    $('kitTabs').innerHTML = KIT_ORDER.map(k => `<button class="kit-tab" role="tab" id="tab-${k}" data-kit="${k}" aria-selected="false">${KITS[k].tab}${k === weak ? '<span class="weak-dot">弱項</span>' : ''}</button>`).join('');
-    $('kitTabs').querySelectorAll('.kit-tab').forEach(b => b.addEventListener('click', () => { Sound.pick(); this.open(b.dataset.kit); }));
-    this.open(weak || KIT_ORDER[0]);
+    this.renderTabs('kitTabs', 'kitPanel', weak, weak || KIT_ORDER[0]);
   },
-  open(key){
+  /* 頂部「急救包」按鈕：隨時打開，先顯示目前這題所屬的分類 */
+  openAnytime(){
+    const started = !$('introOverlay').classList.contains('open');
+    const current = started ? Game.q.category : KIT_ORDER[0];
+    this.renderTabs('kitTabs2', 'kitPanel2', this.weakest(), current);
+    openOverlay('kitOverlay');
+    $('kitOverlay').querySelector('.modal').scrollTop = 0;
+  },
+  renderTabs(tabsId, panelId, weak, first){
+    $(tabsId).innerHTML = KIT_ORDER.map(k => `<button class="kit-tab" role="tab" id="${tabsId}-${k}" data-kit="${k}" aria-selected="false">${KITS[k].tab}${k === weak ? '<span class="weak-dot">弱項</span>' : ''}</button>`).join('');
+    $(tabsId).querySelectorAll('.kit-tab').forEach(b => b.addEventListener('click', () => { Sound.pick(); this.open(b.dataset.kit, tabsId, panelId); }));
+    this.open(first, tabsId, panelId);
+  },
+  open(key, tabsId = 'kitTabs', panelId = 'kitPanel'){
     const k = KITS[key];
-    $('kitTabs').querySelectorAll('.kit-tab').forEach(b => b.setAttribute('aria-selected', b.dataset.kit === key));
-    $('kitPanel').setAttribute('aria-labelledby', `tab-${key}`);
-    $('kitPanel').innerHTML = `
+    $(tabsId).querySelectorAll('.kit-tab').forEach(b => b.setAttribute('aria-selected', b.dataset.kit === key));
+    $(panelId).setAttribute('aria-labelledby', `${tabsId}-${key}`);
+    $(panelId).innerHTML = `
       <div class="infographic-box">
         <!-- 請在此替換 Kling 生成的急救包大圖 -->
         <img class="infographic-img" src="${k.img}" alt="${k.name} 圖解" onerror="this.hidden=true">
