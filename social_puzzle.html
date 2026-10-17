@@ -231,6 +231,49 @@ button{font-family:inherit;cursor:pointer}
 .badges span{display:block;font-size:22px}
 @media (min-width:600px){.badges{grid-template-columns:repeat(6,1fr)}}
 
+/* ---- 結算：弱項診斷與急救包 ---- */
+.result .modal.result-modal{width:min(100%,900px);text-align:left}
+.result-modal h2{text-align:center}
+.result-top{display:grid;grid-template-columns:1fr;gap:10px;align-items:center;margin:6px 0 10px}
+@media (min-width:640px){.result-top{grid-template-columns:200px 1fr}}
+.score-box{text-align:center;background:var(--white);border:3px solid var(--gold);border-radius:18px;padding:6px}
+.score-box .stars{font-size:34px;margin:0}
+.score-box .final-score{font-size:26px}
+.first-try{font-size:14px;font-weight:700;color:var(--ink-soft)}
+.err-stats{display:flex;flex-direction:column;gap:6px;background:var(--white);border:3px solid var(--parchment-dark);border-radius:18px;padding:10px 12px}
+.err-row{display:grid;grid-template-columns:8.6em 1fr 3.2em;align-items:center;gap:8px;font-size:15px;font-weight:700}
+.err-bar{height:14px;border-radius:99px;background:#efe3c4;overflow:hidden}
+.err-bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#ffb36b,#e8565a);transition:width .8s cubic-bezier(.3,1.2,.5,1)}
+.err-row.weak{color:var(--red)}
+.err-row b{text-align:right}
+.diagnose{display:flex;align-items:flex-end;gap:8px;margin-bottom:6px}
+.diagnose .mascot{width:72px;height:72px;flex:0 0 auto}
+.diagnose .bubble p{margin:0;font-size:clamp(16px,4vw,19px);font-weight:900;line-height:1.6}
+.diagnose .bubble b{color:var(--red)}
+.kit-heading{margin:10px 0 6px;font-size:20px;font-weight:900}
+.kit-tabs{display:flex;gap:6px;flex-wrap:wrap}
+.kit-tab{flex:1 1 140px;border:3px solid #c79a55;background:var(--parchment-dark);color:var(--ink);border-radius:16px 16px 0 0;padding:8px 6px;font-size:16px;font-weight:900;position:relative}
+.kit-tab[aria-selected="true"]{background:var(--white);border-bottom-color:var(--white);color:var(--orange-dark)}
+.kit-tab .weak-dot{position:absolute;top:-10px;right:6px;background:var(--red);color:#fff;font-size:12px;border-radius:99px;padding:1px 8px}
+.kit-panel{background:var(--white);border:3px solid #c79a55;border-radius:0 0 18px 18px;padding:12px;margin-top:-3px}
+.kit-intro{font-size:18px;font-weight:900;margin:8px 0;line-height:1.6}
+.infographic-box{position:relative;border-radius:16px;overflow:hidden;border:3px solid var(--ink);aspect-ratio:4/3;background:linear-gradient(135deg,#f7e2ad,#e9cf93)}
+.infographic-img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.infographic-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;font-weight:900;color:var(--ink-soft);padding:12px}
+.infographic-ph span{font-size:48px}
+.kit-cards{display:grid;grid-template-columns:1fr;gap:10px;margin-top:10px}
+@media (min-width:700px){.kit-cards{grid-template-columns:1fr 1fr}}
+.kit-card{background:#fffaf0;border:2px solid var(--parchment-dark);border-left:8px solid var(--kc,#ffc94a);border-radius:14px;padding:10px 12px}
+.kit-card h4{margin:0 0 4px;font-size:18px;font-weight:900}
+.kit-card p,.kit-card li{margin:0;font-size:16px;line-height:1.7}
+.kit-card ul{margin:4px 0 0;padding-left:1.2em}
+.kit-card b{color:#c2410c}
+.kit-mnemonic{margin-top:10px;background:#fff6d6;border:3px dashed var(--gold);border-radius:16px;padding:10px 14px}
+.kit-mnemonic h4{margin:0 0 4px;color:#b07800;font-size:18px;font-weight:900}
+.kit-mnemonic p{margin:0;font-size:18px;font-weight:900;line-height:1.7}
+.badge-wrap{margin-top:10px}
+.badge-wrap summary{cursor:pointer;font-weight:900;font-size:16px}
+
 .spark{position:fixed;width:12px;height:12px;border-radius:3px;pointer-events:none;z-index:2500;animation:spark .9s ease-out forwards}
 @keyframes spark{to{transform:translate(var(--dx),var(--dy)) rotate(540deg) scale(.3);opacity:0}}
 
@@ -385,7 +428,7 @@ button{font-family:inherit;cursor:pointer}
 
     <!-- 拼圖碎片區 -->
     <section class="panel pieces-panel" aria-label="拼圖碎片區">
-      <h2 class="pieces-title">🧩 拼圖碎片區<small>按住拼圖拖到地圖上發光的插槽（也可以先點拼圖、再點插槽）</small></h2>
+      <h2 class="pieces-title">🧩 拼圖碎片區<small>按住拼圖，直接拖到地圖上發光的插槽！</small></h2>
       <div class="pieces" id="pieces"></div>
     </section>
   </main>
@@ -437,13 +480,30 @@ button{font-family:inherit;cursor:pointer}
 
 <!-- ===== 結算畫面 ===== -->
 <div class="overlay result" id="resultOverlay">
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
-    <svg class="mascot" aria-hidden="true"><use href="#leopardCat"/></svg>
+  <div class="modal result-modal" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
     <h2 id="resultTitle">🏆 探險完成！</h2>
-    <div class="stars" id="stars">⭐⭐⭐</div>
-    <div class="final-score" id="finalScore">0 分</div>
-    <p id="resultMsg"></p>
-    <div class="badges" id="badges"></div>
+    <div class="result-top">
+      <div class="score-box">
+        <div class="stars" id="stars">⭐⭐⭐</div>
+        <div class="final-score" id="finalScore">0 分</div>
+        <div class="first-try" id="resultMsg"></div>
+      </div>
+      <!-- 弱項診斷：錯誤次數長條 -->
+      <div class="err-stats" id="errStats" aria-label="各類別拖錯次數"></div>
+    </div>
+
+    <!-- 石虎診斷對話 -->
+    <div class="diagnose">
+      <svg class="mascot" aria-hidden="true"><use href="#leopardCat"/></svg>
+      <div class="bubble"><p id="diagnoseText"></p></div>
+    </div>
+
+    <!-- 白話知識急救包：三個分頁 -->
+    <h3 class="kit-heading">🩹 白話知識急救包</h3>
+    <div class="kit-tabs" role="tablist" id="kitTabs"></div>
+    <div class="kit-panel" role="tabpanel" id="kitPanel"></div>
+
+    <details class="badge-wrap"><summary>🏅 看我收集到的 18 塊知識拼圖</summary><div class="badges" id="badges"></div></details>
     <button class="big-btn green" id="restartBtn">🔁 再玩一次</button>
   </div>
 </div>
@@ -509,126 +569,126 @@ const PIECES = {
    ========================================================= */
 const U1 = '單元一：臺灣我來了', U2 = '單元二：島嶼上的生活樣貌';
 const QUESTIONS = [
-  { unit:U1, title:'板塊推擠與臺灣誕生', prompt:'臺灣這座島嶼是怎麼從海裡冒出來的呢？',
+  { category:'terrain', unit:U1, title:'板塊推擠與臺灣誕生', prompt:'臺灣這座島嶼是怎麼從海裡冒出來的呢？',
     target:'整座臺灣島的正中央', slot:{type:'core', lon:120.95, lat:23.75},
     answer:'plates', distractors:['glacier','volcano','coral','mountain'],
     mnemonic:'兩塊大板塊用力擠，臺灣從海裡被「擠」出來！就像兩手推桌布，中間會拱起一座山。',
     reason:'臺灣位在環太平洋地震帶上，數百萬年前【歐亞板塊】與【菲律賓海板塊】激烈推擠，把海底的地層高高抬升，形成高聳的中央山脈與整座臺灣島！',
     media:'videos/kling_01_plates.mp4', scene:'🌊➡️⛰️⬅️🌊', bg:'linear-gradient(135deg,#1c6e9c,#5fb7d4)',
     kling:'海底視角，歐亞板塊與菲律賓海板塊像兩塊巨大岩層擠壓，海底地表隆起升出海面變成中央山脈。' },
-  { id:9, unit:U1, title:'海域方位', prompt:'臺灣被四座海洋包圍，位於臺灣「西方」、隔著淺海與中國大陸相望的是哪個海域？',
+  { id:9, category:'geo_coords', unit:U1, title:'海域方位', prompt:'臺灣被四座海洋包圍，位於臺灣「西方」、隔著淺海與中國大陸相望的是哪個海域？',
     target:'臺灣西方海域插槽', slot:{type:'ocean', dir:'W'},
     answer:'strait', distractors:['pacific','bashi','eastsea'],
     mnemonic:'東太、西海峽、南巴士、北東海！',
     reason:'臺灣西方是淺平的【臺灣海峽】；東方是深邃浩瀚的【太平洋】；南方是通往菲律賓的【巴士海峽】；北方則是【東海】。方位與海域配對是期中考大熱門！',
     media:'videos/kling_09_strait.mp4', scene:'🌊⛵🌬️', bg:'linear-gradient(135deg,#0d5c8f,#5fb7d4)',
     kling:'Aerial drone shot over Taiwan Strait, calm blue-green shallow sea, gentle waves, western Taiwan coastline with coastal windmills, sunset reflection, cinematic realistic.' },
-  { id:10, unit:U1, title:'緯線拆解：北回歸線', prompt:'像一條隱形皮帶橫跨臺灣腰部，劃分熱帶與副熱帶氣候的特殊緯線是？',
+  { id:10, category:'geo_coords', unit:U1, title:'緯線拆解：北回歸線', prompt:'像一條隱形皮帶橫跨臺灣腰部，劃分熱帶與副熱帶氣候的特殊緯線是？',
     target:'臺灣腰部橫線（嘉義、花蓮）', slot:{type:'belt', lat:23.5},
     answer:'tropic', distractors:['equator','prime','capricorn'],
     mnemonic:'緯線是「樓層」看冷熱，北回歸線就是繫在臺灣腰上的溫熱分界皮帶！',
     reason:'【北回歸線（北緯 23.5 度）】橫穿嘉義水上鄉與花蓮瑞穗。這條線以南屬於【熱帶氣候】；以北則屬於【副熱帶氣候】，是劃分氣候的關鍵界線！',
     media:'videos/kling_10_tropic.mp4', scene:'🌍🎗️☀️', bg:'linear-gradient(135deg,#b86b00,#ffc94a)',
     kling:'Educational 3D globe animation showing Taiwan island, glowing golden line indicating Tropic of Cancer (23.5°N) slicing across Chiayi and Hualien, dividing tropical and subtropical zones, high-tech map aesthetic.' },
-  { id:11, unit:U1, title:'經度坐標', prompt:'地球上的經線像切西瓜的花紋，臺灣本島主要分布在東經幾度之間？',
+  { id:11, category:'geo_coords', unit:U1, title:'經度坐標', prompt:'地球上的經線像切西瓜的花紋，臺灣本島主要分布在東經幾度之間？',
     target:'地圖上方的經度坐標欄', slot:{type:'coord'},
     answer:'e120', distractors:['w120','e22','n120'],
     mnemonic:'經線是切西瓜的紋路、也像門牌號碼，臺灣住在東半球 120 到 122 號！',
     reason:'從英國格林威治（0 度本初子午線）往東數，臺灣坐落在東半球【東經 120°～122°】；由赤道（0 度）往北數，落在北半球【北緯 22°～25°】。',
     media:'videos/kling_11_coord.mp4', scene:'🍉🌐📍', bg:'linear-gradient(135deg,#1f3a8a,#4f8ef7)',
     kling:'Futuristic 3D digital globe showing glowing coordinate grid lines, focusing on Taiwan island highlighted by coordinates East 120 to 122 degrees, high-tech educational aesthetic.' },
-  { unit:U1, title:'臺灣的五大地形之最', prompt:'地勢最高、起伏最大，像島嶼綠色脊梁的是哪種地形？',
+  { category:'terrain', unit:U1, title:'臺灣的五大地形之最', prompt:'地勢最高、起伏最大，像島嶼綠色脊梁的是哪種地形？',
     target:'中央山脈', slot:{type:'terrain', lon:121.05, lat:24.05},
     answer:'mountain', distractors:['plain','basin','hill','tableland'],
     mnemonic:'中央山脈是臺灣的脊椎骨，3000 公尺高山兩百多座，佔全島約三分之一！',
     reason:'臺灣超過 3000 公尺的高山有兩百多座，【山地】面積佔了全島將近三分之一，也是很多珍貴動植物的家。',
     media:'videos/kling_02_mountain.mp4', scene:'☁️🏔️☁️', bg:'linear-gradient(135deg,#2b8a50,#9fd786)',
     kling:'俯瞰空拍視角，雲霧在青翠陡峭的山脊間流動，陽光照射在玉山主峰的高聳岩壁上。' },
-  { id:12, unit:U1, title:'地形：盆地', prompt:'周圍地勢較高、中間平坦低窪，像個大臉盆一樣的地形是哪一種？',
+  { id:12, category:'terrain', unit:U1, title:'地形：盆地', prompt:'周圍地勢較高、中間平坦低窪，像個大臉盆一樣的地形是哪一種？',
     target:'北部（臺北）', slot:{type:'terrain', lon:121.53, lat:25.03},
     answer:'basin', distractors:['plain','tableland','hill'],
     mnemonic:'周圍高高、中間低平，像個臉盆裝滿家園！',
     reason:'四周被山嶺或丘陵環抱、中間低窪的地形稱為【盆地】。例如【臺北盆地】以前曾是個古湖泊，後來湖水流出才演變成現在繁榮的大都會！中部還有臺中盆地、埔里盆地。',
     media:'videos/kling_12_basin.mp4', scene:'⛰️🏙️⛰️', bg:'linear-gradient(135deg,#3d6b4a,#a5d6a7)',
     kling:'Sweeping aerial cinematic view of Taipei Basin surrounded by lush green mountains, flat metropolitan basin in the center with light morning mist, educational landscape.' },
-  { id:13, unit:U1, title:'地形：丘陵', prompt:'高度在 100 到 1000 公尺之間，起伏平緩、排水良好，苗栗盛產茶葉與水果的是什麼地形？',
+  { id:13, category:'terrain', unit:U1, title:'地形：丘陵', prompt:'高度在 100 到 1000 公尺之間，起伏平緩、排水良好，苗栗盛產茶葉與水果的是什麼地形？',
     target:'桃竹苗沿山地帶', slot:{type:'terrain', lon:120.92, lat:24.52},
     answer:'hill', distractors:['mountain','plain','tableland'],
     mnemonic:'坡度平緩小山丘，排水良好種茶果！',
     reason:'【丘陵】高度約 100～1000 公尺，坡度比高山緩和，排水良好不易積水，非常適合開闢階梯茶園與種植柑橘等果樹。苗栗、新竹有非常多丘陵地形。',
     media:'videos/kling_13_hill.mp4', scene:'🌄🍵🍊', bg:'linear-gradient(135deg,#5a8f29,#c5e1a5)',
     kling:'Rolling green hills in Miaoli Taiwan with terraced tea plantations, gentle slopes, bright sunny morning, farmers hand-picking tea leaves, peaceful natural scenery.' },
-  { id:14, unit:U1, title:'史前時代——長濱文化', prompt:'臺灣已知最古老的人類文化！在臺東八仙洞海蝕洞穴裡發現，只會敲打石頭的是？',
+  { id:14, category:'culture_history', unit:U1, title:'史前時代——長濱文化', prompt:'臺灣已知最古老的人類文化！在臺東八仙洞海蝕洞穴裡發現，只會敲打石頭的是？',
     target:'臺東長濱八仙洞挖掘坑', slot:{type:'arch', lon:121.47, lat:23.35},
     answer:'changbin', distractors:['yuanshan','beinan','dabenkeng'],
     mnemonic:'長濱最老住海蝕洞，敲打石頭打野獸！',
     reason:'【長濱文化】是臺灣目前已知最古老的【舊石器時代】文化。他們住在天然海蝕洞裡、懂得用火，只會用石頭敲擊做出粗糙的【打製石器】，靠採集與狩獵維生，還不會農耕與燒陶！',
     media:'videos/kling_14_changbin.mp4', scene:'🕳️🔥🪨', bg:'linear-gradient(135deg,#4e342e,#a1887f)',
     kling:'Cinematic shot of ancient Paleolithic cave dwellers inside Baxiandong sea cave in Taitung, cavemen around campfire, striking stones to make chipped tools, waves visible outside.' },
-  { unit:U1, title:'史前時代——圓山文化', prompt:'在臺北盆地發現了大量古人吃剩的貝殼堆，這是哪裡？',
+  { category:'culture_history', unit:U1, title:'史前時代——圓山文化', prompt:'在臺北盆地發現了大量古人吃剩的貝殼堆，這是哪裡？',
     target:'臺北圓山挖掘坑', slot:{type:'arch', lon:121.52, lat:25.07},
     answer:'yuanshan', distractors:['beinan','shisanhang','changbin','dabenkeng'],
     mnemonic:'圓山人愛吃貝，吃完的貝殼堆成小山，就叫「貝塚」！',
     reason:'【新石器時代】的圓山人住在淡水河邊與臺北湖畔，他們除了種田捕魚，還特別喜歡吃貝類，留下了厚厚一層像小山一樣的【貝塚】，也會使用【磨製石器】！',
     media:'videos/kling_03_yuanshan.mp4', scene:'🛖🐚🐚🐚', bg:'linear-gradient(135deg,#8b5a2b,#e2b46b)',
     kling:'遠古臺北湖畔，史前居民在草屋旁將吃完的貝殼傾倒成巨大貝塚，手裡拿著磨製平整的石錛。' },
-  { unit:U1, title:'史前時代——卑南文化', prompt:'東臺灣出土了面向都蘭山的石板棺與精緻玉器，是哪個文化？',
+  { category:'culture_history', unit:U1, title:'史前時代——卑南文化', prompt:'東臺灣出土了面向都蘭山的石板棺與精緻玉器，是哪個文化？',
     target:'臺東卑南遺址挖掘坑', slot:{type:'arch', lon:121.08, lat:22.8},
     answer:'beinan', distractors:['yuanshan','shisanhang','changbin','dabenkeng'],
     mnemonic:'卑南玉器美，石板做棺木，埋在家底下守護全家！',
     reason:'卑南文化是【新石器時代晚期】聚落，他們會製作非常美麗的【玉玦】和玉飾，並用長長的石板做成【石板棺】，埋葬在房子底下，代表家族長存。',
     media:'videos/kling_04_beinan.mp4', scene:'💚⬛⬛⛰️', bg:'linear-gradient(135deg,#1f7a6a,#7fd1b9)',
     kling:'台東卑南聚落，工匠手拿琢磨透光的翠綠玉玦（耳飾），背景是整齊排列、朝向都蘭山的長條石板棺。' },
-  { unit:U1, title:'鐵器時代——十三行文化', prompt:'住在淡水河口，會生火煉鐵，還戴著美麗外來玻璃珠的是？',
+  { category:'culture_history', unit:U1, title:'鐵器時代——十三行文化', prompt:'住在淡水河口，會生火煉鐵，還戴著美麗外來玻璃珠的是？',
     target:'新北八里挖掘坑', slot:{type:'arch', lon:121.38, lat:25.18},
     answer:'shisanhang', distractors:['yuanshan','beinan','changbin','dabenkeng'],
     mnemonic:'十三行會煉鐵，玻璃珠是從海上「買」來的！',
     reason:'臺灣史前人類邁入【金屬器時代】！十三行人已經懂得用高溫熔爐【煉鐵】製作工具，還透過【海上貿易】換到來自東南亞和中國的玻璃珠與瓷器。',
     media:'videos/kling_05_shisanhang.mp4', scene:'🔥⚒️🔮', bg:'linear-gradient(135deg,#9c2f1a,#ff9a4a)',
     kling:'八里海岸邊，石造圓形煉鐵爐火光閃爍，火星四濺，桌面上擺著透光的彩色玻璃珠與幾何印紋陶罐。' },
-  { unit:U2, title:'海洋文化與飛魚——達悟族', prompt:'住在孤懸海上的蘭嶼，不靠一根鐵釘打造美麗拼板舟的族群是？',
+  { category:'culture_history', unit:U2, title:'海洋文化與飛魚——達悟族', prompt:'住在孤懸海上的蘭嶼，不靠一根鐵釘打造美麗拼板舟的族群是？',
     target:'蘭嶼圖騰柱', slot:{type:'tribe', lon:121.55, lat:22.05},
     answer:'tao', distractors:['paiwan','amis','atayal','bunun'],
     mnemonic:'蘭嶼達悟划拼板舟，飛魚來了不亂抓！',
     reason:'【達悟族】與黑潮海洋緊密共存，春天飛魚汛期來臨時會舉行隆重的【飛魚祭】，建造美麗的【拼板舟】出海，並遵守不過度捕撈的海洋保育智慧。',
     media:'videos/kling_06_tao.mp4', scene:'🐟🛶🌊🐟', bg:'linear-gradient(135deg,#0d5c8f,#4fc3e8)',
     kling:'藍天碧海的蘭嶼海岸，紅黑白雕紋的拼板舟衝向浪花，成群飛魚在蔚藍海面上滑翔跳躍。' },
-  { unit:U2, title:'石板屋與階級制度——排灣族／魯凱族', prompt:'就地取材用黑灰色的板岩堆砌成冬暖夏涼的石板屋，具有嚴格階級的是？',
+  { category:'culture_history', unit:U2, title:'石板屋與階級制度——排灣族／魯凱族', prompt:'就地取材用黑灰色的板岩堆砌成冬暖夏涼的石板屋，具有嚴格階級的是？',
     target:'南部山區圖騰柱', slot:{type:'tribe', lon:120.72, lat:22.5},
     answer:'paiwan', distractors:['tao','amis','atayal','saisiyat'],
     mnemonic:'石板屋冬暖夏涼，百步蛇是祖靈守護神！',
     reason:'南部山區的排灣族與魯凱族有【貴族與平民階級】，藝術天份極高。他們將【百步蛇】視為祖靈象徵，並用劈切平整的石板搭建出堅固抗風的【石板屋】。',
     media:'videos/kling_07_paiwan.mp4', scene:'🌲🏠🐍🌲', bg:'linear-gradient(135deg,#3a3a3a,#8a8f7a)',
     kling:'靜謐的高山林間，黑色板岩堆疊的矮屋，門楣上刻著百步蛇與人頭紋飾，陽光穿過石板縫隙。' },
-  { unit:U2, title:'母系社會與年齡階級——阿美族', prompt:'在花東縱谷生活，由女性繼承財產與家長地位，男性負責部落防禦的是？',
+  { category:'culture_history', unit:U2, title:'母系社會與年齡階級——阿美族', prompt:'在花東縱谷生活，由女性繼承財產與家長地位，男性負責部落防禦的是？',
     target:'花東縱谷圖騰柱', slot:{type:'tribe', lon:121.38, lat:23.62},
     answer:'amis', distractors:['tao','paiwan','bunun','atayal'],
     mnemonic:'阿美族人口最多，媽媽當家、男生守部落！',
     reason:'【阿美族】是臺灣人口最多的原住民族，傳統上行【母系社會】，婚姻採招贅制；而部落中的男性則依照嚴格的【年齡階級】接受訓練，分工合作守護家園。',
     media:'videos/kling_08_amis.mp4', scene:'💃🪶🕺🪶💃', bg:'linear-gradient(135deg,#b3202a,#ff7a59)',
     kling:'盛大的集會場上，族人身穿鮮豔紅黑傳統服飾與羽毛頭飾，手牽手圍成圓圈踏步齊唱，節奏歡快。' },
-  { id:15, unit:U2, title:'原住民族——邵族', prompt:'相傳祖先追逐白鹿來到日月潭定居，利用長短木杵敲擊石板演奏優美杵音的是？',
+  { id:15, category:'culture_history', unit:U2, title:'原住民族——邵族', prompt:'相傳祖先追逐白鹿來到日月潭定居，利用長短木杵敲擊石板演奏優美杵音的是？',
     target:'南投日月潭圖騰柱', slot:{type:'tribe', lon:120.91, lat:23.86},
     answer:'thao', distractors:['bunun','seediq','atayal'],
     mnemonic:'追逐白鹿到湖畔，邵族杵音傳潭面！',
     reason:'【邵族】世居南投【日月潭】畔，除了追逐白鹿定居的美麗傳說外，婦女以長短不同的木杵敲擊石板發出抑揚頓挫的【杵音】，是臺灣非常具代表性的無形文化資產。',
     media:'videos/kling_15_thao.mp4', scene:'🦌🌊🥁', bg:'linear-gradient(135deg,#2e6f8e,#9ad0e0)',
     kling:'Sun Moon Lake misty morning, traditional Thao indigenous women in colorful garments playing rhythmic pestle music against stone slabs, wooden canoes, cultural serene.' },
-  { id:16, unit:U2, title:'原住民族——布農族', prompt:'深居中央山脈高山，以舉世聞名的「八部合音」祈求小米豐收、舉行打耳祭的是哪一族？',
+  { id:16, category:'culture_history', unit:U2, title:'原住民族——布農族', prompt:'深居中央山脈高山，以舉世聞名的「八部合音」祈求小米豐收、舉行打耳祭的是哪一族？',
     target:'中央山脈高山圖騰柱', slot:{type:'tribe', lon:121.08, lat:23.3},
     answer:'bunun', distractors:['tsou','puyuma','paiwan'],
     mnemonic:'八部合音震高山，打耳祭典練勇氣！',
     reason:'【布農族】是典型的高山民族。每年為了祈求小米豐收，男子會圍成圓圈齊唱震撼世界的【八部合音】；此外，傳授狩獵技巧與勇氣的【打耳祭】也是他們的代表祭典！',
     media:'videos/kling_16_bunun.mp4', scene:'🎶🏔️🌾', bg:'linear-gradient(135deg,#33691e,#9ccc65)',
     kling:'Indigenous Bunun men wearing traditional woven vests singing in a tight sacred circle under towering Taiwan cypress trees, Pasibutbut eight-part polyphony atmosphere, cinematic mist.' },
-  { id:17, unit:U2, title:'原住民族——泰雅族', prompt:'以精湛編織技術聞名，男子需擅獵、女子需擅織才能在臉上刻下「紋面」的是？',
+  { id:17, category:'culture_history', unit:U2, title:'原住民族——泰雅族', prompt:'以精湛編織技術聞名，男子需擅獵、女子需擅織才能在臉上刻下「紋面」的是？',
     target:'北部與中部山區圖騰柱', slot:{type:'tribe', lon:121.3, lat:24.62},
     answer:'atayal', distractors:['amis','tao','rukai'],
     mnemonic:'紋面通過彩虹橋，織布精巧獵術高！',
     reason:'【泰雅族】以【紋面】著稱。紋面是成年的榮譽標章，代表男子勇猛、女子織布技藝精巧。他們相信死後靈魂必須經過【彩虹橋】，唯有紋面的勇者與能幹女子才能順利通過回到祖靈身邊。',
     media:'videos/kling_17_atayal.mp4', scene:'🧵🌈🏹', bg:'linear-gradient(135deg,#8e1b1b,#e57373)',
     kling:'Close-up portrait of an Atayal woman skillfully operating a traditional floor loom, weaving vibrant red geometric patterns, proud facial tattoos, warm interior hut lighting.' },
-  { id:18, unit:U2, title:'原住民族——鄒族', prompt:'居住在阿里山一帶，部落設有神聖的「庫巴（Kuba，男子會所）」且舉行戰祭的是？',
+  { id:18, category:'culture_history', unit:U2, title:'原住民族——鄒族', prompt:'居住在阿里山一帶，部落設有神聖的「庫巴（Kuba，男子會所）」且舉行戰祭的是？',
     target:'嘉義阿里山圖騰柱', slot:{type:'tribe', lon:120.78, lat:23.5},
     answer:'tsou', distractors:['paiwan','saisiyat','seediq'],
     mnemonic:'阿里山上有鄒族，庫巴會所迎戰祭！',
@@ -636,6 +696,67 @@ const QUESTIONS = [
     media:'videos/kling_18_tsou.mp4', scene:'🛖🔥🌳', bg:'linear-gradient(135deg,#6d4c41,#d7a86e)',
     kling:'Traditional Tsou sacred Kuba meeting hall with high thatched roof in Alishan, ceremonial sacred tree outside, warriors in red tunics around sacred hearth, documentary aesthetic.' }
 ];
+
+/* =========================================================
+   B-2. 三大弱項白話知識急救包
+   img：請在此替換 Kling 生成的急救包大圖（assets/ 資料夾）
+   ========================================================= */
+const KITS = {
+  geo_coords: {
+    tab:'🌐 經緯度與海域', name:'經緯度與海域方位', img:'assets/kit_geo.jpg', ph:'🌐🎗️🌊',
+    intro:'經緯度其實就是地球上的「門牌」和「溫度計」啦！',
+    cards:[
+      {icon:'🎗️', title:'緯線看冷熱（橫著走）', color:'#ffc94a', html:`<ul>
+        <li>地球肚子最鼓的地方叫<b>赤道（0 度）</b>，太陽天天直曬，熱得要命！</li>
+        <li>往北爬到第 23.5 樓，就是橫穿臺灣腰部的<b>北回歸線</b>，剛好切過嘉義水上鄉和花蓮瑞穗。</li>
+        <li>皮帶以南（高雄、屏東、墾丁）：天天穿短袖的<b>熱帶</b>！</li>
+        <li>皮帶以北（臺中、臺北）：冬天要穿外套的<b>副熱帶</b>！</li></ul>`},
+      {icon:'🍉', title:'經線看門牌（直著切）', color:'#3fae6a', html:`<p>經線像把西瓜切成一瓣一瓣。從英國的 0 號門牌（<b>本初子午線</b>）往東數，數到第 120 到 122 條紋路，就是臺灣的家——<b>東經 120°～122°</b>！</p>`},
+      {icon:'🌊', title:'身邊四個海（順口溜一定要背）', color:'#5fb7d4', html:`<ul>
+        <li>右邊（東）：又大又深的<b>太平洋</b>，可以看日出、賞鯨豚。</li>
+        <li>左邊（西）：隔著看對岸的淺淺<b>臺灣海峽</b>，海邊有很多風力發電風車。</li>
+        <li>下面（南）：往菲律賓去的<b>巴士海峽</b>，想像開著巴士往南走！</li>
+        <li>上面（北）：往日本方向的<b>東海</b>。</li></ul>`}
+    ],
+    mnemonic:'緯線橫著看冷熱，經線直著看門牌；東太、西海峽、南巴士、北東海！'
+  },
+  terrain: {
+    tab:'⛰️ 五大地形', name:'臺灣五大地形', img:'assets/kit_terrain.jpg', ph:'⛰️🌄🍵🌾🥣',
+    intro:'別死背高度！想像一下桌上的餐盤和點心，五大地形長這樣：',
+    cards:[
+      {icon:'⛰️', title:'山地：高聳的綠色大竹筍', color:'#2b8a50', html:`<p>高度超過 <b>1000 公尺</b>，坡度超陡。中央山脈就像整座島的背脊骨，超過 3000 公尺的高山有兩百多座！</p>`},
+      {icon:'🌄', title:'丘陵：波浪起伏的小饅頭', color:'#8bc34a', html:`<p>高度在 <b>100～1000 公尺</b>，比山矮、坡度順很多。水不會積在上面，苗栗、新竹的人最愛拿來<b>種茶葉和採橘子</b>。</p>`},
+      {icon:'🍵', title:'臺地：四方平頂的桌子', color:'#c0634a', html:`<p>周圍是斜坡，但上面像桌面一樣<b>又平又高</b>（例如桃園臺地、林口臺地），常見<b>紅紅的泥土</b>。</p>`},
+      {icon:'🌾', title:'平原：一望無際的綠色大地毯', color:'#ffc94a', html:`<p>高度<b>不到 100 公尺</b>，踩上去平平的。河川帶來的泥土堆成肥沃的<b>嘉南平原</b>，是臺灣最重要的糧倉，專門種稻米！</p>`},
+      {icon:'🥣', title:'盆地：周圍翹起來的洗臉盆', color:'#5fb7d4', html:`<p>外面一整圈都是山，<b>中間陷下去平平的</b>。像臺北盆地、臺中盆地，在很久很久以前甚至是大湖泊喔！</p>`}
+    ],
+    mnemonic:'山地高竹筍、丘陵小饅頭、臺地平桌子、平原大地毯、盆地洗臉盆！'
+  },
+  culture_history: {
+    tab:'🏺 史前文化與原住民', name:'史前文化與原住民分布', img:'assets/kit_culture.jpg', ph:'🪨🐚💚⚒️🛶',
+    intro:'用時間軸抓寶物！史前時代其實只要記四個人，再認識原住民朋友的拿手絕活：',
+    cards:[
+      {icon:'🪨', title:'老祖宗長濱（舊石器）', color:'#8d6e63', html:`<p>住在臺東<b>八仙洞</b>，只會敲碎石頭做<b>打製石器</b>，肚子餓就採野果、打獵，連種田跟陶碗都還不會做！</p>`},
+      {icon:'🐚', title:'海鮮吃貨圓山（新石器）', color:'#e2b46b', html:`<p>住在臺北淡水河邊，超愛吃貝類，吃完的殼堆成像山一樣的<b>貝塚</b>，還會磨出很平滑的<b>磨製石器</b>。</p>`},
+      {icon:'💚', title:'玉器藝術家卑南（新石器晚期）', color:'#3fae6a', html:`<p>住在臺東，超會磨漂亮的綠色<b>玉玦</b>（玉耳飾），過世後睡在長石板做的<b>石板棺</b>裡，方向還朝向都蘭山！</p>`},
+      {icon:'⚒️', title:'鐵匠大商人十三行（金屬器）', color:'#e8565a', html:`<p>住在新北八里淡水河口，會生火蓋爐子<b>煉鐵</b>，還出海跟外國人做生意，換回閃亮亮的<b>彩色玻璃珠</b>。</p>`},
+      {icon:'🛶', title:'原住民朋友的拿手絕活（上）', color:'#5fb7d4', html:`<ul>
+        <li><b>達悟族</b>（蘭嶼）：不用一根釘子拼出紅黑白拼板舟，跟飛魚做好朋友。</li>
+        <li><b>排灣族／魯凱族</b>（南部山區）：用板岩疊成冬暖夏涼的石板屋，崇敬百步蛇。</li>
+        <li><b>阿美族</b>（花東縱谷）：母系社會（媽媽當家），夏天手牽手跳豐年祭。</li></ul>`},
+      {icon:'🎶', title:'原住民朋友的拿手絕活（下）', color:'#8a5cc7', html:`<ul>
+        <li><b>布農族</b>（中央山脈）：男子圍圈唱出驚豔世界的八部合音，還有打耳祭。</li>
+        <li><b>泰雅族</b>（北部山區）：女生會織布、男生會打獵才能紋面，死後跨過彩虹橋。</li>
+        <li><b>邵族</b>（日月潭）：相傳追白鹿而來，婦女敲木杵發出清脆的杵音。</li>
+        <li><b>鄒族</b>（阿里山）：部落有男子會所「庫巴」，舉行莊嚴的戰祭。</li></ul>`}
+    ],
+    mnemonic:'長濱敲石頭、圓山吃貝殼、卑南磨玉器、十三行煉鐵！'
+  }
+};
+const KIT_ORDER = ['geo_coords', 'terrain', 'culture_history'];
+
+/* 弱項診斷：每拖錯一次，該題分類 +1 */
+let errorStats = { geo_coords: 0, terrain: 0, culture_history: 0 };
 
 const PIECE_COLORS = ['#ffd36e','#9fe0b5','#a9d3ff','#ffb3c1'];
 const SCORE_BY_TRY = [100, 60, 30, 10];
@@ -758,8 +879,6 @@ const Slots = {
       }).join('');
     }
     $('slotLayer').innerHTML = html;
-    const t = $('slotTarget');
-    t.addEventListener('click', () => { if (Game.selected) Game.attempt(Game.selected); });
   },
 
   /* 拼對之後：點亮插槽、顯示答案 */
@@ -809,7 +928,7 @@ const Slots = {
    G. 遊戲主程式
    ========================================================= */
 const Game = {
-  order: [], index: 0, score: 0, tries: 0, firstTry: 0, locked: false, selected: null,
+  order: [], index: 0, score: 0, tries: 0, firstTry: 0, locked: false,
 
   init(){
     $('startBtn').addEventListener('click', () => { Sound.unlock(); Sound.pick(); closeOverlay('introOverlay'); this.start(); });
@@ -823,6 +942,7 @@ const Game = {
   start(){
     this.order = QUESTIONS.map((_, i) => i);   // 依課本順序；想隨機可改成 shuffle(...)
     this.index = 0; this.score = 0; this.firstTry = 0;
+    errorStats = { geo_coords: 0, terrain: 0, culture_history: 0 };
     $('scoreNum').textContent = 0;
     this.render();
   },
@@ -831,7 +951,7 @@ const Game = {
 
   render(){
     const q = this.q, total = QUESTIONS.length;
-    this.tries = 0; this.locked = false; this.selected = null;
+    this.tries = 0; this.locked = false;
     $('progressLabel').textContent = `第 ${this.index + 1} / ${total} 關`;
     $('progressFill').style.width = `${(this.index / total) * 100}%`;
     $('progressBar').setAttribute('aria-valuenow', this.index);
@@ -862,17 +982,15 @@ const Game = {
     });
   },
 
-  select(el){
-    const t = $('slotTarget');
-    if (this.selected) this.selected.classList.remove('selected');
-    if (this.selected === el) { this.selected = null; t.classList.remove('armed'); return; }
-    this.selected = el; el.classList.add('selected'); t.classList.add('armed');
+  /* 只點一下沒有拖：提醒要用拖的 */
+  dragTip(el){
+    restartAnim(el, 'wrong');
+    showToast('<b>要用拖的喔！</b>按住拼圖不要放，拖到地圖上發光的插槽再放開 👆');
   },
 
-  /* 點選 / 鍵盤：拼圖飛到插槽再判斷 */
+  /* 鍵盤（無障礙）：拼圖飛到插槽再判斷 */
   async attempt(el){
     if (this.locked || el.classList.contains('tried')) return;
-    el.classList.remove('selected'); this.selected = null; $('slotTarget').classList.remove('armed');
     this.locked = true;
     el.classList.add('flying');
     const off = Drag.offsetToSlot(el);
@@ -913,6 +1031,7 @@ const Game = {
   },
 
   onWrong(el){
+    errorStats[this.q.category]++;
     Sound.wrong();
     el.style.transition = ''; el.style.transform = '';
     el.classList.add('tried'); el.setAttribute('aria-disabled', 'true');
@@ -945,8 +1064,47 @@ const Game = {
     $('finalScore').textContent = `${this.score} / ${total * 100} 分`;
     $('resultMsg').textContent = ['', '探險完成！再玩一次，一定能拿更多星星！', '好厲害！你已經是小小探險家了！', '太神啦！你是臺灣知識大師，期中考穩穩der！'][stars] + `（一次答對 ${this.firstTry} 題）`;
     $('badges').innerHTML = QUESTIONS.map(q => { const p = PIECES[q.answer]; return `<div><span>${p.icon}</span>${p.text}</div>`; }).join('');
+    Kit.showResult();
     Sound.fanfare(); openOverlay('resultOverlay');
+    $('resultOverlay').querySelector('.modal').scrollTop = 0;
     for (let i = 0; i < 4; i++) setTimeout(() => confetti(), i * 300);
+  }
+};
+
+/* =========================================================
+   G-2. 結算：弱項診斷 + 急救包分頁
+   ========================================================= */
+const Kit = {
+  weakest(){
+    const max = Math.max(...KIT_ORDER.map(k => errorStats[k]));
+    return max === 0 ? null : KIT_ORDER.find(k => errorStats[k] === max);
+  },
+  showResult(){
+    const weak = this.weakest();
+    const max = Math.max(1, ...KIT_ORDER.map(k => errorStats[k]));
+    $('errStats').innerHTML = '<div style="font-weight:900">🔍 拖錯次數小調查</div>' + KIT_ORDER.map(k => `
+      <div class="err-row ${k === weak ? 'weak' : ''}"><span>${KITS[k].tab.split(' ')[1]}</span>
+        <span class="err-bar"><i style="width:${errorStats[k] / max * 100}%"></i></span><b>${errorStats[k]} 次</b></div>`).join('');
+    $('diagnoseText').innerHTML = weak
+      ? `探險完成！石虎發現你在<b>【${KITS[weak].name}】</b>需要多補給一點元氣喔！特地幫你準備了專屬急救包，快打開看看 👇`
+      : '探險完成！你一次都沒有拖錯，真是太厲害了！三個急救包都可以再複習一次，期中考穩穩拿高分 💯';
+    $('kitTabs').innerHTML = KIT_ORDER.map(k => `<button class="kit-tab" role="tab" id="tab-${k}" data-kit="${k}" aria-selected="false">${KITS[k].tab}${k === weak ? '<span class="weak-dot">弱項</span>' : ''}</button>`).join('');
+    $('kitTabs').querySelectorAll('.kit-tab').forEach(b => b.addEventListener('click', () => { Sound.pick(); this.open(b.dataset.kit); }));
+    this.open(weak || KIT_ORDER[0]);
+  },
+  open(key){
+    const k = KITS[key];
+    $('kitTabs').querySelectorAll('.kit-tab').forEach(b => b.setAttribute('aria-selected', b.dataset.kit === key));
+    $('kitPanel').setAttribute('aria-labelledby', `tab-${key}`);
+    $('kitPanel').innerHTML = `
+      <div class="infographic-box">
+        <!-- 請在此替換 Kling 生成的急救包大圖 -->
+        <img class="infographic-img" src="${k.img}" alt="${k.name} 圖解" onerror="this.hidden=true">
+        <div class="infographic-ph"><span>${k.ph}</span>Kling 圖解預留位置</div>
+      </div>
+      <p class="kit-intro">🐾 ${k.intro}</p>
+      <div class="kit-cards">${k.cards.map(c => `<div class="kit-card" style="--kc:${c.color}"><h4>${c.icon} ${c.title}</h4>${c.html}</div>`).join('')}</div>
+      <div class="kit-mnemonic"><h4>💡 30 秒口訣</h4><p>${k.mnemonic}</p></div>`;
   }
 };
 
@@ -975,7 +1133,6 @@ const Drag = {
     const dx = e.clientX - c.sx, dy = e.clientY - c.sy;
     if (!c.moved && Math.hypot(dx, dy) > 8){
       c.moved = true;
-      c.el.classList.remove('selected'); Game.selected = null; $('slotTarget').classList.remove('armed');
       c.el.classList.add('dragging'); Sound.pick();
     }
     if (c.moved){
@@ -988,7 +1145,7 @@ const Drag = {
     const c = this.cur; if (!c || e.pointerId !== c.pid) return;
     this.cur = null;
     const el = c.el; el.classList.remove('dragging'); $('slotTarget').classList.remove('hover');
-    if (!c.moved){ Sound.pick(); Game.select(el); return; }
+    if (!c.moved){ Game.dragTip(el); return; }
     if (Slots.isOver(e.clientX, e.clientY)) Game.judge(el);
     else el.style.transform = '';
   },
