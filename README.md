@@ -12,5 +12,5 @@
 直接打開 `social_puzzle.html`，或用 GitHub Pages 的網址在線上玩。
 
 ## 替換動畫
-把 Kling 影片放進 `videos/` 資料夾，在 `social_puzzle.html` 的 `QUESTIONS` 裡把該題的 `media` 填上檔名（前 8 題已放好，對照表見 `kling_prompts.md`）。
+把 Kling 影片放進 `videos/` 資料夾，在 `social_puzzle.html` 的 `QUESTIONS` 裡把該題的 `media` 填上檔名（18 題都已放好，對照表見 `kling_prompts.md`）。
 影片還沒放進去時，遊戲會自動顯示「Kling 動畫預留位置」。
