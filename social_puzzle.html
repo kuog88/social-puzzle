@@ -554,7 +554,7 @@ button{font-family:inherit;cursor:pointer}
       <!-- 作法：到下方 <script> 的 QUESTIONS 資料，把每一題的 media 欄位填上檔名即可，
            例如 media: "kling_01_plates.mp4"（自動用 <video> 播放）或 media: "kling_01_plates.gif"（自動用 <img> 顯示）。
            檔案和本 HTML 放在同一個資料夾。若 media 留空，就會顯示下方的「Kling 動畫預留位置」。 -->
-      <video id="mediaVideo" class="media-el" muted loop playsinline autoplay hidden></video>
+      <video id="mediaVideo" class="media-el" playsinline controls preload="auto" hidden></video>
       <!-- 請在此替換 Kling 生成的 MP4 或 GIF 網址 -->
       <img id="mediaImg" class="media-el" alt="" hidden>
       <div class="media-placeholder" id="mediaPlaceholder">
@@ -735,6 +735,7 @@ const Sound = (() => {
   return {
     unlock: ensure,
     toggle(){ muted = !muted; return muted; },
+    isMuted(){ return muted; },
     pick(){ tone(660, 0, .08, 'sine', .15); },
     success(){ [523, 659, 784, 1047].forEach((f, i) => tone(f, i * .09, .22, 'square', .1)); tone(1568, .38, .35, 'triangle', .14); },
     wrong(){ tone(330, 0, .18, 'sawtooth', .07); tone(247, .16, .28, 'sawtooth', .07); },
@@ -1050,7 +1051,9 @@ const Media = {
     if (/\.(mp4|webm|mov)(\?|$)/i.test(src)) {
       v.onerror = () => { v.hidden = true; ph.hidden = false; };
       v.src = src; v.hidden = false; ph.hidden = true;
-      v.play().catch(() => {});
+      v.muted = Sound.isMuted();                    // 有旁白：跟隨右上角音效開關
+      v.currentTime = 0;
+      v.play().catch(() => { v.muted = true; v.play().catch(() => {}); });   // 瀏覽器擋有聲自動播放時改靜音播放
     } else {
       img.onerror = () => { img.hidden = true; ph.hidden = false; };
       img.alt = `${q.title} 動畫`;
