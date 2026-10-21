@@ -189,34 +189,56 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .hint-line{background:var(--paper);padding:8px 12px;font-size:16px;text-align:center}
 
 /* =========================================================
-   4. 關卡二：校園急救特派員
+   4. 關卡二：校園急救特派員（整張校園地圖，點處所人物就走過去）
    ========================================================= */
-.event-dock{position:relative;min-height:118px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.55);border:4px dashed rgba(35,35,35,.4);border-radius:12px;padding:8px}
-.event-card{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;display:flex;align-items:center;gap:12px;max-width:560px;width:100%;
-  padding:10px 14px;background:#fffbe9;font-size:clamp(17px,4.3vw,22px);font-weight:900;line-height:1.4;animation:fall .7s cubic-bezier(.3,1.4,.5,1);will-change:transform}
-.event-card .e-icon{font-size:40px;flex:0 0 auto}
-.event-card .e-tip{display:block;font-size:13px;color:#8a7a5a;font-weight:700}
-.event-card.dragging{cursor:grabbing;z-index:1000;filter:drop-shadow(0 12px 8px rgba(0,0,0,.3))}
-.event-card.wrong{animation:shake .45s}
-@keyframes fall{from{transform:translateY(-140%) rotate(-6deg);opacity:0}to{transform:translateY(0) rotate(0);opacity:1}}
-.campus{display:grid;grid-template-columns:1fr 1.25fr 1fr;grid-template-rows:repeat(3,auto);gap:10px}
-.campus-map{grid-column:2;grid-row:1 / span 3;background:#5dbb3f;padding:6px;display:flex;align-items:center;justify-content:center}
-.campus-map svg{width:100%;height:auto}
-.target{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:84px;background:var(--paper);transition:transform .15s, background .15s}
-.target .t-icon{font-size:34px;flex:0 0 auto}
-.target .t-name{font-size:clamp(17px,4vw,21px);font-weight:900;display:block}
-.target .t-tag{display:inline-block;font-size:12px;color:#fff;background:var(--stone-dark);padding:1px 8px;border-radius:99px}
-.target .t-tag.officer{background:#c7652a}
-.target.hover{background:#fff4b0;transform:scale(1.04)}
-.target.ok{background:#d9ffd9}
-.target.shake{animation:shake .45s}
-.target .t-done{position:absolute;right:8px;top:6px;font-size:13px;color:var(--green-ok);font-weight:900}
+.l2-ask{display:flex;align-items:center;gap:12px;padding:10px 14px;background:#fffbe9;min-height:92px}
+.l2-ask .a-icon{font-size:44px;flex:0 0 auto;animation:bob 2s ease-in-out infinite}
+.l2-ask .a-text{flex:1;font-size:clamp(17px,4.3vw,23px);font-weight:900;line-height:1.45}
+.l2-ask .a-tip{display:block;font-size:14px;color:#8a7a5a;font-weight:700}
+.l2-ask.good{background:#e9ffe9;border-color:#1f7a34}
+.l2-ask .px-btn{flex:0 0 auto}
+.campus2{
+  position:relative;width:100%;aspect-ratio:16/9;max-height:max(280px, calc(100dvh - 330px));overflow:hidden;--u:5px;
+  border:4px solid var(--ink);border-radius:10px;
+  background:
+    radial-gradient(circle, #4ea534 18%, transparent 20%) 0 0 / 22px 22px,
+    #5dbb3f;
+}
+.road{position:absolute;background:#d9c49a;box-shadow:inset 0 3px 0 rgba(0,0,0,.08), inset 0 -3px 0 rgba(0,0,0,.08)}
+.road.h{left:0;right:0;top:47%;height:13%}
+.road.v{left:45.5%;width:9%;top:0;bottom:0}
+.road.h::after{content:"";position:absolute;left:2%;right:2%;top:46%;height:8%;background:repeating-linear-gradient(90deg,#fff8 0 18px,transparent 18px 36px)}
+.flag{position:absolute;left:50%;top:6%;transform:translateX(-50%);font-size:max(16px,calc(var(--u)*7));z-index:2}
+.bldg{position:absolute;display:flex;flex-direction:column;border:3px solid var(--ink);border-radius:6px;overflow:hidden;cursor:pointer;padding:0;
+  background:var(--wall,#f3e2b8);box-shadow:inset -4px -4px 0 rgba(0,0,0,.15), 0 4px 0 rgba(0,0,0,.3);transition:transform .15s, filter .15s;font-family:inherit}
+.bldg:hover{transform:translateY(-3px);filter:brightness(1.06)}
+.bldg:focus-visible{outline:4px solid #ffe25a;outline-offset:2px}
+.bldg .roof{display:flex;align-items:center;justify-content:center;gap:4px;padding:2px 4px;min-height:34%;background:var(--roof,#e8433a);color:#fff;
+  font-weight:900;font-size:clamp(12px,calc(var(--u)*4.4),22px);text-shadow:2px 2px 0 rgba(0,0,0,.35);white-space:nowrap;line-height:1.1}
+.bldg .wall{position:relative;flex:1;display:flex;align-items:center;justify-content:center;font-size:clamp(16px,calc(var(--u)*8),40px);
+  background-image:linear-gradient(90deg, transparent 0 14%, #8fd3ff 14% 30%, transparent 30% 70%, #8fd3ff 70% 86%, transparent 86%);background-size:100% 30%;background-repeat:no-repeat;background-position:0 24%}
+.bldg .door{position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:20%;height:34%;background:#8a5a2e;border:2px solid #4a2c12;border-bottom:0}
+.bldg .b-icon{position:absolute;right:6%;bottom:4%;line-height:1}
+.bldg.bottom-row .b-icon{bottom:auto;top:4%}
+.bldg.bottom-row{flex-direction:column-reverse}
+.bldg.bottom-row .door{bottom:auto;top:0;border-bottom:2px solid #4a2c12;border-top:0}
+.bldg.field{--wall:#b5562a;cursor:pointer}
+.bldg.field .wall{background:#5dbb3f;margin:8%;border:3px solid #fff;border-radius:40px}
+.bldg.room{cursor:default}
+.bldg.room:hover{transform:none;filter:none}
+.bldg.shake,.officer.shake{animation:shake .45s}
+.bldg.right{outline:5px solid #3dff6a;outline-offset:1px;box-shadow:0 0 22px 6px rgba(61,255,106,.8)}
+.officer{position:absolute;width:calc(var(--u)*8.5);transform:translate(-50%,-100%);z-index:6;cursor:pointer;background:none;border:0;padding:0}
+.officer .char-svg{width:100%;height:auto;display:block}
+.officer .o-tag{position:absolute;left:50%;top:100%;transform:translateX(-50%);white-space:nowrap;background:#c7652a;color:#fff;border:2px solid var(--ink);border-radius:6px;
+  font-size:clamp(11px,calc(var(--u)*3.4),16px);font-weight:900;padding:0 5px;margin-top:2px}
+.officer:hover{filter:brightness(1.1)}
+.officer.right .o-tag{background:var(--green-ok)}
+.campus2 .char.me{width:calc(var(--u)*9);z-index:8;transition-property:left,top;transition-timing-function:linear}
 .big-check{position:fixed;z-index:4000;left:50%;top:45%;transform:translate(-50%,-50%);font-size:140px;color:#fff;
   width:190px;height:190px;border-radius:50%;background:var(--green-ok);border:6px solid var(--ink);display:flex;align-items:center;justify-content:center;
   animation:checkPop 1s cubic-bezier(.3,1.6,.5,1) forwards;pointer-events:none;text-shadow:4px 4px 0 rgba(0,0,0,.25)}
 @keyframes checkPop{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}25%{transform:translate(-50%,-50%) scale(1.1);opacity:1}70%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(.9);opacity:0}}
-.explain{background:#e9ffe9;border-color:#1f7a34;padding:10px 14px;font-size:18px;line-height:1.6;display:flex;gap:10px;align-items:center}
-.explain .ex-icon{font-size:30px}
 
 /* =========================================================
    5. 關卡三：是非紅綠燈
@@ -228,6 +250,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .lamp.green.on{background:#3dff6a;box-shadow:0 0 30px 8px rgba(61,255,106,.8), inset -6px -6px 0 rgba(0,0,0,.2)}
 .q-card{background:var(--paper);padding:16px 18px;display:flex;flex-direction:column;gap:10px;justify-content:center}
 .q-card .q-num{font-size:15px;color:#8a7a5a}
+.q-card .q-unit{display:inline-block;margin-left:6px;background:var(--grass-dark);color:#fff;border-radius:99px;padding:1px 10px;font-size:14px}
 .q-card .q-scene{font-size:46px;letter-spacing:6px}
 .q-card .q-text{font-size:clamp(19px,4.8vw,26px);font-weight:900;line-height:1.5}
 .answer-btns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -300,11 +323,13 @@ svg.pix{shape-rendering:crispEdges;display:block}
   .cards .card:last-child{grid-column:1 / -1}
   .card{min-height:62px;flex-direction:row;gap:8px}
   .card .c-icon{font-size:22px}
-  .campus{grid-template-columns:1fr 1fr;grid-template-rows:auto}
-  .campus-map{grid-column:1 / -1;grid-row:auto;max-height:150px;overflow:hidden}
-  .campus-map svg{width:auto;height:136px}
-  .target{min-height:70px;padding:8px}
-  .target .t-icon{font-size:28px}
+  .campus2{aspect-ratio:5/6;max-height:none}
+  .bldg .roof{font-size:min(3.7vw,18px);padding:2px 1px;min-height:22%}
+  .officer .o-tag{font-size:11px;padding:0 3px}
+  .officer .o-tag i{display:none}
+  .l2-ask{flex-wrap:wrap;min-height:0;padding:8px 10px}
+  .l2-ask .a-icon{font-size:34px}
+  .l2-ask .px-btn{width:100%}
   .l3-wrap{grid-template-columns:1fr}
   .traffic{flex-direction:row;padding:8px}
   .lamp{width:54px;height:54px}
@@ -345,7 +370,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
         <span class="p-info">
           <span class="p-lv">關卡二</span>
           <span class="p-name">🏥 校園急救特派員</span>
-          <span class="p-desc">處室與幹部功能連連看</span>
+          <span class="p-desc">點地圖找處室與幹部</span>
           <span class="p-stars" data-stars="2">★★★</span>
         </span>
       </button>
@@ -354,7 +379,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
         <span class="p-info">
           <span class="p-lv">關卡三</span>
           <span class="p-name">🚦 三年級小公民</span>
-          <span class="p-desc">生活作息與個人隱私紅綠燈</span>
+          <span class="p-desc">家庭・學習・班級・學校生活紅綠燈</span>
           <span class="p-stars" data-stars="3">★★★</span>
         </span>
       </button>
@@ -384,25 +409,26 @@ svg.pix{shape-rendering:crispEdges;display:block}
     <div class="cards" id="l1Cards"></div>
   </section>
 
-  <!-- ===== 關卡二：校園急救特派員 ===== -->
+  <!-- ===== 關卡二：校園急救特派員（整張校園地圖） ===== -->
   <section class="screen" id="level2">
     <div class="level-head px">
       <h2>🏥 關卡二：校園急救特派員</h2>
-      <span class="chip" id="l2Prog">0 / 6</span>
+      <span class="chip" id="l2Prog">0 / 8</span>
       <span class="chip warn" id="l2Miss">想錯 0 次</span>
     </div>
-    <div class="event-dock" id="eventDock"></div>
-    <div class="explain px" id="l2Explain" hidden><span class="ex-icon">✅</span><span id="l2ExplainText"></span></div>
-    <div class="campus" id="campus">
-      <div class="campus-map px" id="campusMap"></div>
+    <div class="l2-ask px" id="l2Ask">
+      <span class="a-icon" id="l2Icon">🤔</span>
+      <span class="a-text"><span id="l2Text"></span><span class="a-tip" id="l2Tip">👆 點地圖上的處室或幹部，小方就會走過去！</span></span>
+      <button class="px-btn" id="l2Next" hidden>下一題 ▶</button>
     </div>
+    <div class="campus2" id="campus2"></div>
   </section>
 
   <!-- ===== 關卡三：三年級小公民 ===== -->
   <section class="screen" id="level3">
     <div class="level-head px">
       <h2>🚦 關卡三：三年級小公民</h2>
-      <span class="chip" id="l3Prog">第 1 / 5 題</span>
+      <span class="chip" id="l3Prog">第 1 / 10 題</span>
       <span class="chip warn" id="l3Score">答對 0 題</span>
     </div>
     <div class="l3-wrap">
@@ -851,118 +877,195 @@ const Level1 = {
 };
 
 /* =========================================================
-   H. 關卡二：校園急救特派員
+   H. 關卡二：校園急救特派員（整張校園地圖，點處所，人物就走過去）
+   位置都用地圖的百分比：x 是左邊、y 是上面；門口是人物走過去的點
    ========================================================= */
-const L2_TARGETS = [
-  {id:'health',  icon:'🏥', name:'健康中心', tag:'處室'},
-  {id:'library', icon:'📚', name:'圖書館',   tag:'處室'},
-  {id:'counsel', icon:'💗', name:'輔導室',   tag:'處室'},
-  {id:'office',  icon:'📢', name:'學務處',   tag:'處室'},
-  {id:'hygiene', icon:'🧹', name:'衛生股長', tag:'幹部'},
-  {id:'arts',    icon:'🎨', name:'學藝股長', tag:'幹部'}
+const L2_PLACES = [
+  {id:'academic', name:'教務處',   icon:'📝', row:'top',    x:3,  w:18, roof:'#3b82f6', wall:'#dbeafe'},
+  {id:'office',   name:'學務處',   icon:'📢', row:'top',    x:24, w:18, roof:'#f59e0b', wall:'#fef3c7'},
+  {id:'class',    name:'三年甲班', icon:'🏫', row:'top',    x:58, w:18, roof:'#8a5a2e', wall:'#f3e2b8', room:true},
+  {id:'health',   name:'健康中心', icon:'🏥', row:'top',    x:79, w:18, roof:'#e8433a', wall:'#ffffff'},
+  {id:'library',  name:'圖書館',   icon:'📚', row:'bottom', x:3,  w:18, roof:'#7c3aed', wall:'#ede9fe'},
+  {id:'counsel',  name:'輔導室',   icon:'💗', row:'bottom', x:24, w:18, roof:'#ec4899', wall:'#fce7f3'},
+  {id:'general',  name:'總務處',   icon:'🔧', row:'bottom', x:58, w:18, roof:'#64748b', wall:'#e2e8f0'},
+  {id:'field',    name:'操場',     icon:'',   row:'bottom', x:79, w:18, roof:'#b5562a', field:true}
+];
+const L2_OFFICERS = [
+  {id:'hygiene', name:'🧹 衛生股長', x:60, look:{hair:'#222', shirt:'#2fbf4f', pants:'#1f2937', extra:'<rect x="13" y="12" width="1" height="16" fill="#8a5a2e"/><rect x="12" y="27" width="4" height="3" fill="#f2c94c"/>'}},
+  {id:'arts',    name:'🎨 學藝股長', x:74, look:{hair:'#7a4a22', shirt:'#a855f7', pants:'#4c1d95', extra:'<rect x="13" y="18" width="3" height="3" fill="#ffcf3f"/><rect x="14" y="19" width="1" height="1" fill="#e8433a"/>'}}
 ];
 const L2_EVENTS = [
-  {icon:'🩹', text:'跑步跌倒，膝蓋擦傷流血了',               ans:'health',  why:'護理師阿姨會幫你消毒包紮喔！'},
-  {icon:'📖', text:'想借有趣的成語故事書與查資料',           ans:'library', why:'圖書館有好多書，圖書館老師還會教你找資料！'},
-  {icon:'🧴', text:'撿到同學掉在操場的運動水壺',             ans:'office',  why:'撿到東西送到學務處（失物招領），失主就找得回來囉！'},
-  {icon:'😢', text:'跟好朋友吵架，心裡很難過想找人聊聊',     ans:'counsel', why:'輔導老師會耐心聽你說，陪你想辦法和好！'},
-  {icon:'🖍️', text:'教室後方的黑板報需要設計插圖',           ans:'arts',    why:'學藝股長負責布置教室和黑板報，交給他就對了！'},
-  {icon:'🧹', text:'掃地用具壞掉了，需要領新的掃把',         ans:'hygiene', why:'衛生股長負責管理打掃用具，找他就能領新掃把！'}
+  {icon:'🩹', text:'我跑步跌倒，膝蓋擦傷流血了！',             ans:'health',   why:'護理師阿姨會幫你消毒包紮喔！'},
+  {icon:'📖', text:'我想借有趣的成語故事書，還想查資料。',     ans:'library',  why:'圖書館有好多書，圖書館老師還會教你找資料！'},
+  {icon:'🧴', text:'我在操場撿到同學掉的運動水壺。',           ans:'office',   why:'撿到東西送到學務處（失物招領），失主就找得回來囉！'},
+  {icon:'😢', text:'我跟好朋友吵架了，心裡很難過想找人聊聊。', ans:'counsel',  why:'輔導老師會耐心聽你說，陪你想辦法和好！'},
+  {icon:'🖍️', text:'教室後方的黑板報需要設計插圖。',           ans:'arts',     why:'學藝股長負責布置教室和黑板報，交給他就對了！'},
+  {icon:'🧹', text:'掃地用具壞掉了，需要領新的掃把。',         ans:'hygiene',  why:'衛生股長負責管理打掃用具，找他就能領新掃把！'},
+  {icon:'💡', text:'教室的電燈不亮，窗戶也壞掉了。',           ans:'general',  why:'總務處負責修理學校的設備，請工友叔叔來修理！'},
+  {icon:'📚', text:'新學期要領新課本，還想問考試的時間。',     ans:'academic', why:'教務處負責課本、課程和考試的事情喔！'}
 ];
-const L2_HINT = {health:'受傷了要去哪裡擦藥？', library:'借書、查資料要去哪裡？', office:'撿到東西要交給哪個處室？', counsel:'心情不好想找人聊，可以去哪裡？', arts:'布置教室、畫黑板報是哪位幹部的工作？', hygiene:'打掃用具歸哪位幹部管？'};
+const L2_HINT = {health:'受傷了要去哪裡擦藥？', library:'借書、查資料要去哪裡？', office:'撿到東西要交給哪個處室？', counsel:'心情不好想找人聊，可以去哪裡？',
+  arts:'布置教室、畫黑板報是哪位幹部的工作？', hygiene:'打掃用具歸哪位幹部管？', general:'學校的東西壞了，要找負責修理的處室！', academic:'課本、考試的事情歸哪個處室管？'};
+const L2_START = {x:47, y:58};
 
 const Level2 = {
-  queue:[], done:0, miss:0,
+  queue:[], done:0, miss:0, busy:false, me:null,
   start(){
-    this.queue = shuffle(L2_EVENTS); this.done = 0; this.miss = 0;
-    $('l2Miss').textContent = '想錯 0 次'; $('l2Explain').hidden = true;
-    const campus = $('campus');
-    campus.querySelectorAll('.target').forEach(t => t.remove());
-    $('campusMap').innerHTML = campusSVG();
-    const order = window.matchMedia('(max-width:820px)').matches ? L2_TARGETS : [L2_TARGETS[0], L2_TARGETS[1], L2_TARGETS[2], L2_TARGETS[3], L2_TARGETS[4], L2_TARGETS[5]];
-    order.forEach((t, i) => {
-      const d = document.createElement('div'); d.className = 'target px'; d.dataset.id = t.id;
-      d.innerHTML = `<span class="t-icon">${t.icon}</span><span><span class="t-name">${t.name}</span><span class="t-tag ${t.tag === '幹部' ? 'officer' : ''}">${t.tag}</span></span>`;
-      if (!window.matchMedia('(max-width:820px)').matches){ d.style.gridColumn = i < 3 ? '1' : '3'; d.style.gridRow = String(i % 3 + 1); }
-      campus.appendChild(d);
+    this.queue = shuffle(L2_EVENTS); this.done = 0; this.miss = 0; this.busy = false;
+    $('l2Miss').textContent = '想錯 0 次';
+    this.buildMap();
+    this.show();
+  },
+  buildMap(){
+    const map = $('campus2');
+    map.innerHTML = '<div class="road h"></div><div class="road v"></div><span class="flag">🚩</span>';
+    L2_PLACES.forEach(pl => {
+      const b = document.createElement('button');
+      b.className = `bldg ${pl.row === 'bottom' ? 'bottom-row' : ''} ${pl.field ? 'field' : ''} ${pl.room ? 'room' : ''}`;
+      b.dataset.id = pl.id; b.type = 'button';
+      b.style.left = pl.x + '%'; b.style.width = pl.w + '%';
+      b.style.top = pl.row === 'top' ? '5%' : '63%'; b.style.height = pl.row === 'top' ? '38%' : '33%';
+      b.style.setProperty('--roof', pl.roof); if (pl.wall) b.style.setProperty('--wall', pl.wall);
+      b.innerHTML = `<span class="roof">${pl.name}</span><span class="wall">${pl.field ? '' : `<span class="b-icon">${pl.icon}</span><span class="door"></span>`}</span>`;
+      b.setAttribute('aria-label', pl.name);
+      b.addEventListener('click', () => this.pick(pl.id, b));
+      map.appendChild(b);
     });
-    this.updateProg(); this.nextEvent();
+    L2_OFFICERS.forEach(o => {
+      const d = document.createElement('button'); d.type = 'button';
+      d.className = 'officer'; d.dataset.id = o.id; d.style.left = o.x + '%'; d.style.top = '45%';
+      d.innerHTML = charSVG(o.look) + `<span class="o-tag"><i>${o.name.split(' ')[0]} </i>${o.name.split(' ')[1]}</span>`;
+      d.setAttribute('aria-label', o.name.replace(/^\S+\s/, ''));
+      d.addEventListener('click', () => this.pick(o.id, d));
+      map.appendChild(d);
+    });
+    this.me = document.createElement('div'); this.me.className = 'char me';
+    this.me.innerHTML = charSVG({hair:'#3b2a1a', shirt:'#ffcf3f', pants:'#2d3a6b'});
+    map.appendChild(this.me);
+    if (!this.ro){ this.ro = new ResizeObserver(() => map.style.setProperty('--u', map.clientHeight / 100 + 'px')); this.ro.observe(map); }
   },
-  updateProg(){ $('l2Prog').textContent = `${this.done} / 6`; },
-  nextEvent(){
-    const dock = $('eventDock'); dock.innerHTML = '';
-    const ev = this.queue[this.done]; if (!ev) return;
-    const el = document.createElement('div'); el.className = 'event-card px';
-    el.innerHTML = `<span class="e-icon">${ev.icon}</span><span>${ev.text}<span class="e-tip">👇 拖到下面正確的地方或幹部</span></span>`;
-    Drag.attach(el, {targets:() => [...document.querySelectorAll('#campus .target')], onDrop:(card, target) => this.drop(card, target, ev)});
-    dock.appendChild(el); Sound.click();
+  place(x, y){ const m = this.me; m.style.transition = 'none'; m.style.left = x + '%'; m.style.top = y + '%'; void m.offsetWidth; m.style.transition = ''; },
+  async walkTo(x, y){
+    const m = this.me, fx = parseFloat(m.style.left), fy = parseFloat(m.style.top);
+    const dist = Math.hypot(x - fx, (y - fy) * .6); if (dist < .5) return;
+    const sec = Math.max(.35, dist * .035);
+    m.classList.toggle('face-left', x < fx); m.classList.add('walking');
+    m.style.transitionDuration = sec + 's';
+    m.style.left = x + '%'; m.style.top = y + '%';
+    const steps = setInterval(() => Sound.step(), 360);
+    await wait(sec * 1000 + 60);
+    clearInterval(steps); m.classList.remove('walking', 'face-left');
   },
-  drop(card, target, ev){
-    if (target.dataset.id !== ev.ans){
+  say(text){
+    const map = $('campus2'); map.querySelectorAll('.bubble').forEach(b => b.remove());
+    if (!text) return;
+    const b = document.createElement('div'); b.className = 'bubble'; b.innerHTML = text; map.appendChild(b);
+    const sr = map.getBoundingClientRect(), ar = this.me.getBoundingClientRect(), bw = b.offsetWidth, bh = b.offsetHeight;
+    const cx = ar.left + ar.width / 2 - sr.left;
+    let left = Math.max(4, Math.min(sr.width - bw - 4, cx - bw / 2));
+    let top = ar.top - sr.top - bh - 10; if (top < 4) top = ar.bottom - sr.top + 8;
+    b.style.left = left + 'px'; b.style.top = top + 'px'; b.style.setProperty('--tail', Math.max(14, Math.min(bw - 14, cx - left)) + 'px');
+  },
+  show(){
+    const ev = this.queue[this.done];
+    this.busy = false;
+    $('l2Prog').textContent = `${this.done} / ${L2_EVENTS.length}`;
+    $('l2Ask').classList.remove('good'); $('l2Icon').textContent = ev.icon;
+    $('l2Text').textContent = `小方：「${ev.text}」要去哪裡呢？`;
+    $('l2Tip').textContent = '👆 點地圖上的處室或幹部，小方就會走過去！';
+    $('l2Next').hidden = true;
+    $('campus2').querySelectorAll('.right').forEach(n => n.classList.remove('right'));
+    this.place(L2_START.x, L2_START.y);
+    setTimeout(() => this.say('要去哪裡呢？🤔'), 60);
+  },
+  async pick(id, el){
+    if (this.busy) return;
+    Sound.unlock(); Sound.click();
+    const ev = this.queue[this.done];
+    if (id === 'class'){ toast('🏫 教室裡有好多幹部！請直接<b>點教室門口的幹部</b>喔。', 2600); return; }
+    if (id !== ev.ans){
       this.miss++; $('l2Miss').textContent = `想錯 ${this.miss} 次`;
-      Sound.shiver(); restartAnim(target, 'shake'); restartAnim(card, 'wrong');
+      Sound.shiver(); restartAnim(el, 'shake');
+      this.say('好像不是這裡耶……');
       toast(`🤔 <b>再想想看喔！</b>${L2_HINT[ev.ans]}`);
-      return false;
+      return;
     }
-    card.classList.add('used'); card.style.opacity = '0';
-    target.classList.add('ok'); restartAnim(target, 'ok');
-    const mark = document.createElement('span'); mark.className = 't-done'; mark.textContent = '✔ ' + ev.icon; target.querySelector('.t-done')?.remove(); target.appendChild(mark);
-    bigCheck(); Sound.ding();
-    $('l2ExplainText').innerHTML = `<b>${L2_TARGETS.find(t => t.id === ev.ans).name}</b>：${ev.why}`; $('l2Explain').hidden = false;
-    this.done++; this.updateProg();
-    setTimeout(() => {
-      if (this.done < 6) this.nextEvent(); else this.finish();
-    }, 1300);
-    return true;
+    // 答對：沿著走道走過去
+    this.busy = true; el.classList.add('right'); this.say('');
+    const target = this.doorOf(id);
+    await this.walkTo(target.x, L2_START.y);
+    await this.walkTo(target.x, target.y);
+    Sound.ding(); bigCheck();
+    const name = (L2_PLACES.find(p => p.id === id) || L2_OFFICERS.find(o => o.id === id)).name.replace(/^\S+\s/, '');
+    this.say(ev.why);
+    this.done++;
+    $('l2Prog').textContent = `${this.done} / ${L2_EVENTS.length}`;
+    $('l2Ask').classList.add('good'); $('l2Icon').textContent = '✅';
+    $('l2Text').innerHTML = `答對了！要去<b>${name}</b>。`;
+    $('l2Tip').textContent = ev.why;
+    const btn = $('l2Next'); btn.hidden = false;
+    btn.textContent = this.done < L2_EVENTS.length ? '下一題 ▶' : '任務完成 🏁';
+    btn.onclick = () => { Sound.click(); this.done < L2_EVENTS.length ? this.show() : this.finish(); };
+  },
+  doorOf(id){
+    const pl = L2_PLACES.find(p => p.id === id);
+    if (pl) return {x:pl.x + pl.w / 2, y:pl.row === 'top' ? 49 : 66};
+    const o = L2_OFFICERS.find(o => o.id === id);
+    return {x:o.x - 5, y:57};
   },
   async finish(){
     Sound.win(); confetti();
     const stars = starsByMiss(this.miss); Store.set(2, stars);
     const v = await showModal({icon:'🚑', title:'校園急救特派員 任務完成！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>！</p>`,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>，東西壞了找<b>總務處</b>、課本考試問<b>教務處</b>！</p>`,
       buttons:[{label:'下一關：三年級小公民 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(2, v);
   }
 };
-function campusSVG(){
-  // 像素校園地圖（純裝飾）
-  const r = (x, y, w, h, c) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`;
-  let s = r(0, 0, 120, 90, '#5dbb3f');
-  for (let i = 0; i < 40; i++) s += r((i * 37) % 118, (i * 23) % 88, 2, 2, '#4ea534');
-  s += r(0, 40, 120, 8, '#d9c49a') + r(56, 0, 8, 90, '#d9c49a');                 // 走道
-  s += r(6, 6, 42, 26, '#c9c9c9') + r(6, 6, 42, 5, '#e8433a') + r(10, 15, 6, 6, '#8fd3ff') + r(20, 15, 6, 6, '#8fd3ff') + r(30, 15, 6, 6, '#8fd3ff') + r(40, 15, 4, 6, '#8fd3ff') + r(24, 24, 6, 8, '#8a5a2e'); // 教學大樓
-  s += r(70, 6, 22, 18, '#fff') + r(70, 6, 22, 4, '#e8433a') + r(79, 12, 4, 10, '#e8433a') + r(76, 15, 10, 4, '#e8433a');        // 健康中心
-  s += r(96, 6, 20, 18, '#f59e0b') + r(96, 6, 20, 4, '#8a5a2e') + r(100, 13, 12, 7, '#fff3c4') + r(105, 13, 1, 7, '#8a5a2e');     // 圖書館
-  s += r(6, 54, 30, 20, '#fbcfe8') + r(6, 54, 30, 4, '#ec4899') + r(17, 62, 8, 6, '#ec4899');                                       // 輔導室
-  s += r(70, 54, 44, 30, '#b5562a') + r(74, 58, 36, 22, '#5dbb3f') + r(90, 60, 4, 18, '#fff');                                        // 操場
-  s += r(40, 56, 2, 22, '#555') + r(42, 56, 8, 5, '#e8433a');                                                                       // 旗桿
-  [[12, 80], [26, 82], [104, 40], [112, 36]].forEach(([x, y]) => { s += r(x, y, 6, 6, '#2f7d22') + r(x + 2, y + 6, 2, 3, '#7a4a22'); });
-  return `<svg class="pix" viewBox="0 0 120 90" role="img" aria-label="校園地圖">${s}</svg>`;
-}
 function bigCheck(){ const d = document.createElement('div'); d.className = 'big-check'; d.textContent = '✔'; document.body.appendChild(d); setTimeout(() => d.remove(), 1100); }
 
 /* =========================================================
    I. 關卡三：三年級小公民（是非紅綠燈）
    ========================================================= */
-const L3_QUESTIONS = [
-  {scene:'🎒📝➡️🎮', text:'放學回家先寫完作業、整理好書包，再去玩遊戲或看電視', ans:'go',   tag:'時間小管家！', why:'先把該做的事做完，再安心去玩，就是很棒的<b>時間管理</b>！'},
-  {scene:'🚽📔👀',   text:'趁同桌同學去上廁所，偷偷翻開他的日記本看秘密',       ans:'stop', tag:'侵犯隱私權！', why:'日記是別人的秘密，沒有經過同意就偷看，是<b>侵犯隱私</b>的行為喔！'},
-  {scene:'🗳️📜👑',   text:'班規是全班一起投票決定的，連班長自己也要嚴格遵守',   ans:'go',   tag:'民主守法！', why:'大家一起訂的規則，<b>每個人都要遵守</b>，班長也不例外！'},
-  {scene:'🏃💨📢',   text:'下課在走廊上大聲喊叫跟同學賽跑衝刺',               ans:'stop', tag:'容易撞倒同學受傷！', why:'走廊要<b>慢慢走、輕聲說話</b>，才不會撞到人或吵到別班上課。'},
-  {scene:'📒✏️❓',   text:'遇到功課不會寫，直接拿同學的作業本來照抄',           ans:'stop', tag:'不能抄襲！', why:'不會的題目要<b>主動請教老師或同學</b>，弄懂了才是自己的本事喔！'}
+/* 題庫依三上課本單元分類：每次隨機抽 L3_ROUND 題 */
+const L3_ROUND = 10;
+const L3_POOL = [
+  // 🏠 我的家庭
+  {unit:'🏠 我的家庭', scene:'🍽️🧽🗑️', text:'週末主動幫忙家人洗碗、倒垃圾，一起分擔家事', ans:'go', tag:'家人分工合作！', why:'家是大家的，每個人都<b>分擔家事</b>，家人就不會那麼累！'},
+  {unit:'🏠 我的家庭', scene:'🧧👵🙇', text:'過年到親戚家，主動跟長輩打招呼、說新年快樂', ans:'go', tag:'有禮貌的好孩子！', why:'和親人常常<b>往來、互相問候</b>，親戚之間的感情會更好！'},
+  {unit:'🏠 我的家庭', scene:'🏠😠📢', text:'不喜歡家裡的規定，就大吵大鬧、甩門不理人', ans:'stop', tag:'要好好溝通！', why:'有不同的想法，要<b>心平氣和跟家人說</b>，大家一起討論，不是生氣吵鬧。'},
+  {unit:'🏠 我的家庭', scene:'🤒🛌💊', text:'生病時，家人照顧我、陪我去看醫生', ans:'go', tag:'家庭會照顧保護我們！', why:'<b>照顧和保護</b>家人，是家庭很重要的功能喔！'},
+  // 📚 學習與成長
+  {unit:'📚 學習與成長', scene:'🙋📒✍️', text:'上課聽不懂就舉手發問，下課把重點整理在筆記上', ans:'go', tag:'聰明的學習方法！', why:'<b>主動發問、整理筆記</b>，都是幫助自己學得更好的方法！'},
+  {unit:'📚 學習與成長', scene:'💯🚫🎨', text:'只要考試考得好，才藝、運動和社團都不用學', ans:'stop', tag:'學習要多元！', why:'學習不只在課本裡，<b>運動、音樂、藝術、社團</b>都能讓我們成長！'},
+  {unit:'📚 學習與成長', scene:'🎒📝➡️🎮', text:'放學回家先寫完作業、整理好書包，再去玩遊戲或看電視', ans:'go', tag:'時間小管家！', why:'先把該做的事做完，再安心去玩，就是很棒的<b>時間管理</b>！'},
+  {unit:'📚 學習與成長', scene:'📒✏️❓', text:'遇到功課不會寫，直接拿同學的作業本來照抄', ans:'stop', tag:'不能抄襲！', why:'不會的題目要<b>主動請教老師或同學</b>，弄懂了才是自己的本事喔！'},
+  // 👫 班級與我
+  {unit:'👫 班級與我', scene:'🗳️🧑‍🤝‍🧑❤️', text:'選班級幹部時，只投給跟自己最要好的朋友', ans:'stop', tag:'要選能服務大家的人！', why:'選幹部要想想：誰<b>負責、熱心、能為全班服務</b>，不是只看交情。'},
+  {unit:'👫 班級與我', scene:'🗳️📜👑', text:'班規是全班一起投票決定的，連班長自己也要嚴格遵守', ans:'go', tag:'民主守法！', why:'大家一起訂的規則，<b>每個人都要遵守</b>，班長也不例外！'},
+  {unit:'👫 班級與我', scene:'🚽📔👀', text:'趁同桌同學去上廁所，偷偷翻開他的日記本看秘密', ans:'stop', tag:'侵犯隱私權！', why:'日記是別人的秘密，沒有經過同意就偷看，是<b>侵犯隱私</b>的行為喔！'},
+  {unit:'👫 班級與我', scene:'🧩🤝🎨', text:'分組做海報時，大家分配工作、互相幫忙完成作品', ans:'go', tag:'合作力量大！', why:'<b>分工合作</b>，每個人做擅長的事，作品會做得又快又好！'},
+  // 🏫 學校與我
+  {unit:'🏫 學校與我', scene:'🏃‍♂️🥈😤', text:'大隊接力輸了，就怪罪隊友：「都是你害的！」', ans:'stop', tag:'要有運動家精神！', why:'<b>良性競爭</b>是一起努力變更好；輸了要互相打氣，不怪罪別人。'},
+  {unit:'🏫 學校與我', scene:'🗣️😂🙅', text:'新同學說話口音跟大家不一樣，就學他說話取笑他', ans:'stop', tag:'平等與尊重！', why:'每個人都不一樣，要<b>尊重彼此的差異</b>，不取笑、不排擠。'},
+  {unit:'🏫 學校與我', scene:'🛝🧍🧍', text:'下課玩溜滑梯時，排隊輪流、不推擠', ans:'go', tag:'校園安全！', why:'<b>排隊、輪流</b>，大家都能玩得開心又安全！'},
+  {unit:'🏫 學校與我', scene:'🏃💨📢', text:'下課在走廊上大聲喊叫，跟同學賽跑衝刺', ans:'stop', tag:'容易撞倒同學受傷！', why:'走廊要<b>慢慢走、輕聲說話</b>，才不會撞到人或吵到別班上課。'},
+  {unit:'🏫 學校與我', scene:'🚪🧍‍♂️❗', text:'陌生人說要帶你出校門買東西，馬上告訴老師', ans:'go', tag:'保護自己！', why:'不跟陌生人走，遇到奇怪的事<b>馬上告訴老師或家人</b>！'}
 ];
+let L3_QUESTIONS = [];
 const Level3 = {
   i:0, correct:0, answered:false,
   start(){
     this.i = 0; this.correct = 0;
+    L3_QUESTIONS = shuffle(L3_POOL).slice(0, L3_ROUND);
     $('l3Btns').querySelectorAll('button').forEach(b => b.onclick = () => this.answer(b.dataset.ans));
     $('l3Next').onclick = () => { Sound.click(); this.i++; this.i < L3_QUESTIONS.length ? this.show() : this.finish(); };
     this.show();
   },
   show(){
     const q = L3_QUESTIONS[this.i]; this.answered = false;
-    $('l3Prog').textContent = `第 ${this.i + 1} / 5 題`; $('l3Score').textContent = `答對 ${this.correct} 題`;
-    $('l3Num').textContent = `情境 ${this.i + 1}`; $('l3Scene').textContent = q.scene; $('l3Text').textContent = `「${q.text}」`;
+    $('l3Prog').textContent = `第 ${this.i + 1} / ${L3_QUESTIONS.length} 題`; $('l3Score').textContent = `答對 ${this.correct} 題`;
+    $('l3Num').innerHTML = `情境 ${this.i + 1}<span class="q-unit">${q.unit}</span>`; $('l3Scene').textContent = q.scene; $('l3Text').textContent = `「${q.text}」`;
     $('lampRed').classList.remove('on'); $('lampGreen').classList.remove('on');
     $('l3Btns').hidden = false; $('l3Feedback').hidden = true;
   },
@@ -980,10 +1083,10 @@ const Level3 = {
     fb.scrollIntoView({behavior:'smooth', block:'nearest'});
   },
   async finish(){
-    const stars = this.correct === 5 ? 3 : this.correct >= 3 ? 2 : 1; Store.set(3, stars);
+    const n = L3_QUESTIONS.length, stars = this.correct >= n - 1 ? 3 : this.correct >= Math.ceil(n * .6) ? 2 : 1; Store.set(3, stars);
     Sound.win(); confetti();
     const v = await showModal({icon:'🚦', title:'三年級小公民 過關！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>5 題答對 <b>${this.correct}</b> 題！保護自己的隱私，也尊重別人的秘密喔！</p>`,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>${L3_QUESTIONS.length} 題答對 <b>${this.correct}</b> 題！家庭、學習、班級、學校生活，你都是小公民高手！</p>`,
       buttons:[{label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(3, v);
   }
@@ -1003,13 +1106,16 @@ const NOTES = [
     <li>💗 心情難過 ➔ 去<b>輔導室</b>找輔導老師</li>
     <li>📢 撿到東西 ➔ 送到<b>學務處</b></li>
     <li>📚 借書、查資料 ➔ 去<b>圖書館</b></li>
+    <li>🔧 東西壞了 ➔ 找<b>總務處</b>；📝 課本、考試 ➔ 問<b>教務處</b></li>
     <li>🧹 打掃用具 ➔ 找<b>衛生股長</b>；🎨 布置教室 ➔ 找<b>學藝股長</b></li></ul>
     <div class="star-tip">⭐ 幹部是熱心為同學<b>「服務」</b>，不是當大官管人喔！</div>`},
   {icon:'💡', title:'《小三新生活》', sub:'作息與隱私', html:`
-    <ul><li>🔒 保護自己的<b>隱私</b>，也<b>絕對不偷看</b>別人的日記、手機和書包。</li>
+    <ul><li>🏠 家人<b>分工做家事</b>、互相照顧；有想法要好好溝通。</li>
+    <li>🔒 保護自己的<b>隱私</b>，也<b>絕對不偷看</b>別人的日記、手機和書包。</li>
     <li>⏰ <b>先苦後甘</b>：先寫作業、整理書包，再去玩！</li>
     <li>📅 <b>今日事今日畢</b>，不把今天的功課拖到明天。</li>
-    <li>✏️ 不會的題目主動請教，不抄別人的作業。</li></ul>
+    <li>✏️ 不會的題目主動請教，不抄別人的作業；學習要<b>多元</b>。</li>
+    <li>🤝 分組要<b>合作</b>、比賽要有<b>運動家精神</b>，尊重每個人的不同。</li></ul>
     <div class="star-tip">⭐ 大家一起訂的班規，每個人都要遵守，班長也一樣！</div>`}
 ];
 const Result = {
