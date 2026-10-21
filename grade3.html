@@ -75,7 +75,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .lobby-title{text-align:center;margin:6px 0 0;font-size:clamp(24px,6vw,42px);font-weight:900;color:#fff;
   text-shadow:3px 3px 0 #2b5e1c, -2px -2px 0 #2b5e1c, 2px -2px 0 #2b5e1c, -2px 2px 0 #2b5e1c, 5px 6px 0 rgba(0,0,0,.25)}
 .lobby-sub{text-align:center;margin:0;font-size:17px;color:#1d3f12;background:rgba(255,255,255,.7);align-self:center;padding:4px 14px;border-radius:99px}
-.portals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+.portals{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
 .portal{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px 14px;text-align:center;background:var(--paper);cursor:pointer;color:var(--ink);font-size:18px;transition:transform .12s}
 .portal:hover{transform:translateY(-4px)}
 .portal:active{transform:translateY(2px)}
@@ -88,6 +88,8 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .portal.p1{border-color:#2b5e1c}
 .portal.p2{background:#fff0ef}
 .portal.p3{background:#eef7ff}
+.portal.p4{background:#fff7e0}
+.portal .p-lv.sem2{background:#c7652a}
 .notes-btn{align-self:center;margin-top:8px}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
@@ -264,6 +266,35 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .shiver{animation:shake .45s}
 
 /* =========================================================
+   5-2. 關卡四（三下）：鳳山社區小達人
+   ========================================================= */
+.l4-steps{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.l4-steps span{background:rgba(255,255,255,.75);border:3px solid #8a7a5a;border-radius:99px;padding:4px 12px;font-size:15px;color:#8a7a5a}
+.l4-steps span.now{background:#ffcf3f;border-color:var(--ink);color:var(--ink)}
+.l4-steps span.done{background:#d9ffd9;border-color:#1f7a34;color:#1f7a34}
+.l4-stage{display:flex;flex-direction:column;gap:10px}
+.campus2.town{max-height:max(260px, calc(100dvh - 380px))}
+.town{background:radial-gradient(circle, #cfd4d9 18%, transparent 20%) 0 0 / 22px 22px, #e5e7eb}
+.town .road{background:#6b7280}
+.town .road.h::after{background:repeating-linear-gradient(90deg,#fde047 0 18px,transparent 18px 36px)}
+.baskets{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.basket{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:150px;padding:10px;background:#e9ffe9;font-size:22px;font-weight:900;text-align:center;transition:transform .15s, background .15s}
+.basket small{font-size:14px;color:#5f5240;font-weight:700}
+.basket.want{background:#fff0f6}
+.basket.hover{transform:scale(1.04);background:#fff4b0}
+.basket.shake{animation:shake .45s}
+.b-items{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px}
+.b-items span{background:#fff;border:2px solid var(--ink);border-radius:8px;padding:2px 8px;font-size:14px;animation:pop .3s cubic-bezier(.3,1.6,.5,1)}
+.shop-card{background:var(--paper);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.shop-card .q-scene{font-size:42px;letter-spacing:6px}
+.shop-card .q-text{font-size:clamp(18px,4.6vw,24px);font-weight:900;line-height:1.5}
+.shop-opts{display:grid;gap:10px}
+.shop-opts .px-btn{text-align:left;font-size:20px;padding:14px 16px;background:#3b82f6}
+.shop-opts .px-btn.right{background:var(--green-ok)}
+.shop-opts .px-btn.wrongpick{background:var(--red)}
+.shop-opts .px-btn:disabled{opacity:.75;cursor:default}
+
+/* =========================================================
    6. 彈窗、結算、筆記
    ========================================================= */
 .overlay{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(20,30,10,.6);opacity:0;pointer-events:none;transition:opacity .25s}
@@ -282,13 +313,13 @@ svg.pix{shape-rendering:crispEdges;display:block}
 
 .result-card{background:var(--paper);padding:16px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
 .result-card h2{margin:0;font-size:clamp(24px,6vw,36px);font-weight:900}
-.result-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.result-levels{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;width:100%}
 .result-levels div{background:#fff;border:3px solid #d8c7a0;border-radius:10px;padding:8px 4px;font-size:15px}
 .result-levels b{display:block;font-size:22px;color:#f0a800;letter-spacing:2px}
 .cat-talk{display:flex;align-items:flex-end;gap:10px;text-align:left;width:100%}
 .cat-talk svg{width:84px;height:auto;flex:0 0 auto;animation:bob 2s ease-in-out infinite}
 .cat-talk .bubble-static{flex:1;background:#fff;border:3px solid var(--ink);border-radius:12px;padding:8px 12px;font-size:17px;line-height:1.6}
-.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%}
+.notes{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;width:100%}
 .note-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;cursor:pointer;color:var(--ink);font-size:18px;font-weight:900;
   background:repeating-linear-gradient(0deg,#fffdf4 0 26px,#cfe3ff 26px 28px);transition:transform .12s}
 .note-card:hover{transform:translateY(-4px) rotate(-1deg)}
@@ -333,8 +364,12 @@ svg.pix{shape-rendering:crispEdges;display:block}
   .l3-wrap{grid-template-columns:1fr}
   .traffic{flex-direction:row;padding:8px}
   .lamp{width:54px;height:54px}
-  .notes,.result-levels{grid-template-columns:1fr}
-  .result-levels{grid-template-columns:repeat(3,1fr)}
+  .notes{grid-template-columns:1fr 1fr}
+  .result-levels{grid-template-columns:repeat(2,1fr)}
+  .baskets{gap:8px}
+  .basket{min-height:120px;font-size:18px}
+  .l4-steps span{font-size:13px;padding:3px 6px}
+  .shop-opts .px-btn{font-size:17px;padding:12px 10px}
 }
 @media (min-width:821px){.portal .p-info{display:contents}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
@@ -381,6 +416,15 @@ svg.pix{shape-rendering:crispEdges;display:block}
           <span class="p-name">🚦 三年級小公民</span>
           <span class="p-desc">學習・班級・人際・家庭紅綠燈</span>
           <span class="p-stars" data-stars="3">★★★</span>
+        </span>
+      </button>
+      <button class="portal px p4" data-level="4">
+        <span class="p-icon" data-pix="shop"></span>
+        <span class="p-info">
+          <span class="p-lv sem2">關卡四・三下</span>
+          <span class="p-name">🛒 鳳山社區小達人</span>
+          <span class="p-desc">社區環境・需要與想要・聰明消費</span>
+          <span class="p-stars" data-stars="4">★★★</span>
         </span>
       </button>
     </div>
@@ -450,6 +494,51 @@ svg.pix{shape-rendering:crispEdges;display:block}
     </div>
   </section>
 
+  <!-- ===== 關卡四（三下）：鳳山社區小達人 ===== -->
+  <section class="screen" id="level4">
+    <div class="level-head px">
+      <h2>🛒 關卡四：鳳山社區小達人</h2>
+      <span class="chip" id="l4Prog">0 / 8</span>
+      <span class="chip warn" id="l4Miss">想錯 0 次</span>
+    </div>
+    <div class="l4-steps" id="l4Steps"><span>🗺️ 第 1 站：社區地圖</span><span>🧺 第 2 站：需要與想要</span><span>🛒 第 3 站：聰明消費</span></div>
+
+    <!-- 第 1 站：鳳山社區地圖 -->
+    <div class="l4-stage" id="l4MapStage">
+      <div class="l2-ask px" id="l4Ask">
+        <span class="a-icon" id="l4Icon">🤔</span>
+        <span class="a-text"><span id="l4Text"></span><span class="a-tip" id="l4Tip"></span></span>
+        <button class="px-btn" id="l4Next" hidden>下一題 ▶</button>
+      </div>
+      <div class="campus2 town" id="town"></div>
+    </div>
+
+    <!-- 第 2 站：需要與想要 -->
+    <div class="l4-stage" id="l4NeedStage" hidden>
+      <div class="hint-line px">👆 把東西<b>拖進</b>正確的籃子！生活一定要的是「需要」，有了更開心、沒有也可以的是「想要」。</div>
+      <div class="baskets">
+        <div class="basket px" data-b="need">🧺 需要<small>生活一定要有的</small><div class="b-items"></div></div>
+        <div class="basket px want" data-b="want">🎁 想要<small>有了更開心，沒有也可以</small><div class="b-items"></div></div>
+      </div>
+      <div class="cards" id="needCards"></div>
+    </div>
+
+    <!-- 第 3 站：聰明消費 -->
+    <div class="l4-stage" id="l4ShopStage" hidden>
+      <div class="shop-card px">
+        <div class="q-num" id="shopNum">聰明消費 1</div>
+        <div class="q-scene" id="shopScene">🛒</div>
+        <div class="q-text" id="shopText"></div>
+      </div>
+      <div class="shop-opts" id="shopOpts"></div>
+      <div class="feedback px" id="shopFb" hidden>
+        <div class="fb-title" id="shopFbTitle"></div>
+        <div id="shopFbText"></div>
+        <button class="px-btn" id="shopNext">下一題 ▶</button>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== 結算畫面 ===== -->
   <section class="screen" id="result">
     <div class="result-card px">
@@ -458,7 +547,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
       <div class="result-levels" id="resultLevels"></div>
       <div class="cat-talk">
         <span id="catPix"></span>
-        <div class="bubble-static">恭喜你完成麥塊校園大冒險！石虎幫你整理了 3 張<b>白話知識筆記卡</b>，點點看、複習一下吧！</div>
+        <div class="bubble-static">恭喜你完成麥塊校園大冒險！石虎幫你整理了 4 張<b>白話知識筆記卡</b>，點點看、複習一下吧！</div>
       </div>
       <div class="notes" id="notes"></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
@@ -547,6 +636,7 @@ const Pix = {
       'ooowkoooooowkooo','ooowkoooooowkooo','doooooowwooooood','oooooowppwoooooo','.ooooowwwwooooo.','..oooowwwwoooo..','...ooooooooooo..','....oooooooo....'
     ], {o:'#d9964f', d:'#7a4a22', e:'#f6dcb4', w:'#fff3e0', k:'#232323', p:'#f29a9a'});
   },
+  shop(){ return this.svg(['rrwwrrwwrr','rrwwrrwwrr','..........','.kkkkkkkk.','.kbbkkbbk.','.kbbkkbbk.','.kkkkkkkk.','.kbbkddkk.','.kbbkddkk.','.kkkkddkk.'], {r:'#e8433a', w:'#ffffff', k:'#f3e2b8', b:'#8fd3ff', d:'#8a5a2e'}); },
   trophy(){ return this.svg(['yyyyyyyyyy','yYyyyyyyYy','yYyyyyyyYy','.yyyyyyyy.','..yyyyyy..','...yyyy...','....yy....','....yy....','..YYYYYY..','.YYYYYYYY.'], {y:'#ffcf3f', Y:'#d39b00'}); },
   medal(){ return this.svg(['rr....bb','.rr..bb.','..rrbb..','...rb...','..yyyy..','.yyYYyy.','.yYwwYy.','.yYwwYy.','.yyYYyy.','..yyyy..'], {r:'#e8433a', b:'#3b82f6', y:'#ffcf3f', Y:'#d39b00', w:'#fff7c2'}); }
 };
@@ -592,7 +682,7 @@ const Store = {
     const s = this.get(); s[level] = Math.max(s[level] || 0, stars); this.mem = s;
     try { localStorage.setItem(this.key, JSON.stringify(s)); } catch(e){}
   },
-  allCleared(){ const s = this.get(); return [1, 2, 3].every(l => (s[l] || 0) > 0); }
+  allCleared(){ const s = this.get(); return [1, 2, 3, 4].every(l => (s[l] || 0) > 0); }
 };
 const starsByMiss = miss => miss === 0 ? 3 : miss <= 2 ? 2 : 1;
 const starHTML = n => '<b>' + '★'.repeat(n) + '</b>' + '☆'.repeat(3 - n);
@@ -1108,8 +1198,232 @@ const Level3 = {
     Sound.win(); confetti();
     const v = await showModal({icon:'🚦', title:'三年級小公民 過關！', center:true,
       html:`<div class="stars-big">${starHTML(stars)}</div><p>${L3_QUESTIONS.length} 題答對 <b>${this.correct}</b> 題！學習、班級、人際相處、家庭生活，你都是小公民高手！</p>`,
-      buttons:[{label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+      buttons:[{label:'下一關：鳳山社區小達人（三下）▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(3, v);
+  }
+};
+
+/* =========================================================
+   I-2. 關卡四（三下）：鳳山社區小達人
+   第 1 站 社區地圖（點設施，小方走過去）→ 第 2 站 需要與想要（拖進籃子）→ 第 3 站 聰明消費（選擇題）
+   ========================================================= */
+const TOWN_PLACES = [
+  {id:'station', name:'火車站',   icon:'🚉', row:'top',    x:3,  w:18, roof:'#0f766e', wall:'#ccfbf1'},
+  {id:'post',    name:'郵局',     icon:'📮', row:'top',    x:24, w:18, roof:'#16a34a', wall:'#dcfce7'},
+  {id:'police',  name:'派出所',   icon:'👮', row:'top',    x:58, w:18, roof:'#1d4ed8', wall:'#dbeafe'},
+  {id:'clinic',  name:'衛生所',   icon:'💉', row:'top',    x:79, w:18, roof:'#e8433a', wall:'#ffffff'},
+  {id:'market',  name:'傳統市場', icon:'🥬', row:'bottom', x:3,  w:18, roof:'#f59e0b', wall:'#fef3c7'},
+  {id:'academy', name:'鳳儀書院', icon:'🏯', row:'bottom', x:24, w:18, roof:'#7f1d1d', wall:'#fde68a'},
+  {id:'fire',    name:'消防隊',   icon:'🚒', row:'bottom', x:58, w:18, roof:'#dc2626', wall:'#fee2e2'},
+  {id:'library', name:'圖書館',   icon:'📚', row:'bottom', x:79, w:18, roof:'#7c3aed', wall:'#ede9fe'}
+];
+const TOWN_EVENTS = [
+  {icon:'🚆', text:'阿公要搭火車去臺北看親戚。',             ans:'station', why:'鳳山火車站可以搭火車到臺灣各地，現在已經變成地下車站囉！'},
+  {icon:'💌', text:'我要把卡片寄給住在臺中的外婆。',         ans:'post',    why:'郵局可以寄信、寄包裹，也可以存錢喔！'},
+  {icon:'👛', text:'我在路上撿到一個錢包。',                 ans:'police',  why:'交給派出所，警察會幫忙找失主，也守護社區的安全！'},
+  {icon:'💉', text:'我要去打流感疫苗。',                     ans:'clinic',  why:'衛生所提供打預防針、健康檢查，照顧大家的健康！'},
+  {icon:'🐟', text:'媽媽要買新鮮的青菜和魚。',               ans:'market',  why:'鳳山的傳統市場有好多新鮮蔬果、魚肉和小吃！'},
+  {icon:'📜', text:'老師要帶大家參觀清朝時讀書的地方。',     ans:'academy', why:'鳳儀書院是清朝時蓋的書院，兩百多年了，是鳳山重要的古蹟！'},
+  {icon:'🔥', text:'看到附近房子冒出濃濃的黑煙！',           ans:'fire',    why:'消防隊會救火、救人，遇到火災記得打 119！'},
+  {icon:'📖', text:'週末想借繪本、查資料。',                 ans:'library', why:'圖書館可以免費借書，大東文化藝術中心裡也有圖書館喔！'}
+];
+const TOWN_HINT = {station:'要搭火車，要去哪裡？', post:'寄信、寄包裹要去哪裡？', police:'撿到東西、需要警察幫忙要去哪裡？', clinic:'打預防針要去哪裡？',
+  market:'買新鮮的菜和魚要去哪裡？', academy:'清朝時的古蹟書院叫什麼名字？', fire:'火災要找誰來救火？', library:'借書要去哪裡？'};
+const NEEDS = [
+  {icon:'✏️', name:'上課用的鉛筆', b:'need'}, {icon:'🍱', name:'每天吃的三餐', b:'need'}, {icon:'☂️', name:'下雨天的雨傘', b:'need'},
+  {icon:'💊', name:'生病時的藥', b:'need'},   {icon:'🪥', name:'刷牙的牙刷', b:'need'},   {icon:'👕', name:'上學穿的制服', b:'need'}
+];
+const WANTS = [
+  {icon:'🎮', name:'最新款遊戲機', b:'want'}, {icon:'🧸', name:'限量版公仔', b:'want'}, {icon:'🧋', name:'珍珠奶茶', b:'want'},
+  {icon:'👟', name:'第五雙漂亮球鞋', b:'want'}, {icon:'✨', name:'亮晶晶貼紙', b:'want'}
+];
+const SHOP_POOL = [
+  {scene:'🍪🔍📅', text:'買零食之前，要先看包裝上的什麼？', opts:[{t:'有效期限和成分', ok:true}, {t:'包裝最可愛的那一包'}], why:'看<b>有效期限</b>，才不會買到過期的食物；看成分，吃得更安心！'},
+  {scene:'📒💲📒', text:'同樣的筆記本，A 店賣 30 元、B 店賣 25 元，品質一樣，要買哪一家？', opts:[{t:'B 店，25 元', ok:true}, {t:'A 店，30 元'}], why:'<b>貨比三家</b>，同樣的東西買便宜的，就是聰明消費！'},
+  {scene:'💰🖍️🧸', text:'零用錢只有 100 元，上課要用的色鉛筆 80 元，好想要的公仔 60 元，怎麼辦？', opts:[{t:'先買色鉛筆，剩下的錢存起來', ok:true}, {t:'先買公仔，色鉛筆跟同學借'}], why:'<b>先買「需要」的，再考慮「想要」的</b>，零用錢才會用在刀口上！'},
+  {scene:'🛍️2️⃣🆓', text:'店員說「買二送一」，可是你只需要一個，怎麼辦？', opts:[{t:'只買自己需要的一個', ok:true}, {t:'買二送一比較划算，全部買'}], why:'用不到的東西再便宜也是浪費，<b>只買需要的</b>才聰明！'},
+  {scene:'🧾🪙✅', text:'買完東西、付完錢之後，要記得做什麼？', opts:[{t:'核對找零，拿發票或收據', ok:true}, {t:'拿了東西就趕快跑走'}], why:'<b>核對找的錢、拿發票或收據</b>，有問題才能退換貨！'},
+  {scene:'📓✍️💰', text:'怎麼知道自己的零用錢都花到哪裡去了？', opts:[{t:'每天記帳，寫下買了什麼、花多少錢', ok:true}, {t:'不用管，花完再跟爸媽要'}], why:'<b>記帳</b>可以知道錢花到哪裡，慢慢學會管理零用錢！'},
+  {scene:'🛒🛍️♻️', text:'去市場買菜，怎麼做比較環保？', opts:[{t:'自己帶購物袋，不拿塑膠袋', ok:true}, {t:'每樣東西都拿一個新塑膠袋'}], why:'<b>自備購物袋</b>，減少塑膠垃圾，愛護我們的社區環境！'}
+];
+const L4_SHOP_ROUND = 5;
+
+/* 共用的「點地圖，人物走過去」小遊戲 */
+class MapQuest {
+  constructor(cfg){ Object.assign(this, cfg); this.start = {x:47, y:58}; }
+  build(){
+    const map = $(this.mapId);
+    map.innerHTML = '<div class="road h"></div><div class="road v"></div>';
+    this.places.forEach(pl => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.className = `bldg ${pl.row === 'bottom' ? 'bottom-row' : ''}`; b.dataset.id = pl.id;
+      b.style.left = pl.x + '%'; b.style.width = pl.w + '%';
+      b.style.top = pl.row === 'top' ? '5%' : '63%'; b.style.height = pl.row === 'top' ? '38%' : '33%';
+      b.style.setProperty('--roof', pl.roof); b.style.setProperty('--wall', pl.wall);
+      b.innerHTML = `<span class="roof">${pl.name}</span><span class="wall"><span class="b-icon">${pl.icon}</span><span class="door"></span></span>`;
+      b.setAttribute('aria-label', pl.name);
+      b.addEventListener('click', () => this.pick(pl.id, b));
+      map.appendChild(b);
+    });
+    this.me = document.createElement('div'); this.me.className = 'char me';
+    this.me.innerHTML = charSVG({hair:'#3b2a1a', shirt:'#ffcf3f', pants:'#2d3a6b'});
+    map.appendChild(this.me);
+    if (!this.ro){ this.ro = new ResizeObserver(() => map.style.setProperty('--u', map.clientHeight / 100 + 'px')); this.ro.observe(map); }
+    this.queue = shuffle(this.events); this.done = 0; this.busy = false;
+    this.show();
+  }
+  place(x, y){ const m = this.me; m.style.transition = 'none'; m.style.left = x + '%'; m.style.top = y + '%'; void m.offsetWidth; m.style.transition = ''; }
+  async walkTo(x, y){
+    const m = this.me, fx = parseFloat(m.style.left), fy = parseFloat(m.style.top);
+    const dist = Math.hypot(x - fx, (y - fy) * .6); if (dist < .5) return;
+    const sec = Math.max(.35, dist * .035);
+    m.classList.toggle('face-left', x < fx); m.classList.add('walking'); m.style.transitionDuration = sec + 's';
+    m.style.left = x + '%'; m.style.top = y + '%';
+    const steps = setInterval(() => Sound.step(), 360);
+    await wait(sec * 1000 + 60);
+    clearInterval(steps); m.classList.remove('walking', 'face-left');
+  }
+  say(text){
+    const map = $(this.mapId); map.querySelectorAll('.bubble').forEach(b => b.remove());
+    if (!text) return;
+    const b = document.createElement('div'); b.className = 'bubble'; b.innerHTML = text; map.appendChild(b);
+    const sr = map.getBoundingClientRect(), ar = this.me.getBoundingClientRect(), bw = b.offsetWidth, bh = b.offsetHeight;
+    const cx = ar.left + ar.width / 2 - sr.left;
+    const left = Math.max(4, Math.min(sr.width - bw - 4, cx - bw / 2));
+    let top = ar.top - sr.top - bh - 10; if (top < 4) top = ar.bottom - sr.top + 8;
+    b.style.left = left + 'px'; b.style.top = top + 'px'; b.style.setProperty('--tail', Math.max(14, Math.min(bw - 14, cx - left)) + 'px');
+  }
+  show(){
+    const ev = this.queue[this.done]; this.busy = false;
+    $(this.ids.prog).textContent = `${this.done} / ${this.events.length}`;
+    $(this.ids.ask).classList.remove('good'); $(this.ids.icon).textContent = ev.icon;
+    $(this.ids.text).textContent = `小方：「${ev.text}」要去哪裡呢？`;
+    $(this.ids.tip).textContent = this.tip;
+    $(this.ids.next).hidden = true;
+    $(this.mapId).querySelectorAll('.right').forEach(n => n.classList.remove('right'));
+    this.place(this.start.x, this.start.y);
+    setTimeout(() => this.say('要去哪裡呢？🤔'), 60);
+  }
+  async pick(id, el){
+    if (this.busy) return;
+    Sound.unlock(); Sound.click();
+    const ev = this.queue[this.done];
+    if (id !== ev.ans){
+      this.onMiss(); Sound.shiver(); restartAnim(el, 'shake');
+      this.say('好像不是這裡耶……');
+      toast(`🤔 <b>再想想看喔！</b>${this.hints[ev.ans]}`);
+      return;
+    }
+    this.busy = true; el.classList.add('right'); this.say('');
+    const pl = this.places.find(p => p.id === id), door = {x:pl.x + pl.w / 2, y:pl.row === 'top' ? 49 : 66};
+    await this.walkTo(door.x, this.start.y); await this.walkTo(door.x, door.y);
+    Sound.ding(); bigCheck(); this.say(ev.why);
+    this.done++;
+    $(this.ids.prog).textContent = `${this.done} / ${this.events.length}`;
+    $(this.ids.ask).classList.add('good'); $(this.ids.icon).textContent = '✅';
+    $(this.ids.text).innerHTML = `答對了！要去<b>${pl.name}</b>。`;
+    $(this.ids.tip).textContent = ev.why;
+    const btn = $(this.ids.next); btn.hidden = false;
+    btn.textContent = this.done < this.events.length ? '下一題 ▶' : '前往下一站 ▶';
+    btn.onclick = () => { Sound.click(); this.done < this.events.length ? this.show() : this.onDone(); };
+  }
+}
+
+const Level4 = {
+  miss:0, stage:0, quest:null, shopQs:[], shopI:0,
+  start(){
+    this.miss = 0; $('l4Miss').textContent = '想錯 0 次';
+    this.quest = new MapQuest({
+      mapId:'town', places:TOWN_PLACES, events:TOWN_EVENTS, hints:TOWN_HINT,
+      tip:'👆 點鳳山社區地圖上的地方，小方就會走過去！',
+      ids:{ask:'l4Ask', icon:'l4Icon', text:'l4Text', tip:'l4Tip', next:'l4Next', prog:'l4Prog'},
+      onMiss:() => this.addMiss(), onDone:() => this.toNeeds()
+    });
+    this.setStage(0);
+    this.quest.build();
+  },
+  addMiss(){ this.miss++; $('l4Miss').textContent = `想錯 ${this.miss} 次`; },
+  setStage(n){
+    this.stage = n;
+    ['l4MapStage', 'l4NeedStage', 'l4ShopStage'].forEach((id, i) => $(id).hidden = i !== n);
+    $('l4Steps').querySelectorAll('span').forEach((sp, i) => { sp.classList.toggle('now', i === n); sp.classList.toggle('done', i < n); });
+    window.scrollTo({top:0, behavior:'smooth'});
+  },
+
+  /* ---- 第 2 站：需要與想要 ---- */
+  async toNeeds(){
+    Sound.win();
+    await showModal({icon:'🗺️', title:'第 1 站完成：鳳山社區小達人！', center:true,
+      html:'你認識了社區裡的火車站、郵局、派出所、衛生所、市場、鳳儀書院、消防隊和圖書館！<br>下一站：分一分「需要」和「想要」🧺', buttons:[{label:'前往第 2 站 ▶', value:true}]});
+    this.setStage(1);
+    this.needLeft = 6;
+    $('l4Prog').textContent = '0 / 6';
+    document.querySelectorAll('.basket .b-items').forEach(b => b.innerHTML = '');
+    const items = shuffle([...shuffle(NEEDS).slice(0, 3), ...shuffle(WANTS).slice(0, 3)]);
+    const box = $('needCards'); box.innerHTML = '';
+    items.forEach(it => {
+      const el = document.createElement('div'); el.className = 'card px'; el.dataset.b = it.b;
+      el.innerHTML = `<span class="c-icon">${it.icon}</span><span>${it.name}</span>`;
+      Drag.attach(el, {targets:() => [...document.querySelectorAll('.basket')], onDrop:(card, basket) => this.dropNeed(card, basket, it)});
+      box.appendChild(el);
+    });
+  },
+  dropNeed(card, basket, it){
+    if (basket.dataset.b !== it.b){
+      this.addMiss(); Sound.shiver(); restartAnim(basket, 'shake'); restartAnim(card, 'wrong');
+      toast(it.b === 'need' ? `🤔 <b>再想想！</b>「${it.name}」生活一定要有，沒有會很不方便喔！` : `🤔 <b>再想想！</b>「${it.name}」沒有也能好好生活，是讓生活更開心的東西。`);
+      return false;
+    }
+    Sound.ding();
+    basket.querySelector('.b-items').insertAdjacentHTML('beforeend', `<span>${it.icon} ${it.name}</span>`);
+    card.remove(); this.needLeft--;
+    $('l4Prog').textContent = `${6 - this.needLeft} / 6`;
+    if (this.needLeft === 0) setTimeout(() => this.toShop(), 600);
+    return true;
+  },
+
+  /* ---- 第 3 站：聰明消費 ---- */
+  async toShop(){
+    Sound.win();
+    await showModal({icon:'🧺', title:'第 2 站完成：需要與想要！', center:true,
+      html:'<b>需要</b>：生活一定要有的東西（吃飯、穿衣、上學用品）。<br><b>想要</b>：有了更開心，沒有也可以的東西。<br>💡 先滿足「需要」，再考慮「想要」！', buttons:[{label:'前往第 3 站 ▶', value:true}]});
+    this.setStage(2);
+    this.shopQs = shuffle(SHOP_POOL).slice(0, L4_SHOP_ROUND); this.shopI = 0;
+    $('shopNext').onclick = () => { Sound.click(); this.shopI++; this.shopI < this.shopQs.length ? this.showShop() : this.finish(); };
+    this.showShop();
+  },
+  showShop(){
+    const q = this.shopQs[this.shopI];
+    $('l4Prog').textContent = `${this.shopI + 1} / ${this.shopQs.length}`;
+    $('shopNum').textContent = `聰明消費 ${this.shopI + 1}`; $('shopScene').textContent = q.scene; $('shopText').textContent = q.text;
+    $('shopFb').hidden = true;
+    const box = $('shopOpts'); box.innerHTML = '';
+    shuffle(q.opts).forEach(o => {
+      const b = document.createElement('button'); b.className = 'px-btn'; b.textContent = o.t;
+      b.onclick = () => this.answerShop(o, b);
+      box.appendChild(b);
+    });
+  },
+  answerShop(o, btn){
+    const q = this.shopQs[this.shopI];
+    $('shopOpts').querySelectorAll('button').forEach(b => {
+      b.disabled = true;
+      if (q.opts.find(x => x.t === b.textContent).ok) b.classList.add('right');
+    });
+    if (o.ok) Sound.ding(); else { this.addMiss(); Sound.shiver(); btn.classList.add('wrongpick'); restartAnim($('shopOpts'), 'shiver'); }
+    const fb = $('shopFb'); fb.className = `feedback px ${o.ok ? 'good' : 'bad'}`;
+    $('shopFbTitle').innerHTML = o.ok ? '⭕ 答對了！聰明消費者！' : '❌ 不對喔！綠色的才是好方法';
+    $('shopFbText').innerHTML = q.why;
+    $('shopNext').textContent = this.shopI === this.shopQs.length - 1 ? '完成關卡 🏁' : '下一題 ▶';
+    fb.hidden = false; fb.scrollIntoView({behavior:'smooth', block:'nearest'});
+  },
+  async finish(){
+    const stars = this.miss <= 1 ? 3 : this.miss <= 4 ? 2 : 1; Store.set(4, stars);
+    Sound.win(); confetti();
+    const v = await showModal({icon:'🛒', title:'鳳山社區小達人 過關！', center:true,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>認識社區設施、分清楚需要與想要、做個聰明消費者——你是鳳山的小達人！</p>`,
+      buttons:[{label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+    App.afterLevel(4, v);
   }
 };
 
@@ -1137,14 +1451,21 @@ const NOTES = [
     <li>✋ <b>我的身體我作主</b>：不舒服就說「不要」、離開，並告訴老師或家人。</li>
     <li>⚖️ <b>性別平等</b>：男生可以哭、女生可以踢足球，興趣不分男女！</li>
     <li>🏠 家庭有很多樣子，每一種都是家；分擔家事、<b>感恩回饋</b>家人。</li></ul>
-    <div class="star-tip">⭐ 在家、在學校，每個人都有不同的角色和責任，盡力做好就是最棒的小公民！</div>`}
+    <div class="star-tip">⭐ 在家、在學校，每個人都有不同的角色和責任，盡力做好就是最棒的小公民！</div>`},
+  {icon:'💡', title:'《聰明小消費者》', sub:'三下：社區與消費', html:`
+    <ul><li>🗺️ 社區裡有好多幫手：<b>火車站</b>搭車、<b>郵局</b>寄信、<b>派出所</b>找警察、<b>衛生所</b>打預防針、<b>消防隊</b>救火（119）。</li>
+    <li>🏯 鳳山的古蹟<b>鳳儀書院</b>，是清朝時讀書的地方。</li>
+    <li>🧺 <b>需要</b>：生活一定要有的；<b>想要</b>：有了更開心，沒有也可以。<b>先需要、後想要！</b></li>
+    <li>🛒 聰明消費：看<b>有效期限</b>、<b>貨比三家</b>、只買需要的、<b>核對找零拿發票</b>、自備購物袋。</li>
+    <li>📓 每天<b>記帳</b>，知道零用錢花到哪裡。</li></ul>
+    <div class="star-tip">⭐ 錢要用在刀口上：先想清楚「我真的需要嗎？」再買！</div>`}
 ];
 const Result = {
   show(){
     const s = Store.get();
     $('trophy').innerHTML = Pix.trophy().replace('<svg', '<svg style="width:110px;height:auto"');
     $('catPix').innerHTML = Pix.cat();
-    const names = ['🎮 班會情境劇', '🏥 急救特派員', '🚦 小公民'];
+    const names = ['🎮 班會情境劇', '🏥 急救特派員', '🚦 小公民', '🛒 社區小達人'];
     $('resultLevels').innerHTML = names.map((n, i) => `<div>${n}<b>${'★'.repeat(s[i + 1] || 0)}${'☆'.repeat(3 - (s[i + 1] || 0))}</b></div>`).join('');
     $('notes').innerHTML = NOTES.map((n, i) => `<button class="note-card px" data-i="${i}"><span class="n-icon">📒</span>${n.title}<small>${n.sub}・點我閱讀</small></button>`).join('');
     $('notes').querySelectorAll('.note-card').forEach(b => b.addEventListener('click', () => {
@@ -1175,7 +1496,7 @@ const App = {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     this.current = id;
     $('homeBtn').hidden = id === 'lobby';
-    $('topTitle').textContent = {lobby:'🎒 三年級社會探險島', level1:'🎮 關卡一：麥塊班會情境劇', level2:'🏥 關卡二：校園急救特派員', level3:'🚦 關卡三：三年級小公民', result:'🏆 全部過關！'}[id];
+    $('topTitle').textContent = {lobby:'🎒 三年級社會探險島', level1:'🎮 關卡一：麥塊班會情境劇', level2:'🏥 關卡二：校園急救特派員', level3:'🚦 關卡三：三年級小公民', level4:'🛒 關卡四：鳳山社區小達人（三下）', result:'🏆 全部過關！'}[id];
     if (id === 'lobby') this.renderLobby();
     if (id === 'result') Result.show();
     $('overlay').classList.remove('open');
@@ -1188,11 +1509,11 @@ const App = {
   },
   startLevel(n){
     this.go('level' + n);
-    ({1:Level1, 2:Level2, 3:Level3})[n].start();
+    ({1:Level1, 2:Level2, 3:Level3, 4:Level4})[n].start();
   },
   afterLevel(n, choice){
     if (choice === 'home') return this.go('lobby');
-    if (n < 3) return this.startLevel(n + 1);
+    if (n < 4) return this.startLevel(n + 1);
     this.go(Store.allCleared() ? 'result' : 'lobby');
   }
 };
