@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>三年級社會探險島・麥塊校園大冒險</title>
+<style>
+/* =========================================================
+   1. 麥塊（像素方塊）風格色彩
+   ========================================================= */
+:root{
+  --sky:#8fd3ff;
+  --grass:#5dbb3f;
+  --grass-dark:#3f8f2a;
+  --dirt:#8b5a2b;
+  --dirt-dark:#5e3a19;
+  --stone:#a7a7a7;
+  --stone-dark:#6f6f6f;
+  --wood:#c08a55;
+  --wood-dark:#8a5a2e;
+  --gold:#ffcf3f;
+  --red:#e8433a;
+  --green-ok:#2fbf4f;
+  --ink:#232323;
+  --paper:#fff8e6;
+  --font:"Microsoft JhengHei","PingFang TC","Noto Sans TC","Heiti TC",sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:var(--font);font-weight:700;font-size:18px;color:var(--ink);
+  background:linear-gradient(180deg,#7cc8ff 0%,#b9e6ff 62%,#5dbb3f 62%,#5dbb3f 66%,#8b5a2b 66%);
+  background-attachment:fixed;min-height:100dvh;
+  -webkit-tap-highlight-color:transparent;overscroll-behavior:none;
+}
+button{font-family:inherit;cursor:pointer}
+
+/* 像素方塊外框（共用） */
+.px{
+  border:4px solid var(--ink);border-radius:8px;
+  box-shadow:inset -5px -5px 0 rgba(0,0,0,.22), inset 5px 5px 0 rgba(255,255,255,.35), 0 5px 0 rgba(0,0,0,.35);
+}
+.px-btn{
+  border:4px solid var(--ink);border-radius:10px;padding:10px 16px;font-size:18px;font-weight:900;color:#fff;
+  background:var(--grass);text-shadow:2px 2px 0 rgba(0,0,0,.35);
+  box-shadow:inset -5px -5px 0 rgba(0,0,0,.25), inset 5px 5px 0 rgba(255,255,255,.3), 0 5px 0 rgba(0,0,0,.4);
+  transition:transform .08s;
+}
+.px-btn:active{transform:translateY(4px);box-shadow:inset -5px -5px 0 rgba(0,0,0,.25), inset 5px 5px 0 rgba(255,255,255,.3), 0 1px 0 rgba(0,0,0,.4)}
+.px-btn.wood{background:var(--wood)}
+.px-btn.stone{background:var(--stone-dark)}
+.px-btn.red{background:var(--red)}
+.px-btn.gold{background:#f0a800}
+svg.pix{shape-rendering:crispEdges;display:block}
+
+/* 背景像素雲 */
+.cloud{position:fixed;z-index:0;width:120px;height:28px;background:#fff;opacity:.85;box-shadow:24px -16px 0 #fff, 56px -16px 0 #fff;pointer-events:none;animation:drift 60s linear infinite}
+.cloud.c2{top:16%;width:90px;animation-duration:80s;animation-delay:-30s}
+@keyframes drift{from{transform:translateX(-200px)}to{transform:translateX(110vw)}}
+
+/* =========================================================
+   2. 版面：上方工具列 + 各畫面
+   ========================================================= */
+.app{position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:10px 12px 70px;min-height:100dvh;display:flex;flex-direction:column;gap:10px}
+.topbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.home-btn{font-size:16px;padding:8px 12px;background:var(--wood)}
+.topbar .title{flex:1 1 auto;min-width:0;background:rgba(255,255,255,.85);padding:6px 12px;font-size:clamp(15px,3.6vw,20px);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mute-btn{width:46px;height:46px;padding:0;font-size:20px;background:var(--stone-dark)}
+.screen{display:none;flex-direction:column;gap:10px;animation:fadeIn .35s}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ---- 大廳 ---- */
+.lobby-title{text-align:center;margin:6px 0 0;font-size:clamp(24px,6vw,42px);font-weight:900;color:#fff;
+  text-shadow:3px 3px 0 #2b5e1c, -2px -2px 0 #2b5e1c, 2px -2px 0 #2b5e1c, -2px 2px 0 #2b5e1c, 5px 6px 0 rgba(0,0,0,.25)}
+.lobby-sub{text-align:center;margin:0;font-size:17px;color:#1d3f12;background:rgba(255,255,255,.7);align-self:center;padding:4px 14px;border-radius:99px}
+.portals{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:8px}
+.portal{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px 14px;text-align:center;background:var(--paper);cursor:pointer;color:var(--ink);font-size:18px;transition:transform .12s}
+.portal:hover{transform:translateY(-4px)}
+.portal:active{transform:translateY(2px)}
+.portal .p-icon{width:96px;height:96px;animation:bob 2s ease-in-out infinite}
+.portal .p-lv{font-size:15px;color:#fff;background:var(--grass-dark);padding:2px 12px;border-radius:99px}
+.portal .p-name{font-size:21px;font-weight:900}
+.portal .p-desc{font-size:15px;color:#6a5a40}
+.portal .p-stars{font-size:26px;letter-spacing:2px;color:#d1c3a0}
+.portal .p-stars b{color:#f0a800;text-shadow:0 2px 0 #9a6b00}
+.portal.p1{border-color:#2b5e1c}
+.portal.p2{background:#fff0ef}
+.portal.p3{background:#eef7ff}
+.notes-btn{align-self:center;margin-top:8px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* ---- 關卡共用 ---- */
+.level-head{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:var(--paper);padding:8px 12px}
+.level-head h2{margin:0;font-size:clamp(18px,4.4vw,24px);font-weight:900;flex:1 1 auto}
+.chip{background:var(--grass-dark);color:#fff;border-radius:99px;padding:3px 12px;font-size:15px;white-space:nowrap}
+.chip.warn{background:#c7652a}
+
+/* =========================================================
+   3. 關卡一：麥塊班會情境劇
+   ========================================================= */
+.scene{
+  position:relative;width:100%;aspect-ratio:16/9;max-height:max(300px, calc(100dvh - 380px));overflow:hidden;
+  border:4px solid var(--ink);border-radius:10px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.06) 0 2px, transparent 2px 12.5%),
+    linear-gradient(180deg,#f3e2b8 0 62%, transparent 62%),
+    repeating-linear-gradient(0deg,#b07a46 0 6%, #9c6a3a 6% 6.6%);
+  --u:5px;
+}
+.scene .wall-strip{position:absolute;left:0;right:0;top:58%;height:4%;background:#8a5a2e;border-top:3px solid #5e3a19}
+.board{position:absolute;left:22%;width:56%;top:6%;height:36%;background:#2f5d3a;border:calc(var(--u)*1.2) solid #8a5a2e;
+  box-shadow:inset 0 0 0 3px #244a2d, 0 4px 0 rgba(0,0,0,.25);color:#f4f4e8;font-size:max(12px,calc(var(--u)*3));
+  padding:calc(var(--u)*1.2) calc(var(--u)*2);display:flex;flex-direction:column;gap:2px;overflow:hidden}
+.board .b-title{font-weight:900;font-size:1.15em;border-bottom:2px dashed rgba(255,255,255,.4);padding-bottom:2px}
+.board .b-list{display:flex;flex-wrap:wrap;gap:2px 14px}
+.board .b-item{animation:chalk .5s ease-out}
+.board .b-vote{display:flex;gap:18px;justify-content:center;font-size:1.35em;margin-top:2px}
+.board .b-vote .yes{color:#b8ff9e}.board .b-vote .no{color:#ffc2b8}
+.board .big-check{position:absolute;right:6%;bottom:6%;font-size:3em;color:#b8ff9e;animation:chalk .6s ease-out}
+.chalk-tray{position:absolute;left:24%;width:52%;top:42%;height:1.4%;background:#5e3a19}
+@keyframes chalk{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.door{position:absolute;left:2%;width:9%;top:20%;height:40%;background:#8a5a2e;border:3px solid #4a2c12;
+  background-image:linear-gradient(#a06a3a,#a06a3a),linear-gradient(#a06a3a,#a06a3a);background-size:70% 35%;background-position:50% 12%,50% 80%;background-repeat:no-repeat}
+.door::after{content:"";position:absolute;right:12%;top:50%;width:12%;height:6%;background:#ffcf3f}
+.window{position:absolute;left:86%;width:11%;top:10%;height:26%;background:linear-gradient(#bfe9ff,#8fd3ff);border:calc(var(--u)*.8) solid #8a5a2e}
+.window::before{content:"";position:absolute;left:46%;top:0;bottom:0;width:8%;background:#8a5a2e}
+.window::after{content:"";position:absolute;top:46%;left:0;right:0;height:8%;background:#8a5a2e}
+.podium{position:absolute;left:50%;transform:translateX(-50%);width:26%;top:51%;height:23%;z-index:6;
+  background:#b07a46;border:3px solid #4a2c12;box-shadow:inset 0 calc(var(--u)*1.4) 0 #c99560, inset -6px -6px 0 rgba(0,0,0,.2)}
+.slot-drop{position:absolute;left:8%;right:8%;top:22%;bottom:12%;border:3px dashed #ffe25a;border-radius:6px;
+  display:flex;align-items:center;justify-content:center;text-align:center;color:#fff8c4;font-size:max(12px,calc(var(--u)*2.8));font-weight:900;
+  background:rgba(255,226,90,.12);animation:glow 1.3s ease-in-out infinite;line-height:1.2;padding:2px}
+.slot-drop.hover{background:rgba(255,240,150,.55);color:#4a2c12}
+.slot-drop.filled{animation:none;border-style:solid;border-color:#7dff8a;background:#2fbf4f;color:#fff;text-shadow:1px 1px 0 rgba(0,0,0,.4)}
+.slot-drop.shake{animation:shake .45s}
+@keyframes glow{0%,100%{box-shadow:0 0 4px 1px rgba(255,226,90,.6)}50%{box-shadow:0 0 18px 6px rgba(255,226,90,1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(4px)}}
+.act-banner{position:absolute;left:1.5%;top:2%;z-index:9;background:rgba(35,35,35,.8);color:#ffe25a;font-size:max(12px,calc(var(--u)*2.8));padding:3px 10px;border-radius:6px}
+
+/* 方塊小人 */
+.char{position:absolute;width:calc(var(--u)*15);transform:translate(-50%,-100%);z-index:5;transition:left 1.4s linear, top 1.4s linear}
+.char .char-svg{width:100%;height:auto;overflow:visible}
+.char.face-left .char-svg{transform:scaleX(-1)}
+.char.walking .char-svg{animation:walkBob .36s steps(2) infinite}
+.char.walking .leg-l{animation:legSwing .36s steps(2) infinite}
+.char.walking .leg-r{animation:legSwing .36s steps(2) infinite reverse}
+.char .leg,.char .arm{transform-box:fill-box;transform-origin:50% 0}
+.char.hand-up .arm-r{transform:rotate(180deg)}
+.char.clap .arm-l{animation:clapL .3s steps(2) infinite}
+.char.clap .arm-r{animation:clapR .3s steps(2) infinite}
+@keyframes walkBob{0%{transform:translateY(0)}100%{transform:translateY(calc(var(--u)*-.8))}}
+.char.face-left.walking .char-svg{animation-name:walkBobL}
+@keyframes walkBobL{0%{transform:scaleX(-1) translateY(0)}100%{transform:scaleX(-1) translateY(calc(var(--u)*-.8))}}
+@keyframes legSwing{0%{transform:rotate(22deg)}100%{transform:rotate(-22deg)}}
+@keyframes clapL{0%{transform:rotate(0)}100%{transform:rotate(-40deg)}}
+@keyframes clapR{0%{transform:rotate(0)}100%{transform:rotate(40deg)}}
+
+/* 對話泡泡 */
+.bubble{position:absolute;z-index:20;transform-origin:var(--tail,50%) 100%;max-width:min(330px,62%);background:#fff;border:3px solid var(--ink);border-radius:10px;
+  padding:6px 10px;font-size:max(14px,calc(var(--u)*3.2));line-height:1.45;font-weight:900;box-shadow:0 4px 0 rgba(0,0,0,.25);
+  animation:pop .3s cubic-bezier(.3,1.6,.5,1)}
+.bubble::after{content:"";position:absolute;left:var(--tail,50%);bottom:-12px;margin-left:-8px;border:8px solid transparent;border-top-color:var(--ink);border-bottom:0}
+@keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+
+/* 座位上的同學（背影） */
+.kid{position:absolute;width:calc(var(--u)*14);transform:translate(-50%,0);z-index:7}
+.kid .kid-svg{width:100%;height:auto}
+.kid.stand{transform:translate(-50%,calc(var(--u)*-7));transition:transform .4s cubic-bezier(.3,1.6,.5,1);z-index:8}
+.kid.bounce{animation:kidBounce .45s ease-in-out infinite}
+.kid.bounce:nth-child(2n){animation-delay:.15s}
+@keyframes kidBounce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,calc(var(--u)*-2))}}
+.hand{position:absolute;left:50%;bottom:100%;transform:translateX(-50%);font-size:max(16px,calc(var(--u)*5));animation:pop .35s cubic-bezier(.3,1.6,.5,1), handWave 1s ease-in-out .35s infinite}
+@keyframes handWave{0%,100%{transform:translateX(-50%) rotate(-8deg)}50%{transform:translateX(-50%) rotate(8deg)}}
+
+/* 劇情卡片 */
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.card{
+  position:relative;touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:84px;padding:8px 6px;
+  background:#f6e6c4;font-size:clamp(15px,3.8vw,19px);font-weight:900;text-align:center;line-height:1.25;
+  transition:transform .3s cubic-bezier(.3,1.5,.5,1), opacity .3s;will-change:transform;
+}
+.card .c-icon{font-size:28px}
+.card.dragging{cursor:grabbing;z-index:1000;transition:none;filter:drop-shadow(0 10px 6px rgba(0,0,0,.3))}
+.card.used{opacity:.35;pointer-events:none;filter:grayscale(1)}
+.card.wrong{animation:shake .45s}
+.hint-line{background:var(--paper);padding:8px 12px;font-size:16px;text-align:center}
+
+/* =========================================================
+   4. 關卡二：校園急救特派員
+   ========================================================= */
+.event-dock{position:relative;min-height:118px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.55);border:4px dashed rgba(35,35,35,.4);border-radius:12px;padding:8px}
+.event-card{touch-action:none;user-select:none;-webkit-user-select:none;cursor:grab;display:flex;align-items:center;gap:12px;max-width:560px;width:100%;
+  padding:10px 14px;background:#fffbe9;font-size:clamp(17px,4.3vw,22px);font-weight:900;line-height:1.4;animation:fall .7s cubic-bezier(.3,1.4,.5,1);will-change:transform}
+.event-card .e-icon{font-size:40px;flex:0 0 auto}
+.event-card .e-tip{display:block;font-size:13px;color:#8a7a5a;font-weight:700}
+.event-card.dragging{cursor:grabbing;z-index:1000;filter:drop-shadow(0 12px 8px rgba(0,0,0,.3))}
+.event-card.wrong{animation:shake .45s}
+@keyframes fall{from{transform:translateY(-140%) rotate(-6deg);opacity:0}to{transform:translateY(0) rotate(0);opacity:1}}
+.campus{display:grid;grid-template-columns:1fr 1.25fr 1fr;grid-template-rows:repeat(3,auto);gap:10px}
+.campus-map{grid-column:2;grid-row:1 / span 3;background:#5dbb3f;padding:6px;display:flex;align-items:center;justify-content:center}
+.campus-map svg{width:100%;height:auto}
+.target{position:relative;display:flex;align-items:center;gap:10px;padding:10px 12px;min-height:84px;background:var(--paper);transition:transform .15s, background .15s}
+.target .t-icon{font-size:34px;flex:0 0 auto}
+.target .t-name{font-size:clamp(17px,4vw,21px);font-weight:900;display:block}
+.target .t-tag{display:inline-block;font-size:12px;color:#fff;background:var(--stone-dark);padding:1px 8px;border-radius:99px}
+.target .t-tag.officer{background:#c7652a}
+.target.hover{background:#fff4b0;transform:scale(1.04)}
+.target.ok{background:#d9ffd9}
+.target.shake{animation:shake .45s}
+.target .t-done{position:absolute;right:8px;top:6px;font-size:13px;color:var(--green-ok);font-weight:900}
+.big-check{position:fixed;z-index:4000;left:50%;top:45%;transform:translate(-50%,-50%);font-size:140px;color:#fff;
+  width:190px;height:190px;border-radius:50%;background:var(--green-ok);border:6px solid var(--ink);display:flex;align-items:center;justify-content:center;
+  animation:checkPop 1s cubic-bezier(.3,1.6,.5,1) forwards;pointer-events:none;text-shadow:4px 4px 0 rgba(0,0,0,.25)}
+@keyframes checkPop{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}25%{transform:translate(-50%,-50%) scale(1.1);opacity:1}70%{transform:translate(-50%,-50%) scale(1);opacity:1}100%{transform:translate(-50%,-50%) scale(.9);opacity:0}}
+.explain{background:#e9ffe9;border-color:#1f7a34;padding:10px 14px;font-size:18px;line-height:1.6;display:flex;gap:10px;align-items:center}
+.explain .ex-icon{font-size:30px}
+
+/* =========================================================
+   5. 關卡三：是非紅綠燈
+   ========================================================= */
+.l3-wrap{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:stretch}
+.traffic{background:#3a3a3a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:14px 10px}
+.lamp{width:84px;height:84px;border-radius:12px;border:4px solid #111;background:#555;box-shadow:inset -6px -6px 0 rgba(0,0,0,.3);transition:background .2s, box-shadow .2s}
+.lamp.red.on{background:#ff4a3d;box-shadow:0 0 30px 8px rgba(255,74,61,.8), inset -6px -6px 0 rgba(0,0,0,.2)}
+.lamp.green.on{background:#3dff6a;box-shadow:0 0 30px 8px rgba(61,255,106,.8), inset -6px -6px 0 rgba(0,0,0,.2)}
+.q-card{background:var(--paper);padding:16px 18px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.q-card .q-num{font-size:15px;color:#8a7a5a}
+.q-card .q-scene{font-size:46px;letter-spacing:6px}
+.q-card .q-text{font-size:clamp(19px,4.8vw,26px);font-weight:900;line-height:1.5}
+.answer-btns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.answer-btns .px-btn{font-size:clamp(19px,4.8vw,26px);padding:18px 10px;border-radius:22px}
+.answer-btns .go{background:#2fbf4f}
+.answer-btns .stop{background:#e8433a}
+.feedback{padding:12px 16px;font-size:18px;line-height:1.6;display:flex;flex-direction:column;gap:8px}
+.feedback.good{background:#e9ffe9}
+.feedback.bad{background:#ffecec}
+.feedback .fb-title{font-size:22px;font-weight:900}
+.shiver{animation:shake .45s}
+
+/* =========================================================
+   6. 彈窗、結算、筆記
+   ========================================================= */
+.overlay{position:fixed;inset:0;z-index:3000;display:flex;align-items:center;justify-content:center;padding:14px;background:rgba(20,30,10,.6);opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.open{opacity:1;pointer-events:auto}
+.modal{width:min(100%,560px);max-height:calc(100dvh - 28px);overflow:auto;background:var(--paper);padding:18px;text-align:center;transform:scale(.7);transition:transform .35s cubic-bezier(.3,1.5,.5,1)}
+.overlay.open .modal{transform:scale(1)}
+.modal .m-icon{font-size:56px;line-height:1.1}
+.modal .m-icon svg{width:110px;height:auto;margin:0 auto}
+.modal h3{margin:6px 0;font-size:clamp(21px,5vw,27px);font-weight:900}
+.modal .m-body{font-size:18px;line-height:1.7;text-align:left}
+.modal .m-body.center{text-align:center}
+.modal .m-btns{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.modal .m-btns .px-btn{font-size:20px;padding:13px}
+.stars-big{font-size:46px;letter-spacing:6px;color:#d1c3a0}
+.stars-big b{color:#f0a800;text-shadow:0 3px 0 #9a6b00}
+
+.result-card{background:var(--paper);padding:16px;display:flex;flex-direction:column;gap:12px;align-items:center;text-align:center}
+.result-card h2{margin:0;font-size:clamp(24px,6vw,36px);font-weight:900}
+.result-levels{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%}
+.result-levels div{background:#fff;border:3px solid #d8c7a0;border-radius:10px;padding:8px 4px;font-size:15px}
+.result-levels b{display:block;font-size:22px;color:#f0a800;letter-spacing:2px}
+.cat-talk{display:flex;align-items:flex-end;gap:10px;text-align:left;width:100%}
+.cat-talk svg{width:84px;height:auto;flex:0 0 auto;animation:bob 2s ease-in-out infinite}
+.cat-talk .bubble-static{flex:1;background:#fff;border:3px solid var(--ink);border-radius:12px;padding:8px 12px;font-size:17px;line-height:1.6}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%}
+.note-card{display:flex;flex-direction:column;align-items:center;gap:6px;padding:14px 10px;cursor:pointer;color:var(--ink);font-size:18px;font-weight:900;
+  background:repeating-linear-gradient(0deg,#fffdf4 0 26px,#cfe3ff 26px 28px);transition:transform .12s}
+.note-card:hover{transform:translateY(-4px) rotate(-1deg)}
+.note-card .n-icon{font-size:42px}
+.note-card small{font-size:13px;color:#7a6a4a;font-weight:700}
+.note-body{text-align:left;font-size:18px;line-height:1.75}
+.note-body .flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:8px 0 12px}
+.note-body .flow span{background:var(--grass);color:#fff;border:3px solid var(--ink);border-radius:8px;padding:4px 10px;font-weight:900;text-shadow:1px 1px 0 rgba(0,0,0,.3)}
+.note-body .flow i{font-style:normal;font-weight:900}
+.note-body .star-tip{background:#fff3c4;border:3px dashed #e0a800;border-radius:12px;padding:8px 12px;margin-top:8px}
+.note-body ul{margin:6px 0;padding-left:1.3em}
+
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translate(-50%,180%);z-index:3500;width:min(92vw,520px);
+  background:#fff;border:4px solid var(--red);border-radius:12px;padding:10px 14px;font-size:17px;line-height:1.5;box-shadow:0 5px 0 rgba(0,0,0,.3);transition:transform .35s cubic-bezier(.3,1.4,.5,1);pointer-events:none}
+.toast.show{transform:translate(-50%,0)}
+.spark{position:fixed;width:12px;height:12px;pointer-events:none;z-index:4500;animation:spark 1.6s ease-out forwards}
+@keyframes spark{to{transform:translate(var(--dx),var(--dy)) rotate(540deg);opacity:0}}
+
+/* =========================================================
+   7. RWD：手機與平板直式
+   ========================================================= */
+@media (max-width:820px){
+  .topbar .title{display:none}
+  .mute-btn{margin-left:auto}
+  .podium{width:36%}
+  .portals{grid-template-columns:1fr;gap:12px}
+  .portal{flex-direction:row;text-align:left;padding:12px}
+  .portal .p-icon{width:72px;height:72px;flex:0 0 auto}
+  .portal .p-info{display:flex;flex-direction:column;gap:2px}
+  .scene{aspect-ratio:4/3}
+  .cards{grid-template-columns:repeat(2,1fr);gap:8px}
+  .cards .card:last-child{grid-column:1 / -1}
+  .card{min-height:62px;flex-direction:row;gap:8px}
+  .card .c-icon{font-size:22px}
+  .campus{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .campus-map{grid-column:1 / -1;grid-row:auto;max-height:150px;overflow:hidden}
+  .campus-map svg{width:auto;height:136px}
+  .target{min-height:70px;padding:8px}
+  .target .t-icon{font-size:28px}
+  .l3-wrap{grid-template-columns:1fr}
+  .traffic{flex-direction:row;padding:8px}
+  .lamp{width:54px;height:54px}
+  .notes,.result-levels{grid-template-columns:1fr}
+  .result-levels{grid-template-columns:repeat(3,1fr)}
+}
+@media (min-width:821px){.portal .p-info{display:contents}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+<div class="cloud" style="top:6%"></div><div class="cloud c2"></div>
+
+<div class="app">
+  <!-- 上方工具列：左上角常駐「回關卡選單」 -->
+  <header class="topbar">
+    <button class="px-btn home-btn" id="homeBtn">🏠 回關卡選單</button>
+    <div class="title px" id="topTitle">🎒 三年級社會探險島</div>
+    <button class="px-btn mute-btn" id="muteBtn" aria-label="切換音效">🔊</button>
+  </header>
+
+  <!-- ===== 大廳（關卡選單） ===== -->
+  <section class="screen active" id="lobby">
+    <h1 class="lobby-title">🎒 三年級社會探險島：<br>麥塊校園大冒險！</h1>
+    <p class="lobby-sub">選一個傳送門開始冒險，每關最多拿 ★★★！</p>
+    <div class="portals">
+      <button class="portal px p1" data-level="1">
+        <span class="p-icon" data-pix="grass"></span>
+        <span class="p-info">
+          <span class="p-lv">關卡一</span>
+          <span class="p-name">🎮 麥塊班會情境劇</span>
+          <span class="p-desc">開會流程與民主素養</span>
+          <span class="p-stars" data-stars="1">★★★</span>
+        </span>
+      </button>
+      <button class="portal px p2" data-level="2">
+        <span class="p-icon" data-pix="cross"></span>
+        <span class="p-info">
+          <span class="p-lv">關卡二</span>
+          <span class="p-name">🏥 校園急救特派員</span>
+          <span class="p-desc">處室與幹部功能連連看</span>
+          <span class="p-stars" data-stars="2">★★★</span>
+        </span>
+      </button>
+      <button class="portal px p3" data-level="3">
+        <span class="p-icon" data-pix="light"></span>
+        <span class="p-info">
+          <span class="p-lv">關卡三</span>
+          <span class="p-name">🚦 三年級小公民</span>
+          <span class="p-desc">生活作息與個人隱私紅綠燈</span>
+          <span class="p-stars" data-stars="3">★★★</span>
+        </span>
+      </button>
+    </div>
+    <button class="px-btn gold notes-btn" id="notesBtn" hidden>📒 看石虎白話小筆記</button>
+    <a class="px-btn wood notes-btn" href="index.html" style="text-decoration:none">⬅ 換年級（三年級／五年級）</a>
+  </section>
+
+  <!-- ===== 關卡一：麥塊班會情境劇 ===== -->
+  <section class="screen" id="level1">
+    <div class="level-head px">
+      <h2>🎮 關卡一：麥塊班會情境劇</h2>
+      <span class="chip" id="l1Act">第 1 / 5 幕</span>
+      <span class="chip warn" id="l1Miss">想錯 0 次</span>
+    </div>
+    <div class="scene" id="scene">
+      <div class="act-banner" id="actBanner">第 1 幕：開場</div>
+      <div class="board" id="board"></div>
+      <div class="chalk-tray"></div>
+      <div class="door"></div>
+      <div class="window"></div>
+      <div class="wall-strip"></div>
+      <div class="podium" id="podium"><div class="slot-drop" id="podiumSlot">⬇ 卡片<br>拖到這裡</div></div>
+      <!-- 人物與同學由 JS 產生 -->
+    </div>
+    <div class="hint-line px" id="l1Hint">👆 按住下面的卡片，拖到講台上發光的插槽！</div>
+    <div class="cards" id="l1Cards"></div>
+  </section>
+
+  <!-- ===== 關卡二：校園急救特派員 ===== -->
+  <section class="screen" id="level2">
+    <div class="level-head px">
+      <h2>🏥 關卡二：校園急救特派員</h2>
+      <span class="chip" id="l2Prog">0 / 6</span>
+      <span class="chip warn" id="l2Miss">想錯 0 次</span>
+    </div>
+    <div class="event-dock" id="eventDock"></div>
+    <div class="explain px" id="l2Explain" hidden><span class="ex-icon">✅</span><span id="l2ExplainText"></span></div>
+    <div class="campus" id="campus">
+      <div class="campus-map px" id="campusMap"></div>
+    </div>
+  </section>
+
+  <!-- ===== 關卡三：三年級小公民 ===== -->
+  <section class="screen" id="level3">
+    <div class="level-head px">
+      <h2>🚦 關卡三：三年級小公民</h2>
+      <span class="chip" id="l3Prog">第 1 / 5 題</span>
+      <span class="chip warn" id="l3Score">答對 0 題</span>
+    </div>
+    <div class="l3-wrap">
+      <div class="traffic px"><div class="lamp red" id="lampRed"></div><div class="lamp green" id="lampGreen"></div></div>
+      <div class="q-card px">
+        <div class="q-num" id="l3Num">情境 1</div>
+        <div class="q-scene" id="l3Scene">🎒📝</div>
+        <div class="q-text" id="l3Text"></div>
+      </div>
+    </div>
+    <div class="answer-btns" id="l3Btns">
+      <button class="px-btn go" data-ans="go">🟢 這樣做很棒</button>
+      <button class="px-btn stop" data-ans="stop">🔴 這樣不行喔</button>
+    </div>
+    <div class="feedback px" id="l3Feedback" hidden>
+      <div class="fb-title" id="l3FbTitle"></div>
+      <div id="l3FbText"></div>
+      <button class="px-btn" id="l3Next">下一題 ▶</button>
+    </div>
+  </section>
+
+  <!-- ===== 結算畫面 ===== -->
+  <section class="screen" id="result">
+    <div class="result-card px">
+      <span id="trophy"></span>
+      <h2>🏆 三年級社會探險島 全部過關！</h2>
+      <div class="result-levels" id="resultLevels"></div>
+      <div class="cat-talk">
+        <span id="catPix"></span>
+        <div class="bubble-static">恭喜你完成麥塊校園大冒險！石虎幫你整理了 3 張<b>白話知識筆記卡</b>，點點看、複習一下吧！</div>
+      </div>
+      <div class="notes" id="notes"></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+        <button class="px-btn wood" id="resultHome">🏠 回關卡選單</button>
+        <a class="px-btn stone" href="index.html" style="text-decoration:none">⬅ 換年級</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 共用彈窗 -->
+<div class="overlay" id="overlay"><div class="modal px" role="dialog" aria-modal="true" id="modal"></div></div>
+<div class="toast" id="toast" role="status" aria-live="assertive"></div>
+
+<script>
+/* =========================================================
+   A. 小工具
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const wait = ms => new Promise(r => setTimeout(r, ms));
+const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function restartAnim(el, cls){ el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+let toastTimer;
+function toast(html, ms = 3200){ $('toast').innerHTML = html; $('toast').classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('show'), ms); }
+
+/* =========================================================
+   B. 音效（Web Audio API 即時合成）
+   ========================================================= */
+const Sound = (() => {
+  let ctx = null, muted = false;
+  const ensure = () => {
+    if (!ctx){ const AC = window.AudioContext || window.webkitAudioContext; if (AC) ctx = new AC(); }
+    if (ctx && ctx.state === 'suspended') ctx.resume();
+    return ctx;
+  };
+  function tone(freq, start, dur, type = 'square', vol = .12){
+    const c = ensure(); if (!c || muted) return;
+    const t = c.currentTime + start, o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + dur);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t + dur + .02);
+  }
+  return {
+    unlock: ensure,
+    toggle(){ muted = !muted; return muted; },
+    click(){ tone(880, 0, .05, 'square', .08); },
+    step(){ tone(220, 0, .04, 'triangle', .06); },
+    ding(){ tone(1046, 0, .25, 'triangle', .2); tone(784, .18, .4, 'triangle', .2); },      // 叮咚
+    win(){ [523, 659, 784, 1046, 784, 1046].forEach((f, i) => tone(f, i * .11, .2, 'square', .09)); },
+    shiver(){                                                                                // 答錯發抖聲
+      const c = ensure(); if (!c || muted) return;
+      const t = c.currentTime, o = c.createOscillator(), g = c.createGain(), lfo = c.createOscillator(), lg = c.createGain();
+      o.type = 'sawtooth'; o.frequency.setValueAtTime(200, t); o.frequency.linearRampToValueAtTime(140, t + .5);
+      lfo.frequency.value = 22; lg.gain.value = 18; lfo.connect(lg).connect(o.frequency);
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.09, t + .03); g.gain.exponentialRampToValueAtTime(.0001, t + .55);
+      o.connect(g).connect(c.destination); o.start(t); lfo.start(t); o.stop(t + .6); lfo.stop(t + .6);
+    }
+  };
+})();
+
+/* =========================================================
+   C. 像素畫產生器（全部由程式碼畫，不用外部圖片）
+   ========================================================= */
+const Pix = {
+  /* rows：字串陣列，每個字元一格；pal：字元對應顏色；'.' 為透明 */
+  svg(rows, pal, cls = ''){
+    const h = rows.length, w = rows[0].length; let rects = '';
+    rows.forEach((row, y) => {
+      let x = 0;
+      while (x < w){
+        const ch = row[x];
+        if (ch === '.' || !pal[ch]){ x++; continue; }
+        let run = 1; while (x + run < w && row[x + run] === ch) run++;
+        rects += `<rect x="${x}" y="${y}" width="${run}" height="1" fill="${pal[ch]}"/>`;
+        x += run;
+      }
+    });
+    return `<svg class="pix ${cls}" viewBox="0 0 ${w} ${h}" aria-hidden="true">${rects}</svg>`;
+  },
+  grass(){ return this.svg(['gggggggg','gGgggGgg','dgddgdgd','dddddddd','ddDdddDd','dddddddd','dDdddddD','dddddddd'], {g:'#5dbb3f', G:'#3f8f2a', d:'#8b5a2b', D:'#5e3a19'}); },
+  cross(){ return this.svg(['wwwwwwwwww','wwwwrrwwww','wwwwrrwwww','wwwwrrwwww','wrrrrrrrrw','wrrrrrrrrw','wwwwrrwwww','wwwwrrwwww','wwwwrrwwww','ssssssssss'], {w:'#ffffff', r:'#e8433a', s:'#c9c9c9'}); },
+  light(){ return this.svg(['..kkkk..','.kkkkkk.','.krrrrk.','.krrrrk.','.kkkkkk.','.kyyyyk.','.kyyyyk.','.kkkkkk.','.kggggk.','.kggggk.','.kkkkkk.','...kk...','...kk...','..kkkk..'], {k:'#2b2b2b', r:'#ff4a3d', y:'#ffcf3f', g:'#3dff6a'}); },
+  cat(){ // 石虎（臺灣豹貓）：額頭兩條白紋
+    return this.svg([
+      '..dd........dd..','.deod......doed.','.doooowoowooood.','.ooooowoowooooo.','oooooowoowoooooo','oodoooooooooodoo',
+      'ooowkoooooowkooo','ooowkoooooowkooo','doooooowwooooood','oooooowppwoooooo','.ooooowwwwooooo.','..oooowwwwoooo..','...ooooooooooo..','....oooooooo....'
+    ], {o:'#d9964f', d:'#7a4a22', e:'#f6dcb4', w:'#fff3e0', k:'#232323', p:'#f29a9a'});
+  },
+  trophy(){ return this.svg(['yyyyyyyyyy','yYyyyyyyYy','yYyyyyyyYy','.yyyyyyyy.','..yyyyyy..','...yyyy...','....yy....','....yy....','..YYYYYY..','.YYYYYYYY.'], {y:'#ffcf3f', Y:'#d39b00'}); },
+  medal(){ return this.svg(['rr....bb','.rr..bb.','..rrbb..','...rb...','..yyyy..','.yyYYyy.','.yYwwYy.','.yYwwYy.','.yyYYyy.','..yyyy..'], {r:'#e8433a', b:'#3b82f6', y:'#ffcf3f', Y:'#d39b00', w:'#fff7c2'}); }
+};
+
+/* 方塊小人：腳、手分開畫，才能做走路擺動 */
+function charSVG({skin = '#f2c08f', hair = '#3b2a1a', shirt = '#3b82f6', pants = '#2d3a6b', shoes = '#3b2a1a', extra = ''}){
+  return `<svg class="pix char-svg" viewBox="0 0 16 32" aria-hidden="true">
+    <g class="leg leg-l"><rect x="4" y="22" width="3" height="8" fill="${pants}"/><rect x="4" y="29" width="3" height="2" fill="${shoes}"/></g>
+    <g class="leg leg-r"><rect x="9" y="22" width="3" height="8" fill="${pants}"/><rect x="9" y="29" width="3" height="2" fill="${shoes}"/></g>
+    <rect x="3" y="12" width="10" height="11" fill="${shirt}"/>
+    <g class="arm arm-l"><rect x="1" y="12" width="2" height="8" fill="${shirt}"/><rect x="1" y="20" width="2" height="2" fill="${skin}"/></g>
+    <g class="arm arm-r"><rect x="13" y="12" width="2" height="8" fill="${shirt}"/><rect x="13" y="20" width="2" height="2" fill="${skin}"/></g>
+    <rect x="3" y="2" width="10" height="10" fill="${skin}"/>
+    <rect x="3" y="1" width="10" height="3" fill="${hair}"/><rect x="3" y="4" width="1" height="3" fill="${hair}"/><rect x="12" y="4" width="1" height="3" fill="${hair}"/>
+    <rect x="5" y="6" width="2" height="2" fill="#fff"/><rect x="6" y="6" width="1" height="2" fill="#222"/>
+    <rect x="9" y="6" width="2" height="2" fill="#fff"/><rect x="10" y="6" width="1" height="2" fill="#222"/>
+    <rect x="7" y="9" width="2" height="1" fill="#c0504d"/>
+    ${extra}
+  </svg>`;
+}
+const ACCESSORY = {
+  // 主席：紅色肩帶 + 金色名牌
+  chair: `<rect x="4" y="13" width="2" height="2" fill="#e8433a"/><rect x="6" y="15" width="2" height="2" fill="#e8433a"/><rect x="8" y="17" width="2" height="2" fill="#e8433a"/><rect x="10" y="19" width="2" height="2" fill="#e8433a"/><rect x="9" y="13" width="3" height="2" fill="#ffcf3f"/>`,
+  // 體育股長：紅頭帶 + 破足球
+  sport: `<rect x="3" y="3" width="10" height="1" fill="#e8433a"/><g class="ball"><rect x="12" y="17" width="4" height="4" fill="#ffffff"/><rect x="13" y="18" width="1" height="1" fill="#222"/><rect x="15" y="19" width="1" height="1" fill="#222"/><rect x="12" y="20" width="2" height="1" fill="#9a9a9a"/><rect x="14" y="17" width="1" height="2" fill="#555"/></g>`,
+  // 紀錄小秘書：眼鏡 + 筆記本
+  secretary: `<rect x="4" y="5" width="4" height="1" fill="#222"/><rect x="8" y="5" width="4" height="1" fill="#222"/><rect x="0" y="18" width="3" height="4" fill="#ffcf3f"/><rect x="1" y="19" width="1" height="2" fill="#e0a800"/>`
+};
+function kidBackSVG(hair, shirt){
+  return Pix.svg([
+    '....hhhhhhhh....','...hhhhhhhhhh...','...hhhhhhhhhh...','...hhhhhhhhhh...','...hhhhhhhhhh...','....hhhhhhhh....','......ssss......',
+    '..tttttttttttt..','.tttttttttttttt.','.tttttttttttttt.','WWWWWWWWWWWWWWWW','wwwwwwwwwwwwwwww','ww............ww','ww............ww'
+  ], {h:hair, s:'#e9b07f', t:shirt, W:'#c99560', w:'#9c6a3a'}, 'kid-svg');
+}
+
+/* =========================================================
+   D. 小星星紀錄（瀏覽器暫存，讀不到也能玩）
+   ========================================================= */
+const Store = {
+  key:'g3_social_stars',
+  get(){ try { return JSON.parse(localStorage.getItem(this.key)) || {}; } catch(e){ return this.mem || {}; } },
+  set(level, stars){
+    const s = this.get(); s[level] = Math.max(s[level] || 0, stars); this.mem = s;
+    try { localStorage.setItem(this.key, JSON.stringify(s)); } catch(e){}
+  },
+  allCleared(){ const s = this.get(); return [1, 2, 3].every(l => (s[l] || 0) > 0); }
+};
+const starsByMiss = miss => miss === 0 ? 3 : miss <= 2 ? 2 : 1;
+const starHTML = n => '<b>' + '★'.repeat(n) + '</b>' + '☆'.repeat(3 - n);
+
+/* =========================================================
+   E. 共用彈窗（回傳使用者按下的按鈕）
+   ========================================================= */
+function showModal({icon = '', title = '', html = '', center = false, buttons = [{label:'好！', value:true}]}){
+  return new Promise(resolve => {
+    $('modal').innerHTML = `<div class="m-icon">${icon}</div><h3>${title}</h3><div class="m-body ${center ? 'center' : ''}">${html}</div>
+      <div class="m-btns">${buttons.map((b, i) => `<button class="px-btn ${b.cls || ''}" data-i="${i}">${b.label}</button>`).join('')}</div>`;
+    $('modal').querySelectorAll('.m-btns button').forEach(btn => btn.addEventListener('click', () => {
+      Sound.click();
+      const b = buttons[+btn.dataset.i];
+      if (b.keepOpen){ b.onClick && b.onClick(btn); return; }
+      $('overlay').classList.remove('open'); resolve(b.value);
+    }));
+    $('overlay').classList.add('open'); $('modal').scrollTop = 0;
+  });
+}
+
+/* =========================================================
+   F. 拖曳（Pointer Events：滑鼠、手指都能拖）
+   ========================================================= */
+const Drag = {
+  cur:null,
+  attach(el, {targets, onDrop}){
+    el.addEventListener('pointerdown', e => {
+      if (this.cur || el.classList.contains('used')) return;
+      e.preventDefault(); el.setPointerCapture(e.pointerId); Sound.unlock();
+      this.cur = {el, id:e.pointerId, sx:e.clientX, sy:e.clientY, moved:false, targets, onDrop, over:null};
+    });
+    el.addEventListener('pointermove', e => {
+      const c = this.cur; if (!c || c.id !== e.pointerId) return;
+      const dx = e.clientX - c.sx, dy = e.clientY - c.sy;
+      if (!c.moved && Math.hypot(dx, dy) > 8){ c.moved = true; el.classList.add('dragging'); Sound.click(); }
+      if (!c.moved) return;
+      el.style.transform = `translate(${dx}px, ${dy}px) scale(1.05) rotate(-2deg)`;
+      const over = this.hit(c.targets(), e.clientX, e.clientY);
+      if (over !== c.over){ c.over && c.over.classList.remove('hover'); over && over.classList.add('hover'); c.over = over; }
+    });
+    const end = e => {
+      const c = this.cur; if (!c || c.id !== e.pointerId) return;
+      this.cur = null; el.classList.remove('dragging'); c.over && c.over.classList.remove('hover');
+      if (!c.moved){ restartAnim(el, 'wrong'); toast('<b>要用拖的喔！</b>按住卡片不要放，拖到目標上再放開 👆', 2400); el.style.transform = ''; return; }
+      const target = e.type === 'pointerup' ? this.hit(c.targets(), e.clientX, e.clientY) : null;
+      const accepted = target ? c.onDrop(el, target) : false;
+      if (!accepted) el.style.transform = '';
+    };
+    el.addEventListener('pointerup', end);
+    el.addEventListener('pointercancel', end);
+    el.addEventListener('touchstart', e => e.preventDefault(), {passive:false});
+  },
+  hit(list, x, y){
+    const pad = 16;
+    return list.find(t => { const r = t.getBoundingClientRect(); return x > r.left - pad && x < r.right + pad && y > r.top - pad && y < r.bottom + pad; }) || null;
+  }
+};
+
+/* =========================================================
+   G. 關卡一：麥塊班會情境劇
+   ========================================================= */
+const L1_CARDS = [
+  {id:'open',    icon:'📣', text:'主席宣布開會'},
+  {id:'report',  icon:'📋', text:'幹部報告事項'},
+  {id:'propose', icon:'🙋', text:'提案與附議'},
+  {id:'vote',    icon:'🗳️', text:'投票表決'},
+  {id:'end',     icon:'👋', text:'臨時動議與散會'}
+];
+const L1_HINTS = {
+  open:'會議一開始，要由<b>主席</b>先做什麼呢？',
+  report:'有幹部要把班上的事情說給大家聽，這叫做什麼？',
+  propose:'有人提出想法，又有人說「我也贊成」，這是哪一步？',
+  vote:'大家意見不一樣時，要用什麼方法決定呢？',
+  end:'事情都討論完了，最後一步是什麼？'
+};
+/* 場景座標（% ）：x 是水平位置、y 是腳底位置 */
+const SPOT = {door:{x:7, y:62}, podium:{x:50, y:58}, side:{x:74, y:74}, board:{x:83, y:62}, out:{x:-12, y:62}};
+const SEATS = [
+  {x:12, top:77}, {x:30, top:77}, {x:70, top:77}, {x:88, top:77},
+  {x:20, top:88}, {x:40, top:88}, {x:60, top:88}, {x:80, top:88}
+];
+const KID_COLORS = [['#3b2a1a','#e8433a'],['#7a4a22','#3b82f6'],['#222','#2fbf4f'],['#c27a2c','#a855f7'],['#3b2a1a','#f59e0b'],['#5a3a20','#14b8a6'],['#222','#ec4899'],['#7a4a22','#64748b']];
+
+const Level1 = {
+  act:0, miss:0, expected:null, busy:false, chars:{}, kids:[], doneSteps:[],
+
+  start(){
+    this.act = 0; this.miss = 0; this.doneSteps = []; this.busy = false;
+    $('l1Miss').textContent = '想錯 0 次';
+    const scene = $('scene');
+    scene.querySelectorAll('.char,.kid,.bubble').forEach(n => n.remove());
+    // 座位上的同學
+    this.kids = SEATS.map((s, i) => {
+      const k = document.createElement('div'); k.className = 'kid';
+      k.style.left = s.x + '%'; k.style.top = s.top + '%';
+      k.innerHTML = kidBackSVG(...KID_COLORS[i]);
+      scene.appendChild(k); return k;
+    });
+    // 主要角色
+    this.chars.chair = this.makeChar('chair', {hair:'#222', shirt:'#3b82f6', pants:'#1e3a8a', extra:ACCESSORY.chair}, SPOT.out);
+    this.chars.sport = this.makeChar('sport', {hair:'#5a3a20', shirt:'#e8433a', pants:'#1f2937', extra:ACCESSORY.sport}, SPOT.out);
+    this.chars.secretary = this.makeChar('secretary', {hair:'#7a4a22', shirt:'#ec4899', pants:'#6b21a8', extra:ACCESSORY.secretary}, SPOT.out);
+    // 卡片
+    const box = $('l1Cards'); box.innerHTML = '';
+    shuffle(L1_CARDS).forEach(c => {
+      const el = document.createElement('div'); el.className = 'card px'; el.dataset.id = c.id;
+      el.innerHTML = `<span class="c-icon">${c.icon}</span><span>${c.text}</span>`;
+      Drag.attach(el, {targets:() => [$('podiumSlot')], onDrop:(card) => this.drop(card)});
+      box.appendChild(el);
+    });
+    this.resetSlot();
+    this.renderBoard();
+    this.runAct(0);
+  },
+
+  makeChar(name, look, at){
+    const d = document.createElement('div'); d.className = 'char'; d.dataset.name = name;
+    d.innerHTML = charSVG(look); d.style.left = at.x + '%'; d.style.top = at.y + '%';
+    $('scene').appendChild(d); return d;
+  },
+  /* 瞬間移到某位置（不播走路動畫） */
+  place(ch, spot){
+    ch.style.transition = 'none'; ch.style.left = spot.x + '%'; ch.style.top = spot.y + '%';
+    void ch.offsetWidth; ch.style.transition = '';
+  },
+  async walk(ch, spot){
+    this.hideBubble(ch);
+    const from = parseFloat(ch.style.left);
+    ch.classList.toggle('face-left', spot.x < from);
+    ch.classList.add('walking');
+    const steps = setInterval(() => Sound.step(), 360);
+    ch.style.left = spot.x + '%'; ch.style.top = spot.y + '%';
+    await wait(1450);
+    clearInterval(steps); ch.classList.remove('walking', 'face-left');
+  },
+  say(anchor, text){
+    this.hideBubble(anchor);
+    const scene = $('scene'), b = document.createElement('div');
+    b.className = 'bubble'; b.innerHTML = text; scene.appendChild(b); anchor._bubble = b;
+    // 用 offsetWidth 量尺寸（不受彈出動畫縮放影響），並限制在場景內
+    const sr = scene.getBoundingClientRect(), ar = anchor.getBoundingClientRect(), bw = b.offsetWidth, bh = b.offsetHeight;
+    const cx = ar.left + ar.width / 2 - sr.left;
+    let left = cx - bw / 2; left = Math.max(4, Math.min(sr.width - bw - 4, left));
+    const bannerBottom = $('actBanner').offsetTop + $('actBanner').offsetHeight + 4;
+    let top = ar.top - sr.top - bh - 12; top = Math.max(left < $('actBanner').offsetLeft + $('actBanner').offsetWidth ? bannerBottom : 4, top);
+    b.style.left = left + 'px'; b.style.top = top + 'px';
+    b.style.setProperty('--tail', Math.max(14, Math.min(bw - 14, cx - left)) + 'px');
+  },
+  hideBubble(anchor){ if (anchor._bubble){ anchor._bubble.remove(); anchor._bubble = null; } },
+  hideAllBubbles(){ $('scene').querySelectorAll('.bubble').forEach(b => b.remove()); Object.values(this.chars).concat(this.kids).forEach(c => c._bubble = null); },
+
+  renderBoard(extra = ''){
+    const names = {open:'主席宣布開會', report:'幹部報告', propose:'提案與附議', vote:'投票表決', end:'臨時動議與散會'};
+    $('board').innerHTML = `<div class="b-title">📋 今日班會紀錄</div>
+      <div class="b-list">${this.doneSteps.map((id, i) => `<span class="b-item">${i + 1}. ${names[id]} ✔</span>`).join('') || '<span style="opacity:.6">（等待開會…）</span>'}</div>${extra}`;
+  },
+  resetSlot(){ const s = $('podiumSlot'); s.className = 'slot-drop'; s.innerHTML = '⬇ 卡片<br>拖到這裡'; },
+  setHint(html){ $('l1Hint').innerHTML = html; },
+
+  async runAct(i){
+    this.act = i; this.busy = true;
+    $('l1Act').textContent = `第 ${i + 1} / 5 幕`;
+    const titles = ['開場', '幹部報告', '提案與附議', '投票表決', '圓滿散會'];
+    $('actBanner').textContent = `第 ${i + 1} 幕：${titles[i]}`;
+    this.resetSlot(); this.hideAllBubbles();
+    const {chair, sport, secretary} = this.chars;
+    if (i === 0){
+      this.place(chair, SPOT.door);
+      this.setHint('👀 班長走上講台了……');
+      await wait(300); await this.walk(chair, SPOT.podium);
+      this.say(chair, '全班請就座！我是今天的<b>主席</b>，第一步要做什麼呢？');
+      this.expected = 'open';
+    }
+    if (i === 1){
+      await this.walk(chair, SPOT.side);
+      this.place(sport, SPOT.door);
+      await this.walk(sport, SPOT.podium);
+      this.say(sport, '報告大家，體育箱的<b>足球破掉了</b>！⚽💥');
+      this.expected = 'report';
+    }
+    if (i === 2){
+      this.say(sport, '我<b>提議</b>用班費買新足球！');
+      await wait(1500);
+      const k = this.kids[2]; k.classList.add('stand');
+      k.insertAdjacentHTML('beforeend', '<span class="hand">✋</span>');
+      await wait(400);
+      this.say(k, '我也贊成買！');
+      this.expected = 'propose';
+    }
+    if (i === 3){
+      this.kids[2].classList.remove('stand'); this.kids[2].querySelector('.hand')?.remove();
+      await this.walk(sport, SPOT.side);
+      await this.walk(chair, SPOT.podium);
+      this.say(chair, '贊成買新足球的請舉手！');
+      await wait(900);
+      [0, 1, 2, 4, 5, 6, 7].forEach((n, j) => setTimeout(() => this.kids[n].insertAdjacentHTML('beforeend', '<span class="hand">✋</span>'), j * 120));
+      await wait(1100);
+      this.renderBoard('<div class="b-vote b-item"><span class="yes">贊成 18 票 正正正丅</span><span class="no">反對 7 票 正丅</span></div>');
+      this.expected = 'vote';
+    }
+    if (i === 4){
+      this.kids.forEach(k => k.querySelector('.hand')?.remove());
+      this.say(chair, '還有其他事情嗎？沒有的話……');
+      this.place(secretary, SPOT.door);
+      await this.walk(secretary, SPOT.board);
+      this.renderBoard('<div class="big-check">✔</div>');
+      this.say(secretary, '紀錄完成，打勾 ✔！');
+      this.expected = 'end';
+    }
+    this.setHint('👆 按住下面的卡片，拖到講台上發光的插槽！');
+    this.busy = false;
+  },
+
+  drop(card){
+    if (this.busy) return false;
+    const id = card.dataset.id;
+    if (id !== this.expected){
+      this.miss++; $('l1Miss').textContent = `想錯 ${this.miss} 次`;
+      Sound.shiver(); restartAnim(card, 'wrong'); restartAnim($('podiumSlot'), 'shake');
+      toast(`🤔 <b>再想想看喔！</b>${L1_HINTS[this.expected]}`);
+      return false;
+    }
+    // 卡片吸附進講台插槽
+    card.classList.add('used'); card.style.transform = '';
+    const slot = $('podiumSlot'); slot.className = 'slot-drop filled';
+    slot.innerHTML = `${card.querySelector('.c-icon').textContent} ${card.textContent.replace(card.querySelector('.c-icon').textContent, '')}`;
+    Sound.ding();
+    this.afterCorrect(id);
+    return true;
+  },
+
+  async afterCorrect(id){
+    this.busy = true;
+    this.doneSteps.push(id);
+    const {chair, sport, secretary} = this.chars;
+    if (id === 'open'){ this.say(chair, '我宣布：<b>班會開始</b>！👏'); this.renderBoard(); await wait(1700); }
+    if (id === 'report'){ this.say(sport, '報告完畢，謝謝大家！'); this.renderBoard(); await wait(1600); }
+    if (id === 'propose'){
+      this.renderBoard(); await wait(700);
+      await this.quiz('同學舉手說「我也贊成拿出來討論！」，這在開會中叫做什麼？',
+        [{label:'附議', ok:true}, {label:'散會'}],
+        '<b>附議</b>就是「我也贊成把這件事拿出來討論」。提案要有人附議，大家才會開始討論喔！');
+    }
+    if (id === 'vote'){
+      this.renderBoard('<div class="b-vote"><span class="yes">贊成 18 票 ✔ 通過</span><span class="no">反對 7 票</span></div>');
+      await wait(700);
+      await this.quiz('投票結果通過了，如果你投的是反對票，這時候應該怎麼做？',
+        [{label:'1. 生氣拍桌不理人'}, {label:'2. 少數服從多數，尊重全班決定', ok:true}],
+        '民主的好習慣：<b>少數服從多數</b>，同時<b>多數也要尊重少數</b>的想法喔！');
+    }
+    if (id === 'end'){ await this.finale(); return; }
+    this.runAct(this.act + 1);
+  },
+
+  async quiz(question, options, why){
+    const order = options;
+    while (true){
+      const pick = await showModal({icon:'🧠', title:'小腦袋二選一', html:`<p style="font-size:20px">${question}</p>`,
+        buttons: order.map((o, i) => ({label:o.label, value:i, cls: i ? 'wood' : ''}))});
+      if (order[pick].ok){ Sound.ding(); await showModal({icon:'⭕', title:'答對了！', html:why, buttons:[{label:'繼續演下一幕 ▶', value:true}]}); return; }
+      this.miss++; $('l1Miss').textContent = `想錯 ${this.miss} 次`; Sound.shiver();
+      await showModal({icon:'🤔', title:'再想想看喔！', html:'這個選項不太對，再選一次吧！', buttons:[{label:'我再試試', value:true, cls:'wood'}]});
+    }
+  },
+
+  async finale(){
+    this.renderBoard('<div class="big-check">✔</div>');
+    this.say(this.chars.chair, '討論結束，<b>散會</b>！謝謝大家 🎉');
+    this.kids.forEach(k => k.classList.add('bounce'));
+    Object.values(this.chars).forEach(c => c.classList.add('clap'));
+    Sound.win(); confetti();
+    await wait(2200);
+    this.kids.forEach(k => k.classList.remove('bounce'));
+    Object.values(this.chars).forEach(c => c.classList.remove('clap'));
+    const stars = starsByMiss(this.miss); Store.set(1, stars);
+    await showModal({icon:Pix.medal(), title:'獲得「小小班會主席獎章」！', center:true,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>你學會了開會五步驟：<br><b>宣布 ➔ 報告 ➔ 提議與附議 ➔ 表決 ➔ 散會</b></p>`,
+      buttons:[{label:'下一關：校園急救特派員 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]})
+      .then(v => App.afterLevel(1, v));
+  }
+};
+
+/* =========================================================
+   H. 關卡二：校園急救特派員
+   ========================================================= */
+const L2_TARGETS = [
+  {id:'health',  icon:'🏥', name:'健康中心', tag:'處室'},
+  {id:'library', icon:'📚', name:'圖書館',   tag:'處室'},
+  {id:'counsel', icon:'💗', name:'輔導室',   tag:'處室'},
+  {id:'office',  icon:'📢', name:'學務處',   tag:'處室'},
+  {id:'hygiene', icon:'🧹', name:'衛生股長', tag:'幹部'},
+  {id:'arts',    icon:'🎨', name:'學藝股長', tag:'幹部'}
+];
+const L2_EVENTS = [
+  {icon:'🩹', text:'跑步跌倒，膝蓋擦傷流血了',               ans:'health',  why:'護理師阿姨會幫你消毒包紮喔！'},
+  {icon:'📖', text:'想借有趣的成語故事書與查資料',           ans:'library', why:'圖書館有好多書，圖書館老師還會教你找資料！'},
+  {icon:'🧴', text:'撿到同學掉在操場的運動水壺',             ans:'office',  why:'撿到東西送到學務處（失物招領），失主就找得回來囉！'},
+  {icon:'😢', text:'跟好朋友吵架，心裡很難過想找人聊聊',     ans:'counsel', why:'輔導老師會耐心聽你說，陪你想辦法和好！'},
+  {icon:'🖍️', text:'教室後方的黑板報需要設計插圖',           ans:'arts',    why:'學藝股長負責布置教室和黑板報，交給他就對了！'},
+  {icon:'🧹', text:'掃地用具壞掉了，需要領新的掃把',         ans:'hygiene', why:'衛生股長負責管理打掃用具，找他就能領新掃把！'}
+];
+const L2_HINT = {health:'受傷了要去哪裡擦藥？', library:'借書、查資料要去哪裡？', office:'撿到東西要交給哪個處室？', counsel:'心情不好想找人聊，可以去哪裡？', arts:'布置教室、畫黑板報是哪位幹部的工作？', hygiene:'打掃用具歸哪位幹部管？'};
+
+const Level2 = {
+  queue:[], done:0, miss:0,
+  start(){
+    this.queue = shuffle(L2_EVENTS); this.done = 0; this.miss = 0;
+    $('l2Miss').textContent = '想錯 0 次'; $('l2Explain').hidden = true;
+    const campus = $('campus');
+    campus.querySelectorAll('.target').forEach(t => t.remove());
+    $('campusMap').innerHTML = campusSVG();
+    const order = window.matchMedia('(max-width:820px)').matches ? L2_TARGETS : [L2_TARGETS[0], L2_TARGETS[1], L2_TARGETS[2], L2_TARGETS[3], L2_TARGETS[4], L2_TARGETS[5]];
+    order.forEach((t, i) => {
+      const d = document.createElement('div'); d.className = 'target px'; d.dataset.id = t.id;
+      d.innerHTML = `<span class="t-icon">${t.icon}</span><span><span class="t-name">${t.name}</span><span class="t-tag ${t.tag === '幹部' ? 'officer' : ''}">${t.tag}</span></span>`;
+      if (!window.matchMedia('(max-width:820px)').matches){ d.style.gridColumn = i < 3 ? '1' : '3'; d.style.gridRow = String(i % 3 + 1); }
+      campus.appendChild(d);
+    });
+    this.updateProg(); this.nextEvent();
+  },
+  updateProg(){ $('l2Prog').textContent = `${this.done} / 6`; },
+  nextEvent(){
+    const dock = $('eventDock'); dock.innerHTML = '';
+    const ev = this.queue[this.done]; if (!ev) return;
+    const el = document.createElement('div'); el.className = 'event-card px';
+    el.innerHTML = `<span class="e-icon">${ev.icon}</span><span>${ev.text}<span class="e-tip">👇 拖到下面正確的地方或幹部</span></span>`;
+    Drag.attach(el, {targets:() => [...document.querySelectorAll('#campus .target')], onDrop:(card, target) => this.drop(card, target, ev)});
+    dock.appendChild(el); Sound.click();
+  },
+  drop(card, target, ev){
+    if (target.dataset.id !== ev.ans){
+      this.miss++; $('l2Miss').textContent = `想錯 ${this.miss} 次`;
+      Sound.shiver(); restartAnim(target, 'shake'); restartAnim(card, 'wrong');
+      toast(`🤔 <b>再想想看喔！</b>${L2_HINT[ev.ans]}`);
+      return false;
+    }
+    card.classList.add('used'); card.style.opacity = '0';
+    target.classList.add('ok'); restartAnim(target, 'ok');
+    const mark = document.createElement('span'); mark.className = 't-done'; mark.textContent = '✔ ' + ev.icon; target.querySelector('.t-done')?.remove(); target.appendChild(mark);
+    bigCheck(); Sound.ding();
+    $('l2ExplainText').innerHTML = `<b>${L2_TARGETS.find(t => t.id === ev.ans).name}</b>：${ev.why}`; $('l2Explain').hidden = false;
+    this.done++; this.updateProg();
+    setTimeout(() => {
+      if (this.done < 6) this.nextEvent(); else this.finish();
+    }, 1300);
+    return true;
+  },
+  async finish(){
+    Sound.win(); confetti();
+    const stars = starsByMiss(this.miss); Store.set(2, stars);
+    const v = await showModal({icon:'🚑', title:'校園急救特派員 任務完成！', center:true,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>！</p>`,
+      buttons:[{label:'下一關：三年級小公民 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+    App.afterLevel(2, v);
+  }
+};
+function campusSVG(){
+  // 像素校園地圖（純裝飾）
+  const r = (x, y, w, h, c) => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${c}"/>`;
+  let s = r(0, 0, 120, 90, '#5dbb3f');
+  for (let i = 0; i < 40; i++) s += r((i * 37) % 118, (i * 23) % 88, 2, 2, '#4ea534');
+  s += r(0, 40, 120, 8, '#d9c49a') + r(56, 0, 8, 90, '#d9c49a');                 // 走道
+  s += r(6, 6, 42, 26, '#c9c9c9') + r(6, 6, 42, 5, '#e8433a') + r(10, 15, 6, 6, '#8fd3ff') + r(20, 15, 6, 6, '#8fd3ff') + r(30, 15, 6, 6, '#8fd3ff') + r(40, 15, 4, 6, '#8fd3ff') + r(24, 24, 6, 8, '#8a5a2e'); // 教學大樓
+  s += r(70, 6, 22, 18, '#fff') + r(70, 6, 22, 4, '#e8433a') + r(79, 12, 4, 10, '#e8433a') + r(76, 15, 10, 4, '#e8433a');        // 健康中心
+  s += r(96, 6, 20, 18, '#f59e0b') + r(96, 6, 20, 4, '#8a5a2e') + r(100, 13, 12, 7, '#fff3c4') + r(105, 13, 1, 7, '#8a5a2e');     // 圖書館
+  s += r(6, 54, 30, 20, '#fbcfe8') + r(6, 54, 30, 4, '#ec4899') + r(17, 62, 8, 6, '#ec4899');                                       // 輔導室
+  s += r(70, 54, 44, 30, '#b5562a') + r(74, 58, 36, 22, '#5dbb3f') + r(90, 60, 4, 18, '#fff');                                        // 操場
+  s += r(40, 56, 2, 22, '#555') + r(42, 56, 8, 5, '#e8433a');                                                                       // 旗桿
+  [[12, 80], [26, 82], [104, 40], [112, 36]].forEach(([x, y]) => { s += r(x, y, 6, 6, '#2f7d22') + r(x + 2, y + 6, 2, 3, '#7a4a22'); });
+  return `<svg class="pix" viewBox="0 0 120 90" role="img" aria-label="校園地圖">${s}</svg>`;
+}
+function bigCheck(){ const d = document.createElement('div'); d.className = 'big-check'; d.textContent = '✔'; document.body.appendChild(d); setTimeout(() => d.remove(), 1100); }
+
+/* =========================================================
+   I. 關卡三：三年級小公民（是非紅綠燈）
+   ========================================================= */
+const L3_QUESTIONS = [
+  {scene:'🎒📝➡️🎮', text:'放學回家先寫完作業、整理好書包，再去玩遊戲或看電視', ans:'go',   tag:'時間小管家！', why:'先把該做的事做完，再安心去玩，就是很棒的<b>時間管理</b>！'},
+  {scene:'🚽📔👀',   text:'趁同桌同學去上廁所，偷偷翻開他的日記本看秘密',       ans:'stop', tag:'侵犯隱私權！', why:'日記是別人的秘密，沒有經過同意就偷看，是<b>侵犯隱私</b>的行為喔！'},
+  {scene:'🗳️📜👑',   text:'班規是全班一起投票決定的，連班長自己也要嚴格遵守',   ans:'go',   tag:'民主守法！', why:'大家一起訂的規則，<b>每個人都要遵守</b>，班長也不例外！'},
+  {scene:'🏃💨📢',   text:'下課在走廊上大聲喊叫跟同學賽跑衝刺',               ans:'stop', tag:'容易撞倒同學受傷！', why:'走廊要<b>慢慢走、輕聲說話</b>，才不會撞到人或吵到別班上課。'},
+  {scene:'📒✏️❓',   text:'遇到功課不會寫，直接拿同學的作業本來照抄',           ans:'stop', tag:'不能抄襲！', why:'不會的題目要<b>主動請教老師或同學</b>，弄懂了才是自己的本事喔！'}
+];
+const Level3 = {
+  i:0, correct:0, answered:false,
+  start(){
+    this.i = 0; this.correct = 0;
+    $('l3Btns').querySelectorAll('button').forEach(b => b.onclick = () => this.answer(b.dataset.ans));
+    $('l3Next').onclick = () => { Sound.click(); this.i++; this.i < L3_QUESTIONS.length ? this.show() : this.finish(); };
+    this.show();
+  },
+  show(){
+    const q = L3_QUESTIONS[this.i]; this.answered = false;
+    $('l3Prog').textContent = `第 ${this.i + 1} / 5 題`; $('l3Score').textContent = `答對 ${this.correct} 題`;
+    $('l3Num').textContent = `情境 ${this.i + 1}`; $('l3Scene').textContent = q.scene; $('l3Text').textContent = `「${q.text}」`;
+    $('lampRed').classList.remove('on'); $('lampGreen').classList.remove('on');
+    $('l3Btns').hidden = false; $('l3Feedback').hidden = true;
+  },
+  answer(a){
+    if (this.answered) return; this.answered = true;
+    const q = L3_QUESTIONS[this.i], ok = a === q.ans;
+    $(q.ans === 'go' ? 'lampGreen' : 'lampRed').classList.add('on');
+    if (ok){ this.correct++; Sound.ding(); } else { Sound.shiver(); restartAnim($('l3Btns'), 'shiver'); }
+    $('l3Score').textContent = `答對 ${this.correct} 題`;
+    const fb = $('l3Feedback'); fb.className = `feedback px ${ok ? 'good' : 'bad'}`;
+    $('l3FbTitle').innerHTML = (ok ? '⭕ 答對了！' : '❌ 不對喔！') + `（${q.ans === 'go' ? '🟢 這樣做很棒' : '🔴 這樣不行喔'}：${q.tag}）`;
+    $('l3FbText').innerHTML = q.why;
+    $('l3Next').textContent = this.i === L3_QUESTIONS.length - 1 ? '看看我的成績 🏁' : '下一題 ▶';
+    $('l3Btns').hidden = true; fb.hidden = false;
+    fb.scrollIntoView({behavior:'smooth', block:'nearest'});
+  },
+  async finish(){
+    const stars = this.correct === 5 ? 3 : this.correct >= 3 ? 2 : 1; Store.set(3, stars);
+    Sound.win(); confetti();
+    const v = await showModal({icon:'🚦', title:'三年級小公民 過關！', center:true,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>5 題答對 <b>${this.correct}</b> 題！保護自己的隱私，也尊重別人的秘密喔！</p>`,
+      buttons:[{label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+    App.afterLevel(3, v);
+  }
+};
+
+/* =========================================================
+   J. 結算與石虎白話小筆記
+   ========================================================= */
+const NOTES = [
+  {icon:'💡', title:'《班會五字訣》', sub:'開會流程與民主', html:`
+    <div class="flow"><span>宣布</span><i>➔</i><span>報告</span><i>➔</i><span>提議與附議</span><i>➔</i><span>表決</span><i>➔</i><span>散會</span></div>
+    <ul><li>開會時由<b>主席</b>先宣布開會，最後也由主席宣布散會。</li>
+    <li>幹部先把班上的事情<b>報告</b>給大家聽。</li></ul>
+    <div class="star-tip">⭐ <b>提案需要有人附議</b>才能拿出來討論！<br>⭐ <b>少數服從多數，多數尊重少數</b>，投票結果大家都要遵守。</div>`},
+  {icon:'💡', title:'《校園大幫手》', sub:'處室與幹部', html:`
+    <ul><li>🏥 受傷了 ➔ 去<b>健康中心</b>找護理師</li>
+    <li>💗 心情難過 ➔ 去<b>輔導室</b>找輔導老師</li>
+    <li>📢 撿到東西 ➔ 送到<b>學務處</b></li>
+    <li>📚 借書、查資料 ➔ 去<b>圖書館</b></li>
+    <li>🧹 打掃用具 ➔ 找<b>衛生股長</b>；🎨 布置教室 ➔ 找<b>學藝股長</b></li></ul>
+    <div class="star-tip">⭐ 幹部是熱心為同學<b>「服務」</b>，不是當大官管人喔！</div>`},
+  {icon:'💡', title:'《小三新生活》', sub:'作息與隱私', html:`
+    <ul><li>🔒 保護自己的<b>隱私</b>，也<b>絕對不偷看</b>別人的日記、手機和書包。</li>
+    <li>⏰ <b>先苦後甘</b>：先寫作業、整理書包，再去玩！</li>
+    <li>📅 <b>今日事今日畢</b>，不把今天的功課拖到明天。</li>
+    <li>✏️ 不會的題目主動請教，不抄別人的作業。</li></ul>
+    <div class="star-tip">⭐ 大家一起訂的班規，每個人都要遵守，班長也一樣！</div>`}
+];
+const Result = {
+  show(){
+    const s = Store.get();
+    $('trophy').innerHTML = Pix.trophy().replace('<svg', '<svg style="width:110px;height:auto"');
+    $('catPix').innerHTML = Pix.cat();
+    const names = ['🎮 班會情境劇', '🏥 急救特派員', '🚦 小公民'];
+    $('resultLevels').innerHTML = names.map((n, i) => `<div>${n}<b>${'★'.repeat(s[i + 1] || 0)}${'☆'.repeat(3 - (s[i + 1] || 0))}</b></div>`).join('');
+    $('notes').innerHTML = NOTES.map((n, i) => `<button class="note-card px" data-i="${i}"><span class="n-icon">📒</span>${n.title}<small>${n.sub}・點我閱讀</small></button>`).join('');
+    $('notes').querySelectorAll('.note-card').forEach(b => b.addEventListener('click', () => {
+      Sound.click(); const n = NOTES[+b.dataset.i];
+      showModal({icon:Pix.cat(), title:`${n.icon} ${n.title}`, html:`<div class="note-body">${n.html}</div>`, buttons:[{label:'看懂了！', value:true}]});
+    }));
+  }
+};
+
+/* =========================================================
+   K. 畫面切換與大廳
+   ========================================================= */
+const App = {
+  current:'lobby',
+  init(){
+    document.querySelectorAll('[data-pix]').forEach(el => el.innerHTML = Pix[el.dataset.pix]());
+    document.querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.unlock(); Sound.click(); this.startLevel(+p.dataset.level); }));
+    $('homeBtn').addEventListener('click', () => { Sound.click(); this.go('lobby'); });
+    $('resultHome').addEventListener('click', () => { Sound.click(); this.go('lobby'); });
+    $('notesBtn').addEventListener('click', () => { Sound.click(); this.go('result'); });
+    $('muteBtn').addEventListener('click', e => { e.currentTarget.textContent = Sound.toggle() ? '🔇' : '🔊'; });
+    // 場景尺寸單位（依場景高度縮放人物大小）
+    const scene = $('scene');
+    new ResizeObserver(() => scene.style.setProperty('--u', scene.clientHeight / 100 + 'px')).observe(scene);
+    this.go('lobby');
+  },
+  go(id){
+    document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
+    this.current = id;
+    $('homeBtn').hidden = id === 'lobby';
+    $('topTitle').textContent = {lobby:'🎒 三年級社會探險島', level1:'🎮 關卡一：麥塊班會情境劇', level2:'🏥 關卡二：校園急救特派員', level3:'🚦 關卡三：三年級小公民', result:'🏆 全部過關！'}[id];
+    if (id === 'lobby') this.renderLobby();
+    if (id === 'result') Result.show();
+    $('overlay').classList.remove('open');
+    window.scrollTo({top:0});
+  },
+  renderLobby(){
+    const s = Store.get();
+    document.querySelectorAll('[data-stars]').forEach(el => el.innerHTML = starHTML(s[el.dataset.stars] || 0));
+    $('notesBtn').hidden = !Store.allCleared();
+  },
+  startLevel(n){
+    this.go('level' + n);
+    ({1:Level1, 2:Level2, 3:Level3})[n].start();
+  },
+  afterLevel(n, choice){
+    if (choice === 'home') return this.go('lobby');
+    if (n < 3) return this.startLevel(n + 1);
+    this.go(Store.allCleared() ? 'result' : 'lobby');
+  }
+};
+
+/* 彩花 */
+function confetti(){
+  const colors = ['#ffcf3f', '#e8433a', '#2fbf4f', '#3b82f6', '#ec4899', '#a855f7'];
+  for (let i = 0; i < 46; i++){
+    const s = document.createElement('div'); s.className = 'spark';
+    s.style.left = Math.random() * innerWidth + 'px'; s.style.top = '-12px'; s.style.background = colors[i % colors.length];
+    s.style.setProperty('--dx', (Math.random() - .5) * 140 + 'px'); s.style.setProperty('--dy', innerHeight * (.6 + Math.random() * .5) + 'px');
+    s.style.animationDuration = 1.4 + Math.random() + 's';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 2800);
+  }
+}
+
+App.init();
+</script>
+<script src="https://kuog88.github.io/home-button.js" defer></script>
+</body>
+</html>
