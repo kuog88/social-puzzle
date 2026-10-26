@@ -100,13 +100,20 @@ function unitStars(u){ const s = Store.get(); return u.levels.reduce((n, l) => n
 function renderLobby(){
   const all = UNITS.reduce((n, u) => n + unitStars(u), 0), max = UNITS.reduce((n, u) => n + u.levels.length * 3, 0);
   $('totalStars').innerHTML = `目前收集 <b>★ ${all}</b> / ${max}` + (all === max ? '　🏆 你是家鄉小導遊！' : '');
-  $('portals').innerHTML = UNITS.map((u, i) => {
+  const card = (u, i, k) => {
     const st = unitStars(u), mx = u.levels.length * 3;
     return `<button class="portal px" data-u="${i}">
-      <span class="p-icon">${u.icon}</span><span class="p-lv">第${'一二三四五六'[i]}單元</span>
+      <span class="p-icon">${u.icon}</span><span class="p-lv">第${'一二三四五六'[k]}單元</span>
       <span class="p-name">${u.name}</span><span class="p-desc">${u.lessons.join('、')}</span>
       <span class="p-stars"><b>${'★'.repeat(Math.min(st, mx))}</b>${'☆'.repeat(mx - st)}</span></button>`;
-  }).join('');
+  };
+  // 單元依學期分區：data.js 的單元可加 term: '下'，沒寫就算上學期
+  const term = t => {
+    const list = UNITS.map((u, i) => [u, i]).filter(([u]) => (u.term || '上') === t);
+    return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3>` +
+      (list.length ? list.map(([u, i], k) => card(u, i, k)).join('') : '<div class="term-soon">🚧 下學期單元製作中，敬請期待！</div>');
+  };
+  $('portals').innerHTML = term('上') + term('下');
   $('portals').querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.click(); openUnit(UNITS[+p.dataset.u]); }));
   $('topTitle').textContent = '🏝️ 四年級社會・家鄉探險隊';
   show('lobby');

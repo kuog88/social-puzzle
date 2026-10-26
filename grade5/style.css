@@ -217,3 +217,8 @@ button{font-family:inherit;cursor:pointer}
 .modal .m-video video{width:100%;max-height:42dvh;background:#000;border-radius:10px;display:block}
 .modal .v-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:16px}
 .modal .v-nav .px-btn{padding:6px 12px;font-size:15px}
+
+/* 上／下學期分區 */
+.term-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 -2px;font-size:22px;font-weight:900;color:var(--ink)}
+.term-head::after{content:'';flex:1;border-top:3px dashed rgba(0,0,0,.18)}
+.term-soon{grid-column:1/-1;padding:18px 12px;text-align:center;border:3px dashed #b9a98a;border-radius:12px;background:rgba(255,255,255,.55);color:#8a7a5a;font-size:18px}

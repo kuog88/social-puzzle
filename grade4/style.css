@@ -193,3 +193,8 @@ button{font-family:inherit;cursor:pointer}
   .map-side{flex-direction:row;flex-wrap:wrap;justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+
+/* 上／下學期分區 */
+.term-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 -2px;font-size:22px;font-weight:900;color:var(--ink)}
+.term-head::after{content:'';flex:1;border-top:3px dashed rgba(0,0,0,.18)}
+.term-soon{grid-column:1/-1;padding:18px 12px;text-align:center;border:3px dashed #b9a98a;border-radius:12px;background:rgba(255,255,255,.55);color:#8a7a5a;font-size:18px}

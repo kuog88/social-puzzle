@@ -85,6 +85,10 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .portal .p-desc{font-size:15px;color:#6a5a40}
 .portal .p-stars{font-size:26px;letter-spacing:2px;color:#d1c3a0}
 .portal .p-stars b{color:#f0a800;text-shadow:0 2px 0 #9a6b00}
+/* 上／下學期分區 */
+.term-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 -2px;font-size:22px;font-weight:900;color:var(--ink)}
+.term-head::after{content:'';flex:1;border-top:3px dashed rgba(0,0,0,.18)}
+.term-soon{grid-column:1/-1;padding:18px 12px;text-align:center;border:3px dashed #b9a98a;border-radius:12px;background:rgba(255,255,255,.55);color:#8a7a5a;font-size:18px}
 .portal.p1{border-color:#2b5e1c}
 .portal.p2{background:#fff0ef}
 .portal.p3{background:#eef7ff}
@@ -391,6 +395,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
     <h1 class="lobby-title">🎒 三年級社會探險島：<br>麥塊校園大冒險！</h1>
     <p class="lobby-sub">選一個傳送門開始冒險，每關最多拿 ★★★！</p>
     <div class="portals">
+      <h3 class="term-head">📘 上學期（三上）</h3>
       <button class="portal px p1" data-level="1">
         <span class="p-icon" data-pix="grass"></span>
         <span class="p-info">
@@ -418,6 +423,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
           <span class="p-stars" data-stars="3">★★★</span>
         </span>
       </button>
+      <h3 class="term-head">📗 下學期（三下）</h3>
       <button class="portal px p4" data-level="4">
         <span class="p-icon" data-pix="shop"></span>
         <span class="p-info">
