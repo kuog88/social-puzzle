@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>三年級下學期社會・小鎮郵差送信記</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="back" href="../index.html">← 選年級</a>
+    <div class="brand">
+      <span class="sem-tag">下學期</span>
+      <h1>三年級下學期・小鎮郵差送信記</h1>
+      <p class="sub">翰林版社會 3 下｜高雄市鳳山區五福國小</p>
+    </div>
+    <div class="stamp-total" title="收集到的郵戳"><span class="ico">📮</span><b id="totalStars">0</b><small>/54</small></div>
+  </header>
+
+  <!-- 首頁：小鎮地圖 -->
+  <main id="home" class="screen">
+    <section class="letter intro">
+      <div class="postman" aria-hidden="true">🧑‍✈️📬</div>
+      <div>
+        <h2>歡迎來到三下的小鎮！</h2>
+        <p>你是新來的小郵差。小鎮有 6 個街區，每個街區有 3 封信要送：<b>動手做</b>、<b>觀念題</b>、<b>挑戰題</b>。送得越好，郵戳 ⭐ 越多！</p>
+        <p class="note">這是<b>下學期</b>（三下）的內容；上學期的方塊校園冒險請回「選年級」找。</p>
+      </div>
+    </section>
+    <section class="town" id="town"></section>
+    <p class="foot">
+      <button class="link-btn" id="resetBtn" type="button">清除下學期進度</button>
+    </p>
+  </main>
+
+  <!-- 街區：選關卡 -->
+  <main id="unit" class="screen" hidden>
+    <button class="btn ghost" data-go="home" type="button">← 回小鎮地圖</button>
+    <section class="letter unit-head" id="unitHead"></section>
+    <section class="level-list" id="levelList"></section>
+  </main>
+
+  <!-- 關卡 -->
+  <main id="play" class="screen" hidden>
+    <div class="play-bar">
+      <button class="btn ghost" id="quitBtn" type="button">← 回街區</button>
+      <div class="play-title" id="playTitle"></div>
+      <button class="btn speak" id="speakBtn" type="button" aria-label="朗讀題目">🔊 唸題目</button>
+    </div>
+    <div class="progress"><span id="progBar"></span></div>
+    <section class="letter stage" id="stage"></section>
+  </main>
+</div>
+
+<!-- 結果視窗 -->
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <div class="postmark" id="mStamp">⭐⭐⭐</div>
+    <h2 id="mTitle">送達！</h2>
+    <p id="mText"></p>
+    <div class="modal-btns">
+      <button class="btn" id="mAgain" type="button">再玩一次</button>
+      <button class="btn primary" id="mNext" type="button">下一關 →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="data.js"></script>
+<script src="game.js"></script>
+<script src="https://kuog88.github.io/home-button.js" defer></script>
+</body>
+</html>
