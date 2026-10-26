@@ -222,3 +222,4 @@ button{font-family:inherit;cursor:pointer}
 .term-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 -2px;font-size:22px;font-weight:900;color:var(--ink)}
 .term-head::after{content:'';flex:1;border-top:3px dashed rgba(0,0,0,.18)}
 .term-soon{grid-column:1/-1;padding:18px 12px;text-align:center;border:3px dashed #b9a98a;border-radius:12px;background:rgba(255,255,255,.55);color:#8a7a5a;font-size:18px}
+.exam-head{grid-column:1/-1;justify-self:start;margin:4px 0 -4px;padding:3px 14px;border-radius:99px;background:#fff3c4;border:2px solid #e0b84a;color:#7a5a00;font-size:16px;font-weight:900}

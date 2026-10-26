@@ -110,8 +110,13 @@ function renderLobby(){
   // 單元依學期分區：data.js 的單元可加 term: '下'，沒寫就算上學期
   const term = t => {
     const list = UNITS.map((u, i) => [u, i]).filter(([u]) => (u.term || '上') === t);
-    return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3>` +
-      (list.length ? list.map(([u, i], k) => card(u, i, k)).join('') : '<div class="term-soon">🚧 下學期單元製作中，敬請期待！</div>');
+    if (!list.length) return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3><div class="term-soon">🚧 下學期單元製作中，敬請期待！</div>`;
+    // 再依月考分組：單元可加 exam: 1 / 2（第一次／第二次月考），沒寫就不分組
+    let last = null;
+    return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3>` + list.map(([u, i], k) => {
+      const head = u.exam && u.exam !== last ? `<div class="exam-head">📝 第${'一二三'[u.exam - 1]}次月考範圍</div>` : '';
+      last = u.exam; return head + card(u, i, k);
+    }).join('');
   };
   $('portals').innerHTML = term('上') + term('下');
   $('portals').querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.click(); openUnit(UNITS[+p.dataset.u]); }));

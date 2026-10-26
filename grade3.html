@@ -89,6 +89,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .term-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 -2px;font-size:22px;font-weight:900;color:var(--ink)}
 .term-head::after{content:'';flex:1;border-top:3px dashed rgba(0,0,0,.18)}
 .term-soon{grid-column:1/-1;padding:18px 12px;text-align:center;border:3px dashed #b9a98a;border-radius:12px;background:rgba(255,255,255,.55);color:#8a7a5a;font-size:18px}
+.exam-head{grid-column:1/-1;justify-self:start;margin:4px 0 -4px;padding:3px 14px;border-radius:99px;background:#fff3c4;border:2px solid #e0b84a;color:#7a5a00;font-size:16px;font-weight:900}
 .portal.p1{border-color:#2b5e1c}
 .portal.p2{background:#fff0ef}
 .portal.p3{background:#eef7ff}
@@ -396,6 +397,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
     <p class="lobby-sub">選一個傳送門開始冒險，每關最多拿 ★★★！</p>
     <div class="portals">
       <h3 class="term-head">📘 上學期（三上）</h3>
+      <div class="exam-head">📝 第一次月考範圍</div>
       <button class="portal px p1" data-level="1">
         <span class="p-icon" data-pix="grass"></span>
         <span class="p-info">
@@ -414,6 +416,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
           <span class="p-stars" data-stars="2">★★★</span>
         </span>
       </button>
+      <div class="exam-head">📝 第二次月考範圍</div>
       <button class="portal px p3" data-level="3">
         <span class="p-icon" data-pix="light"></span>
         <span class="p-info">
