@@ -81,7 +81,7 @@ function showModal({icon = '', title = '', html = '', center = false, buttons = 
     $('modal').innerHTML = `<div class="m-icon">${icon}</div><h3>${title}</h3><div class="m-body ${center ? 'center' : ''}">${html}</div>
       <div class="m-btns">${buttons.map((b, i) => `<button class="px-btn ${b.cls || ''}" data-i="${i}">${b.label}</button>`).join('')}</div>`;
     $('modal').querySelectorAll('.m-btns button').forEach(btn => btn.addEventListener('click', () => {
-      Sound.click(); $('overlay').classList.remove('open'); resolve(buttons[+btn.dataset.i].value);
+      Sound.click(); $('modal').querySelectorAll('video').forEach(v => v.pause()); $('overlay').classList.remove('open'); resolve(buttons[+btn.dataset.i].value);
     }));
     $('overlay').classList.add('open'); $('modal').scrollTop = 0;
   });
@@ -167,6 +167,30 @@ async function timeUp(){
   v === 'again' ? startLevel(curLevel) : openUnit(curUnit);
 }
 
+/* ---------- G2. 過關影片（可靈 Kling 動畫，檔案在 ../videos/） ---------- */
+const LEVEL_VIDEOS = {
+  u1l1: [['kling_09_strait', '臺灣海峽'], ['kling_10_tropic', '北回歸線'], ['kling_11_coord', '經緯度找臺灣']],
+  u1l2: [['kling_06_tao', '達悟族・拼板舟與飛魚'], ['kling_07_paiwan', '排灣族・石板屋'], ['kling_08_amis', '阿美族・豐年祭'],
+         ['kling_15_thao', '邵族・杵音'], ['kling_16_bunun', '布農族'], ['kling_17_atayal', '泰雅族'], ['kling_18_tsou', '鄒族']],
+  u1l3: [['kling_14_changbin', '長濱文化・八仙洞'], ['kling_03_yuanshan', '圓山文化・貝塚'], ['kling_04_beinan', '卑南文化・玉器與石板棺'], ['kling_05_shisanhang', '十三行文化・煉鐵']],
+  u4l1: [['kling_02_mountain', '高山・玉山'], ['kling_13_hill', '丘陵・苗栗茶園'], ['kling_12_basin', '盆地・臺北盆地']],
+  u4l2: [['kling_01_plates', '板塊擠壓，隆起成中央山脈']]
+};
+function videoHTML(list){
+  if (!list) return '';
+  return `<div class="m-video"><video id="lvVideo" src="../videos/${list[0][0]}.mp4" controls autoplay playsinline preload="auto"></video>
+    <div class="v-nav"><span id="vCap">🎬 1 / ${list.length}　${list[0][1]}</span>${list.length > 1 ? '<button class="px-btn stone" id="vNext">下一支 ▶</button>' : ''}</div></div>`;
+}
+function wireVideo(list){
+  const v = $('lvVideo'); if (!v || !list) return;
+  let i = 0;
+  const go = () => { i = (i + 1) % list.length; v.src = `../videos/${list[i][0]}.mp4`; v.play().catch(() => {});
+    $('vCap').textContent = `🎬 ${i + 1} / ${list.length}　${list[i][1]}`; };
+  v.addEventListener('ended', () => { if (i < list.length - 1) go(); });
+  if ($('vNext')) $('vNext').addEventListener('click', go);
+  v.play().catch(() => {});
+}
+
 async function finishLevel(){
   if (game.over) return;
   game.over = true; stopTimer();
@@ -177,10 +201,13 @@ async function finishLevel(){
   const btns = [{label: '🔁 再玩一次', value: 'again', cls: 'wood'}];
   if (next) btns.push({label: '▶ 下一關', value: 'next', cls: 'orange'});
   btns.push({label: '📋 回單元', value: 'unit', cls: 'stone'});
-  const v = await showModal({icon: '🎉', title: '過關！', center: true,
-    html: `<div class="m-stars">${starHTML(stars)}</div>${game.miss === 0 ? '全對！太厲害了！' : `答錯 ${game.miss} 次，${stars === 1 ? '多練習就能拿到 3 顆星！' : '很棒，再細心一點就是滿分！'}`}
+  const vids = LEVEL_VIDEOS[curLevel.id];
+  const shown = showModal({icon: '🎉', title: '過關！', center: true,
+    html: `${videoHTML(vids)}<div class="m-stars">${starHTML(stars)}</div>${game.miss === 0 ? '全對！太厲害了！' : `答錯 ${game.miss} 次，${stars === 1 ? '多練習就能拿到 3 顆星！' : '很棒，再細心一點就是滿分！'}`}
       ${curLevel.recap ? `<div class="explain" style="margin-top:10px;text-align:left">📌 ${curLevel.recap}</div>` : ''}`,
     buttons: btns});
+  wireVideo(vids);
+  const v = await shown;
   if (v === 'again') startLevel(curLevel);
   else if (v === 'next') startLevel(next);
   else openUnit(curUnit);

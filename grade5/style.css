@@ -212,3 +212,8 @@ button{font-family:inherit;cursor:pointer}
   .pinmap{max-width:380px;margin:0 auto}
   .pin-tag{font-size:12px}
 }
+/* 過關影片 */
+.modal .m-video{margin:4px 0 8px}
+.modal .m-video video{width:100%;max-height:42dvh;background:#000;border-radius:10px;display:block}
+.modal .v-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:16px}
+.modal .v-nav .px-btn{padding:6px 12px;font-size:15px}
