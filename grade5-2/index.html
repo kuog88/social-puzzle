@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>五年級下學期社會・時空新聞台（翰林五下）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="back" href="../index.html">← 選年級</a>
+    <div class="brand">
+      <span class="sem-tag">下學期</span>
+      <div class="brand-text">
+        <div class="brand-name">五年級下學期・時空新聞台</div>
+        <div class="brand-sub">翰林版社會 5 下｜高雄市鳳山區五福國小</div>
+      </div>
+    </div>
+    <div class="rating" title="收集到的星星"><span class="live-dot"></span>⭐ <b id="totalStars">0</b><small id="maxStars">/45</small></div>
+  </header>
+
+  <div class="ticker" aria-hidden="true"><div class="ticker-in" id="ticker"></div></div>
+
+  <!-- 首頁：選頻道 -->
+  <main id="home" class="screen">
+    <section class="anchor-desk">
+      <div class="anchor" aria-hidden="true">🧑‍💼🎙️</div>
+      <div>
+        <h1 class="screen-title" id="homeTitle">歡迎來到時空新聞台！</h1>
+        <p>你是新進的小記者。五下社會有 <b>5 個頻道</b>，每個頻道 3 則任務：<span class="k hand">現場連線（動手做）</span><span class="k idea">新聞解析（觀念題）</span><span class="k boss">查證快報（挑戰題）</span>。完成任務就能拿到 ⭐！</p>
+        <p class="note">這是<b>五年級下學期</b>的內容；上學期的「福爾摩沙時光探險隊」請回「選年級」找。</p>
+      </div>
+    </section>
+    <section class="channels" id="channels"></section>
+    <p class="foot"><button class="link-btn" id="resetBtn" type="button">清除下學期進度</button></p>
+  </main>
+
+  <!-- 頻道：選任務 -->
+  <main id="unit" class="screen" hidden>
+    <button class="btn ghost" data-go="home" type="button">← 回頻道表</button>
+    <section class="unit-head" id="unitHead"></section>
+    <section class="task-list" id="taskList"></section>
+  </main>
+
+  <!-- 任務 -->
+  <main id="play" class="screen" hidden>
+    <div class="play-bar">
+      <button class="btn ghost" id="quitBtn" type="button">← 回頻道</button>
+      <h2 class="level-title" id="playTitle"></h2>
+      <span class="timer" id="timer" hidden></span>
+      <button class="btn speak" id="speakBtn" type="button" aria-label="朗讀題目">🔊 唸題目</button>
+    </div>
+    <div class="progress"><span id="progBar"></span></div>
+    <section class="screen-frame">
+      <div class="onair"><span class="live-dot"></span>LIVE</div>
+      <p class="ask" id="ask"></p>
+      <div class="stage" id="stage"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <div class="m-stars" id="mStars">⭐⭐⭐</div>
+    <h2 id="mTitle">播報完成！</h2>
+    <p id="mText"></p>
+    <div class="modal-btns">
+      <button class="btn" id="mAgain" type="button">再玩一次</button>
+      <button class="btn primary" id="mNext" type="button">下一則 →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="data.js"></script>
+<script src="game.js"></script>
+<script src="https://kuog88.github.io/home-button.js" defer></script>
+<script src="https://kuog88.github.io/bgm.js" defer></script>
+</body>
+</html>
