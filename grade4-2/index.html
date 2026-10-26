@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>四年級下學期社會・熱氣球家鄉巡航（南一四下）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span></div>
+<div class="app">
+  <header class="topbar">
+    <a class="back" href="../index.html">← 選年級</a>
+    <div class="brand">
+      <span class="sem-tag">下學期</span>
+      <div class="brand-text">
+        <div class="brand-name">四年級下學期・熱氣球家鄉巡航</div>
+        <div class="brand-sub">南一版社會 4 下｜高雄市鳳山區五福國小</div>
+      </div>
+    </div>
+    <div class="fuel" title="收集到的星星">⭐ <b id="totalStars">0</b><small id="maxStars">/45</small></div>
+  </header>
+
+  <!-- 首頁：航線圖 -->
+  <main id="home" class="screen">
+    <section class="hello">
+      <div class="balloon big" aria-hidden="true">🎈</div>
+      <div>
+        <h1 class="screen-title" id="homeTitle">歡迎登上熱氣球！</h1>
+        <p>你是熱氣球小領航員，要飛越家鄉上空的 <b>5 個空中站</b>。每站 3 個任務：<span class="k hand">動手操作</span><span class="k idea">觀念題</span><span class="k boss">挑戰題（計時）</span>，完成任務收集 ⭐ 當燃料！</p>
+        <p class="note">這是<b>四年級下學期</b>的內容；上學期的「家鄉探險隊」請回「選年級」找。</p>
+      </div>
+    </section>
+    <section class="route" id="route"></section>
+    <p class="foot"><button class="link-btn" id="resetBtn" type="button">清除下學期進度</button></p>
+  </main>
+
+  <!-- 空中站：選任務 -->
+  <main id="unit" class="screen" hidden>
+    <button class="btn ghost" data-go="home" type="button">← 回航線圖</button>
+    <section class="unit-head" id="unitHead"></section>
+    <section class="task-list" id="taskList"></section>
+  </main>
+
+  <!-- 任務 -->
+  <main id="play" class="screen" hidden>
+    <div class="play-bar">
+      <button class="btn ghost" id="quitBtn" type="button">← 回空中站</button>
+      <h2 class="level-title" id="playTitle"></h2>
+      <span class="timer" id="timer" hidden></span>
+      <button class="btn speak" id="speakBtn" type="button" aria-label="朗讀題目">🔊 唸題目</button>
+    </div>
+    <div class="altitude"><span id="progBar"></span><i class="mini-balloon" id="progBalloon">🎈</i></div>
+    <section class="basket">
+      <p class="ask" id="ask"></p>
+      <div class="stage" id="stage"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <div class="m-stars" id="mStars">⭐⭐⭐</div>
+    <h2 id="mTitle">任務完成！</h2>
+    <p id="mText"></p>
+    <div class="modal-btns">
+      <button class="btn" id="mAgain" type="button">再玩一次</button>
+      <button class="btn primary" id="mNext" type="button">下一個任務 →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="data.js"></script>
+<script src="game.js"></script>
+<script src="https://kuog88.github.io/home-button.js" defer></script>
+<script src="https://kuog88.github.io/bgm.js" defer></script>
+</body>
+</html>
