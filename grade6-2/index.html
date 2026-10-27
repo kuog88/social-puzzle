@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>六年級下學期社會・環球永續列車（翰林六下）</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <a class="back" href="../index.html">← 選年級</a>
+    <div class="brand">
+      <span class="sem-tag">下學期</span>
+      <div class="brand-text">
+        <div class="brand-name">六年級下學期・環球永續列車</div>
+        <div class="brand-sub">翰林版社會 6 下｜高雄市鳳山區五福國小</div>
+      </div>
+    </div>
+    <div class="stamps" title="收集到的星星">⭐ <b id="totalStars">0</b><small id="maxStars">/45</small></div>
+  </header>
+
+  <!-- 首頁：路線圖 -->
+  <main id="home" class="screen">
+    <section class="hero">
+      <div class="train" aria-hidden="true">🚂<span>🚃</span><span>🚃</span><span>🚃</span></div>
+      <div>
+        <h1 class="screen-title" id="homeTitle">歡迎搭乘環球永續列車！</h1>
+        <p>你是列車上的見習世界公民。六下社會有 <b>4 個車站</b>，每站有
+          <span class="k hand">動手做</span><span class="k idea">觀念題</span><span class="k boss">挑戰題</span>，最後還有
+          <span class="k extra">🎯 進階挑戰</span>（考卷程度、有陷阱題）。答得越好，車票上蓋的 ⭐ 越多！</p>
+        <p class="note">這是<b>六年級下學期</b>的內容；上學期的「未來公民挑戰營」請回「選年級」找。</p>
+      </div>
+    </section>
+    <section class="route" id="route"></section>
+    <p class="foot"><button class="link-btn" id="resetBtn" type="button">清除下學期進度</button></p>
+  </main>
+
+  <!-- 車站：選關卡 -->
+  <main id="unit" class="screen" hidden>
+    <button class="btn ghost" data-go="home" type="button">← 回路線圖</button>
+    <section class="unit-head" id="unitHead"></section>
+    <section class="ticket-list" id="ticketList"></section>
+  </main>
+
+  <!-- 關卡 -->
+  <main id="play" class="screen" hidden>
+    <div class="play-bar">
+      <button class="btn ghost" id="quitBtn" type="button">← 回車站</button>
+      <h2 class="level-title" id="playTitle"></h2>
+      <button class="btn speak" id="speakBtn" type="button" aria-label="朗讀題目">🔊 唸題目</button>
+    </div>
+    <div class="progress"><span id="progBar"></span></div>
+    <section class="board">
+      <p class="ask" id="ask"></p>
+      <div class="stage" id="stage"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="modal-card">
+    <div class="m-stars" id="mStars">⭐⭐⭐</div>
+    <h2 id="mTitle">抵達！</h2>
+    <p id="mText"></p>
+    <div class="modal-btns">
+      <button class="btn" id="mAgain" type="button">再玩一次</button>
+      <button class="btn primary" id="mNext" type="button">下一關 →</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" hidden></div>
+
+<script src="data.js"></script>
+<script src="game.js"></script>
+<script src="https://kuog88.github.io/home-button.js" defer></script>
+<script src="https://kuog88.github.io/bgm.js" defer></script>
+</body>
+</html>

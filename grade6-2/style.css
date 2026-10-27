@@ -1,0 +1,150 @@
+/* 六年級下學期社會・環球永續列車 — 鐵鏽橘＋深青綠，車票與路線圖風格 */
+:root{
+  --rust:#d9480f;
+  --rust-dark:#a8380b;
+  --teal:#0b5563;
+  --teal-2:#0b7285;
+  --sand:#fff4e6;
+  --paper:#fffaf3;
+  --ink:#1f2a30;
+  --muted:#5b6770;
+  --ok:#2b8a3e;
+  --bad:#e03131;
+  --gold:#f59f00;
+  --font:"Microsoft JhengHei","PingFang TC","Noto Sans TC","Heiti TC",sans-serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none !important}
+html,body{margin:0;min-height:100%}
+body{
+  font-family:var(--font);font-size:18px;color:var(--ink);line-height:1.55;
+  background:
+    repeating-linear-gradient(90deg, rgba(11,85,99,.06) 0 2px, transparent 2px 46px),
+    linear-gradient(180deg,#fde8d4 0%,var(--sand) 45%,#e6f4f1 100%);
+  background-attachment:fixed;min-height:100dvh;
+  -webkit-tap-highlight-color:transparent;
+}
+button{font-family:inherit;cursor:pointer;color:inherit}
+.app{max-width:1000px;margin:0 auto;padding:0 14px 40px}
+
+/* ---------- 上方 ---------- */
+.topbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 0}
+.back{background:#fff;border:2px solid var(--teal);color:var(--teal);font-weight:800;text-decoration:none;border-radius:999px;padding:6px 14px;white-space:nowrap}
+.back:hover{background:var(--teal);color:#fff}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:240px}
+.sem-tag{white-space:nowrap;flex:none;background:var(--rust);color:#fff;font-weight:900;font-size:20px;padding:6px 14px;border-radius:10px;box-shadow:0 3px 0 var(--rust-dark);transform:rotate(-4deg);letter-spacing:2px}
+.brand-name{font-size:22px;font-weight:900;color:var(--teal)}
+.brand-sub{font-size:14px;color:var(--muted)}
+.stamps{background:#fff;border:2px dashed var(--rust);border-radius:12px;padding:6px 12px;font-weight:800;white-space:nowrap}
+.stamps small{color:var(--muted)}
+
+/* ---------- 首頁 ---------- */
+.hero{display:flex;gap:18px;align-items:center;background:var(--paper);border:3px solid var(--teal);border-radius:20px;padding:18px;box-shadow:0 6px 0 rgba(11,85,99,.2)}
+.train{font-size:44px;white-space:nowrap;animation:chug 2.4s ease-in-out infinite}
+.train span{margin-left:-6px}
+@keyframes chug{0%,100%{transform:translateX(0)}50%{transform:translateX(6px)}}
+.screen-title{margin:0 0 6px;color:var(--rust);font-size:28px}
+.hero p{margin:6px 0}
+.note{font-size:15px;color:var(--muted)}
+.k{display:inline-block;padding:0 8px;border-radius:8px;font-weight:800;font-size:15px;margin:0 2px;color:#fff}
+.k.hand{background:var(--teal-2)}.k.idea{background:#7048e8}.k.boss{background:var(--rust)}.k.extra{background:#c2255c}
+
+.route{position:relative;margin:26px 0 8px;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.route::before{content:"";position:absolute;left:6px;right:6px;top:34px;height:8px;border-radius:4px;
+  background:repeating-linear-gradient(90deg,#6b4a2b 0 14px,transparent 14px 22px),#c9a27a;z-index:0}
+.station{position:relative;z-index:1;background:#fff;border:3px solid var(--c,var(--teal));border-radius:18px;padding:12px 14px 14px;text-align:left;
+  box-shadow:0 5px 0 rgba(0,0,0,.12);transition:transform .12s}
+.station:hover,.station:focus-visible{transform:translateY(-3px)}
+.station .dot{width:52px;height:52px;border-radius:50%;background:var(--c,var(--teal));color:#fff;font-size:28px;display:grid;place-items:center;border:4px solid #fff;box-shadow:0 0 0 3px var(--c,var(--teal));margin-bottom:6px}
+.station .no{font-size:14px;color:var(--c);font-weight:900}
+.station .nm{font-size:20px;font-weight:900}
+.station .st{font-size:14px;color:var(--muted)}
+.station .bar{height:10px;background:#eee;border-radius:5px;margin-top:8px;overflow:hidden}
+.station .bar i{display:block;height:100%;background:var(--c);width:0}
+.station .sc{font-size:14px;margin-top:4px;color:var(--muted)}
+.foot{text-align:center;margin-top:24px}
+.link-btn{background:none;border:none;color:var(--muted);text-decoration:underline;font-size:14px}
+
+/* ---------- 車站頁 ---------- */
+.btn{border:2px solid var(--teal);background:#fff;color:var(--teal);font-weight:800;font-size:17px;border-radius:12px;padding:8px 16px;touch-action:manipulation}
+.btn:hover{background:#e6f4f1}
+.btn.primary{background:var(--rust);border-color:var(--rust-dark);color:#fff;box-shadow:0 4px 0 var(--rust-dark)}
+.btn.primary:hover{background:var(--rust-dark)}
+.btn.ghost{margin:4px 0 12px}
+.unit-head{background:var(--paper);border-left:10px solid var(--c,var(--teal));border-radius:16px;padding:14px 18px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
+.unit-title{margin:0;font-size:26px;color:var(--c,var(--teal))}
+.unit-head .lessons{margin:6px 0;padding-left:20px;color:var(--ink)}
+.unit-head p{margin:4px 0;color:var(--muted)}
+.ticket-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
+.ticket{position:relative;display:flex;flex-direction:column;gap:4px;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:14px 16px 14px 22px;text-align:left;
+  box-shadow:0 5px 0 rgba(0,0,0,.15);transition:transform .12s;overflow:hidden}
+.ticket::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--kc)}
+.ticket::after{content:"";position:absolute;right:-12px;top:50%;width:24px;height:24px;border-radius:50%;background:var(--sand);border:2px solid var(--ink);transform:translateY(-50%)}
+.ticket:hover{transform:translateY(-3px)}
+.ticket .kind{font-size:14px;font-weight:900;color:var(--kc)}
+.ticket .tn{font-size:19px;font-weight:900}
+.ticket .ts{font-size:22px;letter-spacing:2px}
+.ticket.hand{--kc:var(--teal-2)}.ticket.idea{--kc:#7048e8}.ticket.boss{--kc:var(--rust)}.ticket.extra{--kc:#c2255c;background:#fff0f6}
+
+/* ---------- 關卡 ---------- */
+.play-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.play-bar .btn.ghost{margin:0}
+.level-title{flex:1;margin:0;font-size:22px;color:var(--teal);min-width:200px}
+.btn.speak{border-color:var(--rust);color:var(--rust)}
+.progress{height:12px;background:#fff;border:2px solid var(--teal);border-radius:8px;margin:10px 0;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:repeating-linear-gradient(45deg,var(--rust) 0 10px,#f08c4a 10px 20px);transition:width .3s}
+.board{background:var(--paper);border:3px solid var(--teal);border-radius:20px;padding:16px;box-shadow:0 6px 0 rgba(11,85,99,.2)}
+.ask{font-size:21px;font-weight:800;margin:0 0 12px}
+.fig{background:#fff;border:2px solid #d0d7db;border-radius:14px;padding:8px;margin:0 0 12px;text-align:center}
+.fig svg{width:100%;max-width:560px;height:auto}
+.mapfig{position:relative;display:inline-block;width:min(300px,80%);aspect-ratio:3/4;background:#7cc6e8;border-radius:10px;overflow:hidden}
+.mapfig img,.mapfig .mapbase{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mpin{position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:var(--rust);color:#fff;font-weight:900;font-size:18px;display:grid;place-items:center;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:640px){.opts{grid-template-columns:1fr}}
+.opt{text-align:left;background:#fff;border:2px solid var(--teal);border-radius:12px;padding:12px 14px;font-size:18px;font-weight:700;touch-action:manipulation}
+.opt:hover:not(:disabled){background:#e6f4f1}
+.opt.right{background:#d3f9d8;border-color:var(--ok)}
+.opt.wrong{background:#ffe3e3;border-color:var(--bad)}
+.opt:disabled{cursor:default}
+.explain{margin-top:12px;background:#fff;border-left:8px solid var(--ok);border-radius:10px;padding:10px 14px}
+.explain.no{border-left-color:var(--bad)}
+.explain .trap{margin-top:6px;background:#fff4e6;border-radius:8px;padding:6px 10px;color:#a8380b;font-weight:700}
+.next-row{text-align:right;margin-top:12px}
+
+/* 分類、配對、排序 */
+.chips{display:flex;flex-wrap:wrap;gap:8px;min-height:52px;padding:8px;border:2px dashed #c9a27a;border-radius:12px;background:#fffdf8}
+.chip{background:#fff;border:2px solid var(--ink);border-radius:10px;padding:8px 12px;font-size:17px;font-weight:700;touch-action:none;user-select:none;-webkit-user-select:none}
+.chip.sel{background:#ffe8cc;border-color:var(--rust);box-shadow:0 0 0 3px rgba(217,72,15,.3)}
+.chip.done{background:#d3f9d8;border-color:var(--ok);cursor:default}
+.chip.shake{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.ghost-chip{position:fixed;pointer-events:none;z-index:50;opacity:.9;transform:translate(-50%,-50%)}
+.bins{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.bin{background:#fff;border:3px solid var(--teal);border-radius:14px;padding:10px;min-height:120px}
+.bin h4{margin:0 0 8px;color:var(--teal);font-size:18px}
+.bin.hot{background:#e6f4f1}
+.bin .chips{border:none;background:none;padding:0;min-height:0}
+.match{display:grid;grid-template-columns:1fr 1.6fr;gap:10px 16px}
+.match .col{display:flex;flex-direction:column;gap:8px}
+.match .chip{text-align:left;cursor:pointer}
+.order-slots{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.slot{display:flex;gap:10px;align-items:center;background:#fff;border:2px dashed #c9a27a;border-radius:10px;padding:8px 12px;min-height:46px}
+.slot b{background:var(--teal);color:#fff;border-radius:50%;width:28px;height:28px;display:grid;place-items:center;flex:none}
+.slot.filled{border-style:solid;border-color:var(--ok);background:#ebfbee}
+
+/* 結果視窗、提示 */
+.modal{position:fixed;inset:0;background:rgba(31,42,48,.55);display:grid;place-items:center;z-index:40;padding:16px}
+.modal-card{background:var(--paper);border:4px solid var(--rust);border-radius:22px;padding:22px;max-width:440px;width:100%;text-align:center}
+.m-stars{font-size:44px;letter-spacing:4px}
+.modal-card h2{margin:6px 0;color:var(--teal)}
+.modal-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 18px;border-radius:12px;font-weight:700;z-index:60;max-width:90vw}
+@media (max-width:560px){
+  body{font-size:17px}
+  .hero{flex-direction:column;text-align:center}
+  .route::before{display:none}
+  .match{grid-template-columns:1fr}
+  .screen-title{font-size:24px}
+}
