@@ -89,6 +89,12 @@ button{font-family:inherit;cursor:pointer}
 .chip.k-hand{background:#3b82f6}
 .chip.k-idea{background:var(--grass-dark)}
 .chip.k-boss{background:#8e3bd1}
+.chip.k-adv{background:#e8433a}
+.explain .trap{margin-top:6px;color:#b3261e;font-weight:bold}
+.q-art svg.adv-fig{width:100%;max-width:460px;background:#fff;border:3px solid #232323;border-radius:8px}
+.xmap{position:relative;width:min(100%,300px);aspect-ratio:3/4;margin:0 auto;border:3px solid #232323;border-radius:8px;overflow:hidden;background:linear-gradient(#6cc6e8,#3a9fd0)}
+.xmap img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.xmap .xm{position:absolute;transform:translate(-50%,-50%);background:#e8433a;color:#fff;border:2px solid #fff;border-radius:50%;width:34px;height:34px;font-size:17px;line-height:30px;font-weight:900;text-align:center;box-shadow:0 2px 4px #0006}
 .unit-desc{margin:0;background:rgba(255,255,255,.9);padding:10px 14px;font-size:16px;line-height:1.6}
 .levels{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .lv-card{display:flex;flex-direction:column;gap:6px;align-items:flex-start;text-align:left;background:#fff;padding:14px;color:var(--ink);font-size:17px}
@@ -212,14 +218,3 @@ button{font-family:inherit;cursor:pointer}
   .pinmap{max-width:380px;margin:0 auto}
   .pin-tag{font-size:12px}
 }
-/* 過關影片 */
-.modal .m-video{margin:4px 0 8px}
-.modal .m-video video{width:100%;max-height:42dvh;background:#000;border-radius:10px;display:block}
-.modal .v-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:16px}
-.modal .v-nav .px-btn{padding:6px 12px;font-size:15px}
-
-/* 上／下學期分區 */
-.term-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 -2px;font-size:22px;font-weight:900;color:var(--ink)}
-.term-head::after{content:'';flex:1;border-top:3px dashed rgba(0,0,0,.18)}
-.term-soon{grid-column:1/-1;padding:18px 12px;text-align:center;border:3px dashed #b9a98a;border-radius:12px;background:rgba(255,255,255,.55);color:#8a7a5a;font-size:18px}
-.exam-head{grid-column:1/-1;justify-self:start;margin:4px 0 -4px;padding:3px 14px;border-radius:99px;background:#fff3c4;border:2px solid #e0b84a;color:#7a5a00;font-size:16px;font-weight:900}

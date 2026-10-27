@@ -1,7 +1,7 @@
 /* =========================================================
    五年級社會・福爾摩沙時光探險隊　遊戲引擎（沿用四、六年級社會引擎，另加臺灣地圖拼圖）
    關卡內容都在 data.js（window.UNITS），這裡只負責畫面與判斷。
-   關卡種類：sort（拖曳分類）、quiz（選擇題）、order（排順序）、map（方格地圖）、pinmap（臺灣地圖拼圖）
+   關卡種類（第 4 關 kind:'adv' 為進階挑戰）：sort（拖曳分類）、quiz（選擇題）、order（排順序）、map（方格地圖）、pinmap（臺灣地圖拼圖）
    ========================================================= */
 'use strict';
 
@@ -73,7 +73,7 @@ const Store = {
 };
 const starsByMiss = miss => miss === 0 ? 3 : miss <= 2 ? 2 : 1;
 const starHTML = n => '<b>' + '★'.repeat(n) + '</b>' + '☆'.repeat(3 - n);
-const KIND = { hand: ['🖐️ 動手做', 'k-hand'], idea: ['💡 觀念題', 'k-idea'], boss: ['🔥 挑戰題', 'k-boss'] };
+const KIND = { hand: ['🖐️ 動手做', 'k-hand'], idea: ['💡 觀念題', 'k-idea'], boss: ['🔥 挑戰題', 'k-boss'], adv: ['🎯 進階挑戰', 'k-adv'] };
 
 /* ---------- E. 彈窗 ---------- */
 function showModal({icon = '', title = '', html = '', center = false, buttons = [{label: '好！', value: true}]}){
@@ -81,7 +81,7 @@ function showModal({icon = '', title = '', html = '', center = false, buttons = 
     $('modal').innerHTML = `<div class="m-icon">${icon}</div><h3>${title}</h3><div class="m-body ${center ? 'center' : ''}">${html}</div>
       <div class="m-btns">${buttons.map((b, i) => `<button class="px-btn ${b.cls || ''}" data-i="${i}">${b.label}</button>`).join('')}</div>`;
     $('modal').querySelectorAll('.m-btns button').forEach(btn => btn.addEventListener('click', () => {
-      Sound.click(); $('modal').querySelectorAll('video').forEach(v => v.pause()); $('overlay').classList.remove('open'); resolve(buttons[+btn.dataset.i].value);
+      Sound.click(); $('overlay').classList.remove('open'); resolve(buttons[+btn.dataset.i].value);
     }));
     $('overlay').classList.add('open'); $('modal').scrollTop = 0;
   });
@@ -100,25 +100,13 @@ function unitStars(u){ const s = Store.get(); return u.levels.reduce((n, l) => n
 function renderLobby(){
   const all = UNITS.reduce((n, u) => n + unitStars(u), 0), max = UNITS.reduce((n, u) => n + u.levels.length * 3, 0);
   $('totalStars').innerHTML = `目前收集 <b>★ ${all}</b> / ${max}` + (all === max ? '　🏆 你是福爾摩沙時光大師！' : '');
-  const card = (u, i, k) => {
+  $('portals').innerHTML = UNITS.map((u, i) => {
     const st = unitStars(u), mx = u.levels.length * 3;
     return `<button class="portal px" data-u="${i}">
-      <span class="p-icon">${u.icon}</span><span class="p-lv">第${'一二三四五六'[k]}單元</span>
+      <span class="p-icon">${u.icon}</span><span class="p-lv">第${'一二三四五六'[i]}單元</span>
       <span class="p-name">${u.name}</span><span class="p-desc">${u.lessons.join('、')}</span>
       <span class="p-stars"><b>${'★'.repeat(Math.min(st, mx))}</b>${'☆'.repeat(mx - st)}</span></button>`;
-  };
-  // 單元依學期分區：data.js 的單元可加 term: '下'，沒寫就算上學期
-  const term = t => {
-    const list = UNITS.map((u, i) => [u, i]).filter(([u]) => (u.term || '上') === t);
-    if (!list.length) return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3><div class="term-soon">🚧 下學期單元製作中，敬請期待！</div>`;
-    // 再依月考分組：單元可加 exam: 1 / 2（第一次／第二次月考），沒寫就不分組
-    let last = null;
-    return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3>` + list.map(([u, i], k) => {
-      const head = u.exam && u.exam !== last ? `<div class="exam-head">📝 第${'一二三'[u.exam - 1]}次月考範圍</div>` : '';
-      last = u.exam; return head + card(u, i, k);
-    }).join('');
-  };
-  $('portals').innerHTML = term('上') + term('下');
+  }).join('');
   $('portals').querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.click(); openUnit(UNITS[+p.dataset.u]); }));
   $('topTitle').textContent = '🧭 五年級社會・福爾摩沙時光探險隊';
   show('lobby');
@@ -179,30 +167,6 @@ async function timeUp(){
   v === 'again' ? startLevel(curLevel) : openUnit(curUnit);
 }
 
-/* ---------- G2. 過關影片（可靈 Kling 動畫，檔案在 ../videos/） ---------- */
-const LEVEL_VIDEOS = {
-  u1l1: [['kling_09_strait', '臺灣海峽'], ['kling_10_tropic', '北回歸線'], ['kling_11_coord', '經緯度找臺灣']],
-  u1l2: [['kling_06_tao', '達悟族・拼板舟與飛魚'], ['kling_07_paiwan', '排灣族・石板屋'], ['kling_08_amis', '阿美族・豐年祭'],
-         ['kling_15_thao', '邵族・杵音'], ['kling_16_bunun', '布農族'], ['kling_17_atayal', '泰雅族'], ['kling_18_tsou', '鄒族']],
-  u1l3: [['kling_14_changbin', '長濱文化・八仙洞'], ['kling_03_yuanshan', '圓山文化・貝塚'], ['kling_04_beinan', '卑南文化・玉器與石板棺'], ['kling_05_shisanhang', '十三行文化・煉鐵']],
-  u4l1: [['kling_02_mountain', '高山・玉山'], ['kling_13_hill', '丘陵・苗栗茶園'], ['kling_12_basin', '盆地・臺北盆地']],
-  u4l2: [['kling_01_plates', '板塊擠壓，隆起成中央山脈']]
-};
-function videoHTML(list){
-  if (!list) return '';
-  return `<div class="m-video"><video id="lvVideo" src="../videos/${list[0][0]}.mp4" controls autoplay playsinline preload="auto"></video>
-    <div class="v-nav"><span id="vCap">🎬 1 / ${list.length}　${list[0][1]}</span>${list.length > 1 ? '<button class="px-btn stone" id="vNext">下一支 ▶</button>' : ''}</div></div>`;
-}
-function wireVideo(list){
-  const v = $('lvVideo'); if (!v || !list) return;
-  let i = 0;
-  const go = () => { i = (i + 1) % list.length; v.src = `../videos/${list[i][0]}.mp4`; v.play().catch(() => {});
-    $('vCap').textContent = `🎬 ${i + 1} / ${list.length}　${list[i][1]}`; };
-  v.addEventListener('ended', () => { if (i < list.length - 1) go(); });
-  if ($('vNext')) $('vNext').addEventListener('click', go);
-  v.play().catch(() => {});
-}
-
 async function finishLevel(){
   if (game.over) return;
   game.over = true; stopTimer();
@@ -213,13 +177,10 @@ async function finishLevel(){
   const btns = [{label: '🔁 再玩一次', value: 'again', cls: 'wood'}];
   if (next) btns.push({label: '▶ 下一關', value: 'next', cls: 'orange'});
   btns.push({label: '📋 回單元', value: 'unit', cls: 'stone'});
-  const vids = LEVEL_VIDEOS[curLevel.id];
-  const shown = showModal({icon: '🎉', title: '過關！', center: true,
-    html: `${videoHTML(vids)}<div class="m-stars">${starHTML(stars)}</div>${game.miss === 0 ? '全對！太厲害了！' : `答錯 ${game.miss} 次，${stars === 1 ? '多練習就能拿到 3 顆星！' : '很棒，再細心一點就是滿分！'}`}
+  const v = await showModal({icon: '🎉', title: '過關！', center: true,
+    html: `<div class="m-stars">${starHTML(stars)}</div>${game.miss === 0 ? '全對！太厲害了！' : `答錯 ${game.miss} 次，${stars === 1 ? '多練習就能拿到 3 顆星！' : '很棒，再細心一點就是滿分！'}`}
       ${curLevel.recap ? `<div class="explain" style="margin-top:10px;text-align:left">📌 ${curLevel.recap}</div>` : ''}`,
     buttons: btns});
-  wireVideo(vids);
-  const v = await shown;
   if (v === 'again') startLevel(curLevel);
   else if (v === 'next') startLevel(next);
   else openUnit(curUnit);
@@ -317,7 +278,7 @@ const RENDER = {
         if (o.right){
           good(); bigCheck(); b.classList.add('right');
           $('stage').querySelectorAll('.opt').forEach(x => x.disabled = true);
-          $('why').innerHTML = `<div class="explain" style="margin-top:10px">💡 ${q.why || '答對了！'}</div>
+          $('why').innerHTML = `<div class="explain" style="margin-top:10px">💡 ${q.why || '答對了！'}${q.trap ? `<div class="trap">⚠️ 小心陷阱：${q.trap}</div>` : ''}</div>
             <div class="next-row" style="margin-top:10px"><button class="px-btn orange" id="nextQ">${qi + 1 < qs.length ? '下一題 ▶' : '完成 🏁'}</button></div>`;
           $('nextQ').addEventListener('click', () => { Sound.click(); qi++; step(); });
         } else {
