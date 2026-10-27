@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>三年級社會探險島・麥塊校園大冒險</title>
+<title>三年級上學期社會探險島・麥塊校園大冒險</title>
 <style>
 /* =========================================================
    1. 麥塊（像素方塊）風格色彩
@@ -89,12 +89,9 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .term-head{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:10px 0 -2px;font-size:22px;font-weight:900;color:var(--ink)}
 .term-head::after{content:'';flex:1;border-top:3px dashed rgba(0,0,0,.18)}
 .term-soon{grid-column:1/-1;padding:18px 12px;text-align:center;border:3px dashed #b9a98a;border-radius:12px;background:rgba(255,255,255,.55);color:#8a7a5a;font-size:18px}
-.exam-head{grid-column:1/-1;justify-self:start;margin:4px 0 -4px;padding:3px 14px;border-radius:99px;background:#fff3c4;border:2px solid #e0b84a;color:#7a5a00;font-size:16px;font-weight:900}
 .portal.p1{border-color:#2b5e1c}
 .portal.p2{background:#fff0ef}
 .portal.p3{background:#eef7ff}
-.portal.p4{background:#fff7e0}
-.portal .p-lv.sem2{background:#c7652a}
 .notes-btn{align-self:center;margin-top:8px}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
@@ -271,25 +268,16 @@ svg.pix{shape-rendering:crispEdges;display:block}
 .shiver{animation:shake .45s}
 
 /* =========================================================
-   5-2. 關卡四（三下）：鳳山社區小達人
+   5-2. 🎯 進階挑戰（沿用選擇題卡片樣式）
    ========================================================= */
-.l4-steps{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
-.l4-steps span{background:rgba(255,255,255,.75);border:3px solid #8a7a5a;border-radius:99px;padding:4px 12px;font-size:15px;color:#8a7a5a}
-.l4-steps span.now{background:#ffcf3f;border-color:var(--ink);color:var(--ink)}
-.l4-steps span.done{background:#d9ffd9;border-color:#1f7a34;color:#1f7a34}
-.l4-stage{display:flex;flex-direction:column;gap:10px}
-.campus2.town{max-height:max(260px, calc(100dvh - 380px))}
-.town{background:radial-gradient(circle, #cfd4d9 18%, transparent 20%) 0 0 / 22px 22px, #e5e7eb}
-.town .road{background:#6b7280}
-.town .road.h::after{background:repeating-linear-gradient(90deg,#fde047 0 18px,transparent 18px 36px)}
-.baskets{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.basket{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:150px;padding:10px;background:#e9ffe9;font-size:22px;font-weight:900;text-align:center;transition:transform .15s, background .15s}
-.basket small{font-size:14px;color:#5f5240;font-weight:700}
-.basket.want{background:#fff0f6}
-.basket.hover{transform:scale(1.04);background:#fff4b0}
-.basket.shake{animation:shake .45s}
-.b-items{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:4px}
-.b-items span{background:#fff;border:2px solid var(--ink);border-radius:8px;padding:2px 8px;font-size:14px;animation:pop .3s cubic-bezier(.3,1.6,.5,1)}
+.portal.adv{background:#f3ecff}
+.portal .p-lv.adv{background:#7c3aed}
+.shop-card .q-num{font-size:15px;color:#8a7a5a}
+.shop-card .q-unit{display:inline-block;margin-left:6px;background:#7c3aed;color:#fff;border-radius:99px;padding:1px 10px;font-size:14px}
+.adv-fig:empty{display:none}
+.adv-fig{align-self:center;width:100%;max-width:520px}
+.adv-fig svg{width:100%;height:auto;display:block}
+.trap{background:#fff3c4;border:3px dashed #e0a800;border-radius:10px;padding:6px 10px}
 .shop-card{background:var(--paper);padding:14px 16px;display:flex;flex-direction:column;gap:8px}
 .shop-card .q-scene{font-size:42px;letter-spacing:6px}
 .shop-card .q-text{font-size:clamp(18px,4.6vw,24px);font-weight:900;line-height:1.5}
@@ -371,9 +359,6 @@ svg.pix{shape-rendering:crispEdges;display:block}
   .lamp{width:54px;height:54px}
   .notes{grid-template-columns:1fr 1fr}
   .result-levels{grid-template-columns:repeat(2,1fr)}
-  .baskets{gap:8px}
-  .basket{min-height:120px;font-size:18px}
-  .l4-steps span{font-size:13px;padding:3px 6px}
   .shop-opts .px-btn{font-size:17px;padding:12px 10px}
 }
 @media (min-width:821px){.portal .p-info{display:contents}}
@@ -393,52 +378,43 @@ svg.pix{shape-rendering:crispEdges;display:block}
 
   <!-- ===== 大廳（關卡選單） ===== -->
   <section class="screen active" id="lobby">
-    <h1 class="lobby-title">🎒 三年級社會探險島：<br>麥塊校園大冒險！</h1>
-    <p class="lobby-sub">選一個傳送門開始冒險，每關最多拿 ★★★！</p>
+    <h1 class="lobby-title">🎒 三年級上學期社會探險島：<br>麥塊校園大冒險！</h1>
+    <p class="lobby-sub">翰林版三上・選一個傳送門開始冒險，每關最多拿 ★★★！</p>
     <div class="portals">
-      <h3 class="term-head">📘 上學期（三上）</h3>
-      <div class="exam-head">📝 第一次月考範圍</div>
+      <h3 class="term-head">📘 三年級上學期（翰林版）</h3>
       <button class="portal px p1" data-level="1">
         <span class="p-icon" data-pix="grass"></span>
         <span class="p-info">
-          <span class="p-lv">關卡一</span>
+          <span class="p-lv">關卡一・第二單元</span>
           <span class="p-name">🎮 麥塊班會情境劇</span>
-          <span class="p-desc">開會流程與民主素養</span>
+          <span class="p-desc">班會程序與民主素養</span>
           <span class="p-stars" data-stars="1">★★★</span>
         </span>
       </button>
       <button class="portal px p2" data-level="2">
         <span class="p-icon" data-pix="cross"></span>
         <span class="p-info">
-          <span class="p-lv">關卡二</span>
+          <span class="p-lv">關卡二・第二、三單元</span>
           <span class="p-name">🏥 校園急救特派員</span>
           <span class="p-desc">點地圖找處室與幹部</span>
           <span class="p-stars" data-stars="2">★★★</span>
         </span>
       </button>
-      <div class="exam-head">📝 第二次月考範圍</div>
       <button class="portal px p3" data-level="3">
         <span class="p-icon" data-pix="light"></span>
         <span class="p-info">
-          <span class="p-lv">關卡三</span>
+          <span class="p-lv">關卡三・第一～四單元</span>
           <span class="p-name">🚦 三年級小公民</span>
-          <span class="p-desc">學習・班級・人際・家庭紅綠燈</span>
+          <span class="p-desc">學習・班級・家庭・健康成長紅綠燈</span>
           <span class="p-stars" data-stars="3">★★★</span>
         </span>
       </button>
-      <h3 class="term-head">📗 下學期（三下）</h3>
-      <button class="portal px p4" data-level="4">
-        <span class="p-icon" data-pix="shop"></span>
-        <span class="p-info">
-          <span class="p-lv sem2">關卡四・三下</span>
-          <span class="p-name">🛒 鳳山社區小達人</span>
-          <span class="p-desc">社區環境・需要與想要・聰明消費</span>
-          <span class="p-stars" data-stars="4">★★★</span>
-        </span>
-      </button>
+      <h3 class="term-head">🎯 進階挑戰（考卷陷阱題，每單元 5 題）</h3>
+      <div id="advPortals" style="display:contents"></div>
     </div>
     <button class="px-btn gold notes-btn" id="notesBtn" hidden>📒 看石虎白話小筆記</button>
-    <a class="px-btn wood notes-btn" href="index.html" style="text-decoration:none">⬅ 換年級（三年級／五年級）</a>
+    <a class="px-btn wood notes-btn" href="index.html" style="text-decoration:none">⬅ 換年級</a>
+    <a class="px-btn stone notes-btn" href="grade3-2/" style="text-decoration:none;font-size:16px">📗 三年級下學期在另一個遊戲，點這裡</a>
   </section>
 
   <!-- ===== 關卡一：麥塊班會情境劇 ===== -->
@@ -503,48 +479,23 @@ svg.pix{shape-rendering:crispEdges;display:block}
     </div>
   </section>
 
-  <!-- ===== 關卡四（三下）：鳳山社區小達人 ===== -->
-  <section class="screen" id="level4">
+  <!-- ===== 🎯 進階挑戰（每單元 5 題考卷程度題） ===== -->
+  <section class="screen" id="adv">
     <div class="level-head px">
-      <h2>🛒 關卡四：鳳山社區小達人</h2>
-      <span class="chip" id="l4Prog">0 / 8</span>
-      <span class="chip warn" id="l4Miss">想錯 0 次</span>
+      <h2 id="advTitle" class="lv-title">🎯 進階挑戰</h2>
+      <span class="chip" id="advProg">第 1 / 5 題</span>
+      <span class="chip warn" id="advMiss">答錯 0 題</span>
     </div>
-    <div class="l4-steps" id="l4Steps"><span>🗺️ 第 1 站：社區地圖</span><span>🧺 第 2 站：需要與想要</span><span>🛒 第 3 站：聰明消費</span></div>
-
-    <!-- 第 1 站：鳳山社區地圖 -->
-    <div class="l4-stage" id="l4MapStage">
-      <div class="l2-ask px" id="l4Ask">
-        <span class="a-icon" id="l4Icon">🤔</span>
-        <span class="a-text"><span id="l4Text"></span><span class="a-tip" id="l4Tip"></span></span>
-        <button class="px-btn" id="l4Next" hidden>下一題 ▶</button>
-      </div>
-      <div class="campus2 town" id="town"></div>
+    <div class="shop-card px">
+      <div class="q-num" id="advNum"></div>
+      <div class="adv-fig" id="advFig"></div>
+      <div class="q-text" id="advText"></div>
     </div>
-
-    <!-- 第 2 站：需要與想要 -->
-    <div class="l4-stage" id="l4NeedStage" hidden>
-      <div class="hint-line px">👆 把東西<b>拖進</b>正確的籃子！生活一定要的是「需要」，有了更開心、沒有也可以的是「想要」。</div>
-      <div class="baskets">
-        <div class="basket px" data-b="need">🧺 需要<small>生活一定要有的</small><div class="b-items"></div></div>
-        <div class="basket px want" data-b="want">🎁 想要<small>有了更開心，沒有也可以</small><div class="b-items"></div></div>
-      </div>
-      <div class="cards" id="needCards"></div>
-    </div>
-
-    <!-- 第 3 站：聰明消費 -->
-    <div class="l4-stage" id="l4ShopStage" hidden>
-      <div class="shop-card px">
-        <div class="q-num" id="shopNum">聰明消費 1</div>
-        <div class="q-scene" id="shopScene">🛒</div>
-        <div class="q-text" id="shopText"></div>
-      </div>
-      <div class="shop-opts" id="shopOpts"></div>
-      <div class="feedback px" id="shopFb" hidden>
-        <div class="fb-title" id="shopFbTitle"></div>
-        <div id="shopFbText"></div>
-        <button class="px-btn" id="shopNext">下一題 ▶</button>
-      </div>
+    <div class="shop-opts" id="advOpts"></div>
+    <div class="feedback px" id="advFb" hidden>
+      <div class="fb-title" id="advFbTitle"></div>
+      <div id="advFbText"></div>
+      <button class="px-btn" id="advNext">下一題 ▶</button>
     </div>
   </section>
 
@@ -552,11 +503,11 @@ svg.pix{shape-rendering:crispEdges;display:block}
   <section class="screen" id="result">
     <div class="result-card px">
       <span id="trophy"></span>
-      <h2>🏆 三年級社會探險島 全部過關！</h2>
+      <h2>🏆 三年級上學期社會探險島 全部過關！</h2>
       <div class="result-levels" id="resultLevels"></div>
       <div class="cat-talk">
         <span id="catPix"></span>
-        <div class="bubble-static">恭喜你完成麥塊校園大冒險！石虎幫你整理了 4 張<b>白話知識筆記卡</b>，點點看、複習一下吧！</div>
+        <div class="bubble-static">恭喜你完成三上麥塊校園大冒險！石虎幫你整理了 4 張<b>白話知識筆記卡</b>，點點看、複習一下吧！</div>
       </div>
       <div class="notes" id="notes"></div>
       <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
@@ -645,7 +596,7 @@ const Pix = {
       'ooowkoooooowkooo','ooowkoooooowkooo','doooooowwooooood','oooooowppwoooooo','.ooooowwwwooooo.','..oooowwwwoooo..','...ooooooooooo..','....oooooooo....'
     ], {o:'#d9964f', d:'#7a4a22', e:'#f6dcb4', w:'#fff3e0', k:'#232323', p:'#f29a9a'});
   },
-  shop(){ return this.svg(['rrwwrrwwrr','rrwwrrwwrr','..........','.kkkkkkkk.','.kbbkkbbk.','.kbbkkbbk.','.kkkkkkkk.','.kbbkddkk.','.kbbkddkk.','.kkkkddkk.'], {r:'#e8433a', w:'#ffffff', k:'#f3e2b8', b:'#8fd3ff', d:'#8a5a2e'}); },
+  target(){ return this.svg(['..rrrrrr..','.rwwwwwwr.','rwwrrrrwwr','rwrwwwwrwr','rwrwrrwrwr','rwrwrrwrwr','rwrwwwwrwr','rwwrrrrwwr','.rwwwwwwr.','..rrrrrr..'], {r:'#e8433a', w:'#ffffff'}); },
   trophy(){ return this.svg(['yyyyyyyyyy','yYyyyyyyYy','yYyyyyyyYy','.yyyyyyyy.','..yyyyyy..','...yyyy...','....yy....','....yy....','..YYYYYY..','.YYYYYYYY.'], {y:'#ffcf3f', Y:'#d39b00'}); },
   medal(){ return this.svg(['rr....bb','.rr..bb.','..rrbb..','...rb...','..yyyy..','.yyYYyy.','.yYwwYy.','.yYwwYy.','.yyYYyy.','..yyyy..'], {r:'#e8433a', b:'#3b82f6', y:'#ffcf3f', Y:'#d39b00', w:'#fff7c2'}); }
 };
@@ -691,7 +642,7 @@ const Store = {
     const s = this.get(); s[level] = Math.max(s[level] || 0, stars); this.mem = s;
     try { localStorage.setItem(this.key, JSON.stringify(s)); } catch(e){}
   },
-  allCleared(){ const s = this.get(); return [1, 2, 3, 4].every(l => (s[l] || 0) > 0); }
+  allCleared(){ const s = this.get(); return [1, 2, 3, 'a1', 'a2', 'a3', 'a4', 'a5'].every(l => (s[l] || 0) > 0); }
 };
 const starsByMiss = miss => miss === 0 ? 3 : miss <= 2 ? 2 : 1;
 const starHTML = n => '<b>' + '★'.repeat(n) + '</b>' + '☆'.repeat(3 - n);
@@ -969,7 +920,7 @@ const Level1 = {
     Object.values(this.chars).forEach(c => c.classList.remove('clap'));
     const stars = starsByMiss(this.miss); Store.set(1, stars);
     await showModal({icon:Pix.medal(), title:'獲得「小小班會主席獎章」！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>你學會了開會五步驟：<br><b>宣布 ➔ 報告 ➔ 提議與附議 ➔ 表決 ➔ 散會</b></p>`,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>你學會了班會程序：<br><b>宣布開會 ➔ 報告 ➔ 提案討論（附議、表決）➔ 臨時動議 ➔ 散會</b></p>`,
       buttons:[{label:'下一關：校園急救特派員 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]})
       .then(v => App.afterLevel(1, v));
   }
@@ -1116,7 +1067,7 @@ const Level2 = {
     Sound.win(); confetti();
     const stars = starsByMiss(this.miss); Store.set(2, stars);
     const v = await showModal({icon:'🚑', title:'校園急救特派員 任務完成！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>，東西壞了找<b>總務處</b>、課本考試問<b>教務處</b>！</p>`,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>，東西壞了找<b>總務處</b>、課本考試問<b>教務處</b>！<br>校園裡還有工友、警衛、導護志工、護理師為我們服務，記得說謝謝！</p>`,
       buttons:[{label:'下一關：三年級小公民 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(2, v);
   }
@@ -1129,6 +1080,8 @@ function bigCheck(){ const d = document.createElement('div'); d.className = 'big
 /* 題庫依翰林版三上四大主題分類；每次從各主題平均抽題，共 L3_ROUND 題 */
 const L3_ROUND = 10;
 const L3_UNITS = ['🌱 自我與學習', '🗳️ 班級自治與規範', '🤝 人際互動與性別平等', '🏠 社會角色與家庭'];
+/* 畫面上顯示翰林三上單元名稱 */
+const L3_LABEL = {'🌱 自我與學習':'🌱 一、新學習', '🗳️ 班級自治與規範':'🗳️ 二、校園規範和班級自治', '🤝 人際互動與性別平等':'🛡️ 四、健康成長的快樂童年', '🏠 社會角色與家庭':'🏠 三、校園和家庭生活'};
 const L3_POOL = [
   // 🌱 自我與學習適應
   {unit:'🌱 自我與學習', scene:'🏫🍱😴', text:'升上三年級開始上整天課，中午好好吃飯、午休養足精神', ans:'go', tag:'適應新生活！', why:'中年級作息改變了，<b>吃飽、睡好</b>，下午上課才有精神！'},
@@ -1185,7 +1138,7 @@ const Level3 = {
   show(){
     const q = L3_QUESTIONS[this.i]; this.answered = false;
     $('l3Prog').textContent = `第 ${this.i + 1} / ${L3_QUESTIONS.length} 題`; $('l3Score').textContent = `答對 ${this.correct} 題`;
-    $('l3Num').innerHTML = `情境 ${this.i + 1}<span class="q-unit">${q.unit}</span>`; $('l3Scene').textContent = q.scene; $('l3Text').textContent = `「${q.text}」`;
+    $('l3Num').innerHTML = `情境 ${this.i + 1}<span class="q-unit">${L3_LABEL[q.unit]}</span>`; $('l3Scene').textContent = q.scene; $('l3Text').textContent = `「${q.text}」`;
     $('lampRed').classList.remove('on'); $('lampGreen').classList.remove('on');
     $('l3Btns').hidden = false; $('l3Feedback').hidden = true;
   },
@@ -1206,233 +1159,266 @@ const Level3 = {
     const n = L3_QUESTIONS.length, stars = this.correct >= n - 1 ? 3 : this.correct >= Math.ceil(n * .6) ? 2 : 1; Store.set(3, stars);
     Sound.win(); confetti();
     const v = await showModal({icon:'🚦', title:'三年級小公民 過關！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>${L3_QUESTIONS.length} 題答對 <b>${this.correct}</b> 題！學習、班級、人際相處、家庭生活，你都是小公民高手！</p>`,
-      buttons:[{label:'下一關：鳳山社區小達人（三下）▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>${L3_QUESTIONS.length} 題答對 <b>${this.correct}</b> 題！學習、班級、家庭生活、健康成長，你都是小公民高手！</p>`,
+      buttons:[{label:'下一關：🎯 第一單元進階挑戰 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(3, v);
   }
 };
 
 /* =========================================================
-   I-2. 關卡四（三下）：鳳山社區小達人
-   第 1 站 社區地圖（點設施，小方走過去）→ 第 2 站 需要與想要（拖進籃子）→ 第 3 站 聰明消費（選擇題）
+   I-2. 🎯 進階挑戰：翰林三上五個單元，每單元 5 題考卷程度題
+   每題 a 是正解在 opts 裡的位置（顯示時會打亂）；ex 詳解；trap 陷阱提醒
    ========================================================= */
-const TOWN_PLACES = [
-  {id:'station', name:'火車站',   icon:'🚉', row:'top',    x:3,  w:18, roof:'#0f766e', wall:'#ccfbf1'},
-  {id:'post',    name:'郵局',     icon:'📮', row:'top',    x:24, w:18, roof:'#16a34a', wall:'#dcfce7'},
-  {id:'police',  name:'派出所',   icon:'👮', row:'top',    x:58, w:18, roof:'#1d4ed8', wall:'#dbeafe'},
-  {id:'clinic',  name:'衛生所',   icon:'💉', row:'top',    x:79, w:18, roof:'#e8433a', wall:'#ffffff'},
-  {id:'market',  name:'傳統市場', icon:'🥬', row:'bottom', x:3,  w:18, roof:'#f59e0b', wall:'#fef3c7'},
-  {id:'academy', name:'鳳儀書院', icon:'🏯', row:'bottom', x:24, w:18, roof:'#7f1d1d', wall:'#fde68a'},
-  {id:'fire',    name:'消防隊',   icon:'🚒', row:'bottom', x:58, w:18, roof:'#dc2626', wall:'#fee2e2'},
-  {id:'library', name:'圖書館',   icon:'📚', row:'bottom', x:79, w:18, roof:'#7c3aed', wall:'#ede9fe'}
-];
-const TOWN_EVENTS = [
-  {icon:'🚆', text:'阿公要搭火車去臺北看親戚。',             ans:'station', why:'鳳山火車站可以搭火車到臺灣各地，現在已經變成地下車站囉！'},
-  {icon:'💌', text:'我要把卡片寄給住在臺中的外婆。',         ans:'post',    why:'郵局可以寄信、寄包裹，也可以存錢喔！'},
-  {icon:'👛', text:'我在路上撿到一個錢包。',                 ans:'police',  why:'交給派出所，警察會幫忙找失主，也守護社區的安全！'},
-  {icon:'💉', text:'我要去打流感疫苗。',                     ans:'clinic',  why:'衛生所提供打預防針、健康檢查，照顧大家的健康！'},
-  {icon:'🐟', text:'媽媽要買新鮮的青菜和魚。',               ans:'market',  why:'鳳山的傳統市場有好多新鮮蔬果、魚肉和小吃！'},
-  {icon:'📜', text:'老師要帶大家參觀清朝時讀書的地方。',     ans:'academy', why:'鳳儀書院是清朝時蓋的書院，兩百多年了，是鳳山重要的古蹟！'},
-  {icon:'🔥', text:'看到附近房子冒出濃濃的黑煙！',           ans:'fire',    why:'消防隊會救火、救人，遇到火災記得打 119！'},
-  {icon:'📖', text:'週末想借繪本、查資料。',                 ans:'library', why:'圖書館可以免費借書，大東文化藝術中心裡也有圖書館喔！'}
-];
-const TOWN_HINT = {station:'要搭火車，要去哪裡？', post:'寄信、寄包裹要去哪裡？', police:'撿到東西、需要警察幫忙要去哪裡？', clinic:'打預防針要去哪裡？',
-  market:'買新鮮的菜和魚要去哪裡？', academy:'清朝時的古蹟書院叫什麼名字？', fire:'火災要找誰來救火？', library:'借書要去哪裡？'};
-const NEEDS = [
-  {icon:'✏️', name:'上課用的鉛筆', b:'need'}, {icon:'🍱', name:'每天吃的三餐', b:'need'}, {icon:'☂️', name:'下雨天的雨傘', b:'need'},
-  {icon:'💊', name:'生病時的藥', b:'need'},   {icon:'🪥', name:'刷牙的牙刷', b:'need'},   {icon:'👕', name:'上學穿的制服', b:'need'}
-];
-const WANTS = [
-  {icon:'🎮', name:'最新款遊戲機', b:'want'}, {icon:'🧸', name:'限量版公仔', b:'want'}, {icon:'🧋', name:'珍珠奶茶', b:'want'},
-  {icon:'👟', name:'第五雙漂亮球鞋', b:'want'}, {icon:'✨', name:'亮晶晶貼紙', b:'want'}
-];
-const SHOP_POOL = [
-  {scene:'🍪🔍📅', text:'買零食之前，要先看包裝上的什麼？', opts:[{t:'有效期限和成分', ok:true}, {t:'包裝最可愛的那一包'}], why:'看<b>有效期限</b>，才不會買到過期的食物；看成分，吃得更安心！'},
-  {scene:'📒💲📒', text:'同樣的筆記本，A 店賣 30 元、B 店賣 25 元，品質一樣，要買哪一家？', opts:[{t:'B 店，25 元', ok:true}, {t:'A 店，30 元'}], why:'<b>貨比三家</b>，同樣的東西買便宜的，就是聰明消費！'},
-  {scene:'💰🖍️🧸', text:'零用錢只有 100 元，上課要用的色鉛筆 80 元，好想要的公仔 60 元，怎麼辦？', opts:[{t:'先買色鉛筆，剩下的錢存起來', ok:true}, {t:'先買公仔，色鉛筆跟同學借'}], why:'<b>先買「需要」的，再考慮「想要」的</b>，零用錢才會用在刀口上！'},
-  {scene:'🛍️2️⃣🆓', text:'店員說「買二送一」，可是你只需要一個，怎麼辦？', opts:[{t:'只買自己需要的一個', ok:true}, {t:'買二送一比較划算，全部買'}], why:'用不到的東西再便宜也是浪費，<b>只買需要的</b>才聰明！'},
-  {scene:'🧾🪙✅', text:'買完東西、付完錢之後，要記得做什麼？', opts:[{t:'核對找零，拿發票或收據', ok:true}, {t:'拿了東西就趕快跑走'}], why:'<b>核對找的錢、拿發票或收據</b>，有問題才能退換貨！'},
-  {scene:'📓✍️💰', text:'怎麼知道自己的零用錢都花到哪裡去了？', opts:[{t:'每天記帳，寫下買了什麼、花多少錢', ok:true}, {t:'不用管，花完再跟爸媽要'}], why:'<b>記帳</b>可以知道錢花到哪裡，慢慢學會管理零用錢！'},
-  {scene:'🛒🛍️♻️', text:'去市場買菜，怎麼做比較環保？', opts:[{t:'自己帶購物袋，不拿塑膠袋', ok:true}, {t:'每樣東西都拿一個新塑膠袋'}], why:'<b>自備購物袋</b>，減少塑膠垃圾，愛護我們的社區環境！'}
-];
-const L4_SHOP_ROUND = 5;
+const FIG = {
+  /* 第一單元：小明今晚的待辦清單 */
+  todo(){
+    const rows = [['數學習作', '明天要交', '#e8433a'], ['閱讀心得', '下週五交', '#3b82f6'], ['看卡通', '沒有期限', '#9a9a9a'], ['練習跳繩', '下週比賽', '#2fbf4f']];
+    return `<svg viewBox="0 0 320 190" role="img" aria-label="小明的待辦清單：數學習作明天要交、閱讀心得下週五交、看卡通沒有期限、練習跳繩下週比賽">
+      <rect x="4" y="4" width="312" height="182" rx="8" fill="#fffdf4" stroke="#232323" stroke-width="4"/>
+      <rect x="4" y="4" width="312" height="34" rx="6" fill="#ffcf3f" stroke="#232323" stroke-width="4"/>
+      <text x="160" y="28" text-anchor="middle" font-size="18" font-weight="900" fill="#232323">📝 小明今晚的待辦清單</text>
+      ${rows.map((r, i) => `<rect x="20" y="${50 + i * 34}" width="20" height="20" fill="#fff" stroke="#232323" stroke-width="3"/>
+        <text x="50" y="${66 + i * 34}" font-size="18" font-weight="900" fill="#232323">${r[0]}</text>
+        <rect x="190" y="${48 + i * 34}" width="110" height="24" rx="12" fill="${r[2]}"/>
+        <text x="245" y="${66 + i * 34}" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">${r[1]}</text>`).join('')}
+    </svg>`;
+  },
+  /* 第二單元：黑板上的表決結果（正字記票，一個「正」是 5 票） */
+  tally(){
+    return `<svg viewBox="0 0 320 170" role="img" aria-label="黑板：提案班服選藍色。贊成 正正丅，反對 正正正">
+      <rect x="4" y="4" width="312" height="150" fill="#2f5d3a" stroke="#8a5a2e" stroke-width="8"/>
+      <rect x="40" y="154" width="240" height="10" fill="#5e3a19"/>
+      <text x="160" y="40" text-anchor="middle" font-size="19" font-weight="900" fill="#f4f4e8">提案：班服選「藍色」</text>
+      <line x1="30" y1="52" x2="290" y2="52" stroke="#f4f4e8" stroke-dasharray="6 5" stroke-width="2"/>
+      <text x="40" y="92" font-size="22" font-weight="900" fill="#b8ff9e">贊成：</text>
+      <text x="120" y="93" font-size="30" font-weight="900" fill="#b8ff9e" letter-spacing="4">正正丅</text>
+      <text x="40" y="134" font-size="22" font-weight="900" fill="#ffc2b8">反對：</text>
+      <text x="120" y="135" font-size="30" font-weight="900" fill="#ffc2b8" letter-spacing="4">正正正</text>
+    </svg>`;
+  },
+  /* 第三單元：三種家庭 */
+  families(){
+    const person = (x, y, h, hair, shirt) => {
+      const s = h / 30;
+      return `<g transform="translate(${x},${y}) scale(${s})"><rect x="3" y="0" width="10" height="3" fill="${hair}"/><rect x="3" y="3" width="10" height="9" fill="#f2c08f"/>
+        <rect x="5" y="6" width="2" height="2" fill="#222"/><rect x="9" y="6" width="2" height="2" fill="#222"/><rect x="2" y="12" width="12" height="11" fill="${shirt}"/>
+        <rect x="4" y="23" width="3" height="7" fill="#2d3a6b"/><rect x="9" y="23" width="3" height="7" fill="#2d3a6b"/></g>`;
+    };
+    const card = (x, label, cap, people) => `<g><rect x="${x}" y="6" width="100" height="150" rx="8" fill="#fff8e6" stroke="#232323" stroke-width="3"/>
+      <rect x="${x + 36}" y="0" width="28" height="24" rx="5" fill="#7c3aed" stroke="#232323" stroke-width="2"/>
+      <text x="${x + 50}" y="18" text-anchor="middle" font-size="15" font-weight="900" fill="#fff">${label}</text>
+      ${people}
+      <text x="${x + 50}" y="132" text-anchor="middle" font-size="12.5" font-weight="900" fill="#232323">${cap[0]}</text>
+      <text x="${x + 50}" y="148" text-anchor="middle" font-size="12.5" font-weight="900" fill="#232323">${cap[1]}</text></g>`;
+    return `<svg viewBox="0 0 330 162" role="img" aria-label="甲：爸爸、媽媽、我、弟弟；乙：阿公、阿嬤、我；丙：媽媽、我">
+      ${card(4, '甲', ['爸爸、媽媽', '我、弟弟'],
+        person(10, 50, 64, '#222', '#3b82f6') + person(32, 50, 60, '#7a4a22', '#ec4899') + person(56, 74, 40, '#3b2a1a', '#ffcf3f') + person(78, 80, 34, '#222', '#2fbf4f'))}
+      ${card(115, '乙', ['阿公、阿嬤', '我'],
+        person(122, 52, 62, '#cfcfcf', '#64748b') + person(146, 54, 60, '#d9d9d9', '#a855f7') + person(176, 74, 40, '#3b2a1a', '#ffcf3f'))}
+      ${card(226, '丙', ['媽媽', '我'],
+        person(240, 50, 62, '#7a4a22', '#ec4899') + person(272, 74, 40, '#3b2a1a', '#ffcf3f'))}
+    </svg>`;
+  },
+  /* 第四單元：網路抽獎表單 */
+  form(){
+    const rows = [['暱稱', '小小石虎'], ['最喜歡的顏色', '綠色'], ['家裡地址', '鳳山區○○路○號'], ['爸媽身分證字號', 'S123……']];
+    return `<svg viewBox="0 0 320 214" role="img" aria-label="網路抽獎表單，要填暱稱、最喜歡的顏色、家裡地址、爸媽身分證字號">
+      <rect x="4" y="4" width="312" height="206" rx="8" fill="#ffffff" stroke="#232323" stroke-width="4"/>
+      <rect x="4" y="4" width="312" height="36" rx="6" fill="#e8433a" stroke="#232323" stroke-width="4"/>
+      <text x="160" y="29" text-anchor="middle" font-size="17" font-weight="900" fill="#fff">🎁 填資料就抽最新遊戲機！</text>
+      ${rows.map((r, i) => `<text x="16" y="${70 + i * 36}" font-size="15" font-weight="900" fill="#232323">${r[0]}</text>
+        <rect x="140" y="${52 + i * 36}" width="164" height="26" fill="#f3f4f6" stroke="#6f6f6f" stroke-width="2"/>
+        <text x="148" y="${70 + i * 36}" font-size="14" fill="#6f6f6f">${r[1]}</text>`).join('')}
+      <rect x="110" y="192" width="100" height="14" rx="4" fill="#2fbf4f"/>
+      <text x="160" y="203" text-anchor="middle" font-size="11" font-weight="900" fill="#fff">送出參加抽獎</text>
+    </svg>`;
+  },
+  /* 第五單元：探究步驟（第 3 格空白） */
+  steps(){
+    const box = ['發現問題', '找出原因', '？', '評估選擇', '行動與檢討'];
+    return `<svg viewBox="0 0 330 92" role="img" aria-label="探究步驟：發現問題、找出原因、問號、評估選擇、行動與檢討">
+      ${box.map((t, i) => `<rect x="${4 + i * 66}" y="16" width="56" height="60" rx="6" fill="${t === '？' ? '#ffcf3f' : '#5dbb3f'}" stroke="#232323" stroke-width="3"/>
+        <text x="${32 + i * 66}" y="${t === '？' ? 56 : 44}" text-anchor="middle" font-size="${t === '？' ? 28 : 13}" font-weight="900" fill="${t === '？' ? '#232323' : '#fff'}">${t.length > 2 && t !== '？' ? t.slice(0, 2) : t}</text>
+        ${t.length > 2 && t !== '？' ? `<text x="${32 + i * 66}" y="62" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">${t.slice(2)}</text>` : ''}
+        ${i < 4 ? `<text x="${63 + i * 66}" y="52" text-anchor="middle" font-size="14" font-weight="900" fill="#232323">➔</text>` : ''}`).join('')}
+    </svg>`;
+  },
+  /* 第五單元：班級問題票選長條圖 */
+  bars(){
+    const data = [['走廊奔跑', 5], ['忘記關燈', 12], ['抽屜很亂', 8], ['午餐廚餘', 9]];
+    const H = 140, base = 180, unit = H / 15;
+    return `<svg viewBox="0 0 330 220" role="img" aria-label="長條圖：走廊奔跑 5 票、忘記關燈 12 票、抽屜很亂 8 票、午餐廚餘 9 票">
+      <rect x="0" y="0" width="330" height="220" fill="#fffdf4"/>
+      <text x="175" y="18" text-anchor="middle" font-size="15" font-weight="900" fill="#232323">三年甲班「最想改善的問題」票數</text>
+      ${[0, 5, 10, 15].map(v => `<line x1="40" y1="${base - v * unit}" x2="320" y2="${base - v * unit}" stroke="${v ? '#d8c7a0' : '#232323'}" stroke-width="${v ? 1.5 : 3}"/>
+        <text x="32" y="${base - v * unit + 5}" text-anchor="end" font-size="13" font-weight="900" fill="#232323">${v}</text>`).join('')}
+      ${[1, 2, 3, 4, 6, 7, 8, 9, 11, 12, 13, 14].map(v => `<line x1="40" y1="${base - v * unit}" x2="320" y2="${base - v * unit}" stroke="#efe5cc" stroke-width="1"/>`).join('')}
+      <line x1="40" y1="${base}" x2="40" y2="${base - 15 * unit}" stroke="#232323" stroke-width="3"/>
+      <text x="46" y="34" font-size="12" font-weight="900" fill="#232323">（票）</text>
+      ${data.map((d, i) => `<rect x="${58 + i * 66}" y="${base - d[1] * unit}" width="40" height="${d[1] * unit}" fill="#3b82f6" stroke="#232323" stroke-width="2"/>
+        <text x="${78 + i * 66}" y="${base + 20}" text-anchor="middle" font-size="13" font-weight="900" fill="#232323">${d[0]}</text>`).join('')}
+    </svg>`;
+  }
+};
 
-/* 共用的「點地圖，人物走過去」小遊戲 */
-class MapQuest {
-  constructor(cfg){ Object.assign(this, cfg); this.start = {x:47, y:58}; }
-  build(){
-    const map = $(this.mapId);
-    map.innerHTML = '<div class="road h"></div><div class="road v"></div>';
-    this.places.forEach(pl => {
-      const b = document.createElement('button'); b.type = 'button';
-      b.className = `bldg ${pl.row === 'bottom' ? 'bottom-row' : ''}`; b.dataset.id = pl.id;
-      b.style.left = pl.x + '%'; b.style.width = pl.w + '%';
-      b.style.top = pl.row === 'top' ? '5%' : '63%'; b.style.height = pl.row === 'top' ? '38%' : '33%';
-      b.style.setProperty('--roof', pl.roof); b.style.setProperty('--wall', pl.wall);
-      b.innerHTML = `<span class="roof">${pl.name}</span><span class="wall"><span class="b-icon">${pl.icon}</span><span class="door"></span></span>`;
-      b.setAttribute('aria-label', pl.name);
-      b.addEventListener('click', () => this.pick(pl.id, b));
-      map.appendChild(b);
-    });
-    this.me = document.createElement('div'); this.me.className = 'char me';
-    this.me.innerHTML = charSVG({hair:'#3b2a1a', shirt:'#ffcf3f', pants:'#2d3a6b'});
-    map.appendChild(this.me);
-    if (!this.ro){ this.ro = new ResizeObserver(() => map.style.setProperty('--u', map.clientHeight / 100 + 'px')); this.ro.observe(map); }
-    this.queue = shuffle(this.events); this.done = 0; this.busy = false;
+const ADV = [
+  {u:1, name:'升上三年級的新學習', icon:'🌱', qs:[
+    {q:'參觀博物館、上網查資料都是很好的「學習資源」。下列哪一個做法「不」恰當？',
+     opts:['用手摸摸博物館的展示品，看看是不是真的', '在圖書館借書，看完按時歸還', '上網查資料時請大人陪同，並確認網站可不可信', '戶外學習時聽從老師指導、注意安全'], a:0,
+     ex:'博物館的展示品很珍貴，要<b>用眼睛看、不用手摸</b>，遵守參觀規定。其他三個都是使用學習資源的好方法。',
+     trap:'題目問的是「不」恰當的做法，不要急著選第一個看起來對的！'},
+    {fig:'todo', q:'小明今晚的時間只夠做一件事。依照「事情的重要和急迫順序」來規劃，他應該先做哪一件？',
+     opts:['數學習作', '閱讀心得', '練習跳繩', '看卡通'], a:0,
+     ex:'規劃學習時要依事情的<b>重要順序</b>排列：數學習作「明天就要交」，最急也最重要，要先完成；心得和跳繩還有一週可以安排。',
+     trap:'閱讀心得、跳繩比賽也很重要，但期限還沒到；要看清楚清單上的「期限」再決定。'},
+    {q:'第一天上臺自我介紹時，下列哪一項內容「最不適合」在全班面前說？',
+     opts:['家裡的地址和爸媽的手機號碼', '我的名字和興趣', '我擅長畫畫', '我希望和大家成為好朋友'], a:0,
+     ex:'自我介紹可以說<b>姓名、興趣、專長和期望</b>；地址、電話是<b>個人隱私資料</b>，不要隨便公開。',
+     trap:'自我介紹不是「說越多越好」，個人資料要保護好。'},
+    {q:'小華的考卷錯了很多題，下列哪一個做法「最能」幫助他真正進步？',
+     opts:['訂正錯的題目，弄懂錯在哪裡，再整理到筆記裡', '把正確答案背起來就好', '把考卷藏起來不給家人看', '考試前一天晚上熬夜讀書'], a:0,
+     ex:'<b>訂正、找出錯誤原因、整理筆記</b>，下次遇到類似題目才會寫，這是有效的學習方法。',
+     trap:'只背答案，題目換個問法就又不會了，並不是真正學會。'},
+    {q:'有同學說：「小安跑步最慢，所以他什麼事都做不好。」這句話錯在哪裡？',
+     opts:['每個人都有不同的特質和優點，不能用一件事看輕別人', '沒有錯，跑步慢就是做不好', '應該改說小安畫畫也不好', '只要小安多練跑步就好，這句話沒問題'], a:0,
+     ex:'每個人的<b>特質和優點都不一樣</b>，要欣賞並尊重彼此的差異，不能只看一件事就否定一個人。',
+     trap:'「多練跑步就好」聽起來像好建議，可是沒有指出這句話「看輕別人」的錯誤。'}
+  ]},
+  {u:2, name:'校園規範和班級自治', icon:'🗳️', qs:[
+    {q:'下列哪一個是「班會程序」正確的順序？',
+     opts:['宣布開會 ➔ 報告 ➔ 提案討論 ➔ 臨時動議 ➔ 散會', '宣布開會 ➔ 提案討論 ➔ 報告 ➔ 臨時動議 ➔ 散會', '宣布開會 ➔ 報告 ➔ 臨時動議 ➔ 提案討論 ➔ 散會', '報告 ➔ 宣布開會 ➔ 提案討論 ➔ 散會 ➔ 臨時動議'], a:0,
+     ex:'班會由主席<b>宣布開會</b>，接著主席與幹部<b>報告</b>，再進行<b>提案討論</b>（附議、表決），最後是<b>臨時動議</b>，然後<b>散會</b>。',
+     trap:'「臨時動議」是臨時想到的事，排在提案討論<b>之後</b>、散會之前，最容易和提案討論弄反！'},
+    {fig:'tally', q:'全班 27 人都投了票，黑板上用「正」字記票。這個提案的結果是什麼？',
+     opts:['不通過，反對的票比較多', '通過，因為贊成寫在上面', '通過，贊成和反對一樣多', '由主席自己決定'], a:0,
+     ex:'一個「正」字是 <b>5 票</b>，「丅」是 2 票。贊成：5＋5＋2＝<b>12 票</b>；反對：5＋5＋5＝<b>15 票</b>。15 比 12 多，所以<b>不通過</b>，大家要尊重表決結果。',
+     trap:'寫在上面不代表比較多，「正」字要一筆一筆數清楚！'},
+    {q:'有人在班會提案：「下課可以在走廊玩球，不用管學校的規定。」如果全班多數人贊成，可以列入班級公約嗎？',
+     opts:['不可以，班規不能違反校規和法律', '可以，因為是多數人表決通過的', '可以，只要班長同意', '可以，只要老師不知道就好'], a:0,
+     ex:'訂班級公約要<b>明確、具體、公平可行</b>，而且<b>班規不可以違反校規，校規不可以違反法律</b>。',
+     trap:'「多數決」很重要，但表決通過的事也不能違反校規和法律！'},
+    {q:'下列班級幹部和工作的配對，哪一個是「錯誤」的？',
+     opts:['風紀股長：爬上去修理教室壞掉的電燈', '衛生股長：分配打掃工作、檢查整潔', '體育股長：帶隊、整隊，管理體育器材', '學藝股長：布置教室、設計黑板報'], a:0,
+     ex:'教室設備壞了，要<b>報告老師，由學校總務處請工友來修理</b>，學生不能自己爬上去修，太危險了！風紀股長負責的是提醒大家<b>維持秩序</b>。',
+     trap:'題目問「錯誤」的配對；而且修理設備不是任何幹部的工作。'},
+    {q:'開班會時，負責「把討論的內容和結果寫下來」的是誰？',
+     opts:['記錄', '司儀', '主席', '提案人'], a:0,
+     ex:'<b>主席</b>主持會議、<b>司儀</b>宣布開會程序、<b>記錄</b>把內容寫下來、<b>提案人</b>提出要討論的事。',
+     trap:'司儀和記錄常被搞混：司儀是「說」程序，記錄是「寫」內容。'}
+  ]},
+  {u:3, name:'我的校園和家庭生活', icon:'🏫', qs:[
+    {q:'校園裡有很多為我們服務的人。下列配對哪一個是「錯誤」的？',
+     opts:['警衛：幫同學批改作業', '導護志工：上放學時在校門口維護交通安全', '圖書館志工：協助大家借書、還書', '護理師：受傷時幫忙擦藥、量身高體重'], a:0,
+     ex:'<b>警衛</b>守護校門，不讓陌生人隨便進學校；批改作業是<b>老師</b>的工作。接受別人服務時，要<b>有禮貌、說謝謝</b>。',
+     trap:'問的是「錯誤」的配對，要一個一個檢查。'},
+    {fig:'families', q:'看圖中的三個家庭，下列說法哪一個正確？',
+     opts:['甲、乙、丙都是家庭，家庭有很多種樣子', '只有甲才是完整的家庭', '乙沒有爸爸媽媽，不能算是家庭', '家裡人越多，就一定越幸福'], a:0,
+     ex:'甲是爸媽和孩子一起住的家庭、乙是祖父母照顧孫子的<b>隔代教養家庭</b>、丙是<b>單親家庭</b>。<b>每一種家庭都是家</b>，都能給孩子愛與照顧。',
+     trap:'不要用「人數」或「有沒有爸爸媽媽」來判斷是不是家庭。'},
+    {q:'小莉的媽媽在家是「媽媽」，到醫院上班是「護理師」。週末回到外婆家，小莉的媽媽又是外婆的什麼人？',
+     opts:['女兒', '媽媽', '姊姊', '外婆'], a:0,
+     ex:'同一個人會因為<b>對象和地點不同</b>，扮演不同的角色：對小莉是媽媽，在醫院是護理師，對外婆來說是<b>女兒</b>。',
+     trap:'要從「外婆」的角度來想，不是從小莉的角度！'},
+    {q:'下列哪一句話是「事實」，而不是個人的「意見」？',
+     opts:['我們學校有合唱團和田徑隊', '合唱團是全校最棒的社團', '參加田徑隊很無聊', '校慶是一年裡最好玩的一天'], a:0,
+     ex:'<b>事實</b>是可以查證、大家都一樣的事；<b>意見</b>是個人的感覺和想法，每個人可能不一樣。',
+     trap:'句子裡有「最棒」「很無聊」「最好玩」這種感覺的詞，通常是意見。'},
+    {q:'下列哪一項「不是」家庭的功能？',
+     opts:['幫孩子把所有作業都寫完', '提供吃飯、睡覺的地方，照顧生活', '給家人關心和支持', '教孩子生活習慣和禮貌'], a:0,
+     ex:'家庭能<b>照顧生活、給予關愛、教導生活習慣</b>；作業是自己的責任，家人可以陪伴、指導，但不是幫忙寫完。',
+     trap:'題目問「不是」，選出不屬於家庭功能的那一個。'}
+  ]},
+  {u:4, name:'健康成長的快樂童年', icon:'🛡️', qs:[
+    {q:'幾個同學故意約好「都不要跟小凱玩」，分組時也不讓他加入。這是哪一種霸凌？',
+     opts:['關係霸凌', '肢體霸凌', '網路霸凌', '只是開玩笑，不算霸凌'], a:0,
+     ex:'故意<b>排擠、孤立</b>別人，讓他交不到朋友，是<b>關係霸凌</b>。遇到霸凌要勇敢拒絕、告訴師長，或向學校申訴。',
+     trap:'沒有動手打人，也可能是霸凌！'},
+    {q:'小芸把同學出糗的照片傳到班級群組，還寫了取笑的話。下列說法哪一個正確？',
+     opts:['這是網路霸凌，也沒經過同意就公開別人的照片', '只是在網路上，不算霸凌', '照片是真的，所以沒關係', '之後刪掉就完全沒有影響'], a:0,
+     ex:'在網路上取笑、散布別人的照片是<b>網路霸凌</b>，也侵犯了別人的<b>隱私</b>。網路上的東西傳出去很難收回。',
+     trap:'「照片是真的」不代表可以隨便公開，要先尊重別人的意願。'},
+    {fig:'form', q:'在網路上看到這個抽獎表單，哪些資料「不應該」隨便填寫？',
+     opts:['家裡地址和爸媽的身分證字號', '暱稱和最喜歡的顏色', '全部都可以填，因為可以抽獎', '只要不填暱稱就安全了'], a:0,
+     ex:'地址、身分證字號都是<b>重要的個人資料</b>，被壞人拿到可能被冒用或找上門。在網路上不隨便留個人資料，有疑問先問大人。',
+     trap:'獎品再吸引人，也要先想想「會不會洩漏隱私」。'},
+    {q:'學校健康中心會定期量身高體重，還安排醫師到校打預防針。這主要是在保障兒童的哪一種權利？',
+     opts:['健康權', '隱私權', '表意權', '學習權'], a:0,
+     ex:'量身高體重、打預防針、健康檢查，都是照顧兒童身體，保障<b>健康權</b>。',
+     trap:'四個都是兒童的權利，要選和「身體健康」最有關的那一個。'},
+    {q:'兒童有「權利」，也有「責任」。下列哪一個是「責任」？',
+     opts:['遵守班規，尊重別人', '有乾淨的水可以喝', '可以上學受教育', '自己的日記不被偷看'], a:0,
+     ex:'有乾淨的水（生存）、上學（學習權）、日記不被偷看（隱私權）都是<b>權利</b>；<b>遵守規範、尊重他人</b>是我們應盡的<b>責任</b>。',
+     trap:'權利是「我可以得到的保障」，責任是「我應該做到的事」，不要弄反了。'}
+  ]},
+  {u:5, name:'打造更美好的班級', icon:'🌟', qs:[
+    {fig:'steps', q:'全班要用「探究」的方法讓班級變得更好。圖中問號那一步應該是什麼？',
+     opts:['想出可能的解決方法', '直接處罰犯錯的人', '宣布散會', '放棄這個問題'], a:0,
+     ex:'探究的步驟：<b>發現問題 ➔ 找出原因 ➔ 想出可能的方法 ➔ 評估選擇 ➔ 行動與檢討</b>。',
+     trap:'要先想出好幾種方法，才有東西可以「評估選擇」。'},
+    {q:'全班發現「午餐後地上常常有很多廚餘」。下列哪一句是在說這個問題的「原因」？',
+     opts:['湯桶裝太滿，同學端回座位時容易灑出來', '地上黏黏的很髒', '我覺得我們班是全校最髒的', '請老師罰大家多掃一次地'], a:0,
+     ex:'「地上很髒」是<b>看到的情形</b>；「我覺得最髒」是<b>意見</b>；「罰掃地」是<b>做法</b>；只有「湯桶太滿容易灑出來」說明了<b>為什麼</b>會發生，這才是原因。',
+     trap:'要分清楚「問題的情形」「原因」和「做法」。'},
+    {fig:'bars', q:'看長條圖，票數「第二多」的問題是哪一個？',
+     opts:['午餐廚餘', '忘記關燈', '抽屜很亂', '走廊奔跑'], a:0,
+     ex:'票數：忘記關燈 <b>12</b> 票最多，午餐廚餘 <b>9</b> 票第二，抽屜很亂 8 票，走廊奔跑 5 票。',
+     trap:'題目問「第二多」，不是最多！而且午餐廚餘（9）和抽屜很亂（8）只差 1 票，要對準格線看。'},
+    {q:'為了改善「下課忘記關燈」，同學想出四種方法。哪一種最可行，也最公平？',
+     opts:['每週輪流當「節能小天使」，離開教室前檢查並關燈', '忘記關燈的人罰站一整天', '以後上課都不開燈', '每次都請老師自己去關燈'], a:0,
+     ex:'評估做法要想：<b>做得到嗎？公平嗎？會不會造成新問題？</b>輪流當節能小天使，人人有責又做得到。',
+     trap:'處罰看起來很有效，但罰站一整天不合理，也不能解決忘記的問題。'},
+    {q:'「節能小天使」實行一週後，大家發現還是常常忘記關燈。下一步怎麼做最好？',
+     opts:['檢討原因，調整做法再試一次', '宣布方法失敗，從此放棄', '怪罪這週的節能小天使', '當作沒看到，不要再討論'], a:0,
+     ex:'行動之後要<b>檢討</b>：找出還沒做好的原因（例如忘記輪到誰），<b>調整做法</b>再試，班級就會越來越好。',
+     trap:'沒有一次就成功很正常，「檢討、修正」也是探究的一部分。'}
+  ]}
+];
+
+const AdvLevel = {
+  n:0, qs:[], i:0, miss:0,
+  start(n){
+    this.n = n; this.i = 0; this.miss = 0;
+    const unit = ADV[n - 1];
+    this.qs = unit.qs;
+    $('advTitle').textContent = `🎯 進階挑戰・第${'一二三四五'[n - 1]}單元 ${unit.name}`;
+    $('advMiss').textContent = '答錯 0 題';
+    $('advNext').onclick = () => { Sound.click(); this.i++; this.i < this.qs.length ? this.show() : this.finish(); };
     this.show();
-  }
-  place(x, y){ const m = this.me; m.style.transition = 'none'; m.style.left = x + '%'; m.style.top = y + '%'; void m.offsetWidth; m.style.transition = ''; }
-  async walkTo(x, y){
-    const m = this.me, fx = parseFloat(m.style.left), fy = parseFloat(m.style.top);
-    const dist = Math.hypot(x - fx, (y - fy) * .6); if (dist < .5) return;
-    const sec = Math.max(.35, dist * .035);
-    m.classList.toggle('face-left', x < fx); m.classList.add('walking'); m.style.transitionDuration = sec + 's';
-    m.style.left = x + '%'; m.style.top = y + '%';
-    const steps = setInterval(() => Sound.step(), 360);
-    await wait(sec * 1000 + 60);
-    clearInterval(steps); m.classList.remove('walking', 'face-left');
-  }
-  say(text){
-    const map = $(this.mapId); map.querySelectorAll('.bubble').forEach(b => b.remove());
-    if (!text) return;
-    const b = document.createElement('div'); b.className = 'bubble'; b.innerHTML = text; map.appendChild(b);
-    const sr = map.getBoundingClientRect(), ar = this.me.getBoundingClientRect(), bw = b.offsetWidth, bh = b.offsetHeight;
-    const cx = ar.left + ar.width / 2 - sr.left;
-    const left = Math.max(4, Math.min(sr.width - bw - 4, cx - bw / 2));
-    let top = ar.top - sr.top - bh - 10; if (top < 4) top = ar.bottom - sr.top + 8;
-    b.style.left = left + 'px'; b.style.top = top + 'px'; b.style.setProperty('--tail', Math.max(14, Math.min(bw - 14, cx - left)) + 'px');
-  }
+  },
   show(){
-    const ev = this.queue[this.done]; this.busy = false;
-    $(this.ids.prog).textContent = `${this.done} / ${this.events.length}`;
-    $(this.ids.ask).classList.remove('good'); $(this.ids.icon).textContent = ev.icon;
-    $(this.ids.text).textContent = `小方：「${ev.text}」要去哪裡呢？`;
-    $(this.ids.tip).textContent = this.tip;
-    $(this.ids.next).hidden = true;
-    $(this.mapId).querySelectorAll('.right').forEach(n => n.classList.remove('right'));
-    this.place(this.start.x, this.start.y);
-    setTimeout(() => this.say('要去哪裡呢？🤔'), 60);
-  }
-  async pick(id, el){
-    if (this.busy) return;
-    Sound.unlock(); Sound.click();
-    const ev = this.queue[this.done];
-    if (id !== ev.ans){
-      this.onMiss(); Sound.shiver(); restartAnim(el, 'shake');
-      this.say('好像不是這裡耶……');
-      toast(`🤔 <b>再想想看喔！</b>${this.hints[ev.ans]}`);
-      return;
-    }
-    this.busy = true; el.classList.add('right'); this.say('');
-    const pl = this.places.find(p => p.id === id), door = {x:pl.x + pl.w / 2, y:pl.row === 'top' ? 49 : 66};
-    await this.walkTo(door.x, this.start.y); await this.walkTo(door.x, door.y);
-    Sound.ding(); bigCheck(); this.say(ev.why);
-    this.done++;
-    $(this.ids.prog).textContent = `${this.done} / ${this.events.length}`;
-    $(this.ids.ask).classList.add('good'); $(this.ids.icon).textContent = '✅';
-    $(this.ids.text).innerHTML = `答對了！要去<b>${pl.name}</b>。`;
-    $(this.ids.tip).textContent = ev.why;
-    const btn = $(this.ids.next); btn.hidden = false;
-    btn.textContent = this.done < this.events.length ? '下一題 ▶' : '前往下一站 ▶';
-    btn.onclick = () => { Sound.click(); this.done < this.events.length ? this.show() : this.onDone(); };
-  }
-}
-
-const Level4 = {
-  miss:0, stage:0, quest:null, shopQs:[], shopI:0,
-  start(){
-    this.miss = 0; $('l4Miss').textContent = '想錯 0 次';
-    this.quest = new MapQuest({
-      mapId:'town', places:TOWN_PLACES, events:TOWN_EVENTS, hints:TOWN_HINT,
-      tip:'👆 點鳳山社區地圖上的地方，小方就會走過去！',
-      ids:{ask:'l4Ask', icon:'l4Icon', text:'l4Text', tip:'l4Tip', next:'l4Next', prog:'l4Prog'},
-      onMiss:() => this.addMiss(), onDone:() => this.toNeeds()
-    });
-    this.setStage(0);
-    this.quest.build();
-  },
-  addMiss(){ this.miss++; $('l4Miss').textContent = `想錯 ${this.miss} 次`; },
-  setStage(n){
-    this.stage = n;
-    ['l4MapStage', 'l4NeedStage', 'l4ShopStage'].forEach((id, i) => $(id).hidden = i !== n);
-    $('l4Steps').querySelectorAll('span').forEach((sp, i) => { sp.classList.toggle('now', i === n); sp.classList.toggle('done', i < n); });
-    window.scrollTo({top:0, behavior:'smooth'});
-  },
-
-  /* ---- 第 2 站：需要與想要 ---- */
-  async toNeeds(){
-    Sound.win();
-    await showModal({icon:'🗺️', title:'第 1 站完成：鳳山社區小達人！', center:true,
-      html:'你認識了社區裡的火車站、郵局、派出所、衛生所、市場、鳳儀書院、消防隊和圖書館！<br>下一站：分一分「需要」和「想要」🧺', buttons:[{label:'前往第 2 站 ▶', value:true}]});
-    this.setStage(1);
-    this.needLeft = 6;
-    $('l4Prog').textContent = '0 / 6';
-    document.querySelectorAll('.basket .b-items').forEach(b => b.innerHTML = '');
-    const items = shuffle([...shuffle(NEEDS).slice(0, 3), ...shuffle(WANTS).slice(0, 3)]);
-    const box = $('needCards'); box.innerHTML = '';
-    items.forEach(it => {
-      const el = document.createElement('div'); el.className = 'card px'; el.dataset.b = it.b;
-      el.innerHTML = `<span class="c-icon">${it.icon}</span><span>${it.name}</span>`;
-      Drag.attach(el, {targets:() => [...document.querySelectorAll('.basket')], onDrop:(card, basket) => this.dropNeed(card, basket, it)});
-      box.appendChild(el);
-    });
-  },
-  dropNeed(card, basket, it){
-    if (basket.dataset.b !== it.b){
-      this.addMiss(); Sound.shiver(); restartAnim(basket, 'shake'); restartAnim(card, 'wrong');
-      toast(it.b === 'need' ? `🤔 <b>再想想！</b>「${it.name}」生活一定要有，沒有會很不方便喔！` : `🤔 <b>再想想！</b>「${it.name}」沒有也能好好生活，是讓生活更開心的東西。`);
-      return false;
-    }
-    Sound.ding();
-    basket.querySelector('.b-items').insertAdjacentHTML('beforeend', `<span>${it.icon} ${it.name}</span>`);
-    card.remove(); this.needLeft--;
-    $('l4Prog').textContent = `${6 - this.needLeft} / 6`;
-    if (this.needLeft === 0) setTimeout(() => this.toShop(), 600);
-    return true;
-  },
-
-  /* ---- 第 3 站：聰明消費 ---- */
-  async toShop(){
-    Sound.win();
-    await showModal({icon:'🧺', title:'第 2 站完成：需要與想要！', center:true,
-      html:'<b>需要</b>：生活一定要有的東西（吃飯、穿衣、上學用品）。<br><b>想要</b>：有了更開心，沒有也可以的東西。<br>💡 先滿足「需要」，再考慮「想要」！', buttons:[{label:'前往第 3 站 ▶', value:true}]});
-    this.setStage(2);
-    this.shopQs = shuffle(SHOP_POOL).slice(0, L4_SHOP_ROUND); this.shopI = 0;
-    $('shopNext').onclick = () => { Sound.click(); this.shopI++; this.shopI < this.shopQs.length ? this.showShop() : this.finish(); };
-    this.showShop();
-  },
-  showShop(){
-    const q = this.shopQs[this.shopI];
-    $('l4Prog').textContent = `${this.shopI + 1} / ${this.shopQs.length}`;
-    $('shopNum').textContent = `聰明消費 ${this.shopI + 1}`; $('shopScene').textContent = q.scene; $('shopText').textContent = q.text;
-    $('shopFb').hidden = true;
-    const box = $('shopOpts'); box.innerHTML = '';
-    shuffle(q.opts).forEach(o => {
-      const b = document.createElement('button'); b.className = 'px-btn'; b.textContent = o.t;
-      b.onclick = () => this.answerShop(o, b);
+    const q = this.qs[this.i];
+    $('advProg').textContent = `第 ${this.i + 1} / ${this.qs.length} 題`;
+    $('advNum').innerHTML = `考卷挑戰 ${this.i + 1}<span class="q-unit">${ADV[this.n - 1].icon} 第${'一二三四五'[this.n - 1]}單元</span>`;
+    $('advFig').innerHTML = q.fig ? FIG[q.fig]() : '';
+    $('advText').textContent = q.q;
+    $('advFb').hidden = true;
+    const box = $('advOpts'); box.innerHTML = '';
+    shuffle(q.opts.map((t, k) => ({t, ok:k === q.a}))).forEach((o, k) => {
+      const b = document.createElement('button'); b.className = 'px-btn'; b.textContent = `${'ABCD'[k]}. ${o.t}`;
+      if (o.ok) b.dataset.ok = '1';
+      b.onclick = () => this.answer(o, b);
       box.appendChild(b);
     });
+    window.scrollTo({top:0, behavior:'smooth'});
   },
-  answerShop(o, btn){
-    const q = this.shopQs[this.shopI];
-    $('shopOpts').querySelectorAll('button').forEach(b => {
-      b.disabled = true;
-      if (q.opts.find(x => x.t === b.textContent).ok) b.classList.add('right');
-    });
-    if (o.ok) Sound.ding(); else { this.addMiss(); Sound.shiver(); btn.classList.add('wrongpick'); restartAnim($('shopOpts'), 'shiver'); }
-    const fb = $('shopFb'); fb.className = `feedback px ${o.ok ? 'good' : 'bad'}`;
-    $('shopFbTitle').innerHTML = o.ok ? '⭕ 答對了！聰明消費者！' : '❌ 不對喔！綠色的才是好方法';
-    $('shopFbText').innerHTML = q.why;
-    $('shopNext').textContent = this.shopI === this.shopQs.length - 1 ? '完成關卡 🏁' : '下一題 ▶';
+  answer(o, btn){
+    const q = this.qs[this.i];
+    $('advOpts').querySelectorAll('button').forEach(b => { b.disabled = true; if (b.dataset.ok) b.classList.add('right'); });
+    if (o.ok) Sound.ding();
+    else { this.miss++; $('advMiss').textContent = `答錯 ${this.miss} 題`; Sound.shiver(); btn.classList.add('wrongpick'); restartAnim($('advOpts'), 'shiver'); }
+    const fb = $('advFb'); fb.className = `feedback px ${o.ok ? 'good' : 'bad'}`;
+    $('advFbTitle').innerHTML = o.ok ? '⭕ 答對了！' : `❌ 不對喔！正確答案是：${q.opts[q.a]}`;
+    $('advFbText').innerHTML = `<div>📖 <b>詳解：</b>${q.ex}</div>` + (q.trap ? `<div class="trap">⚠️ <b>小心陷阱：</b>${q.trap}</div>` : '');
+    $('advNext').textContent = this.i === this.qs.length - 1 ? '完成挑戰 🏁' : '下一題 ▶';
     fb.hidden = false; fb.scrollIntoView({behavior:'smooth', block:'nearest'});
   },
   async finish(){
-    const stars = this.miss <= 1 ? 3 : this.miss <= 4 ? 2 : 1; Store.set(4, stars);
+    const n = this.n, stars = starsByMiss(this.miss); Store.set('a' + n, stars);
     Sound.win(); confetti();
-    const v = await showModal({icon:'🛒', title:'鳳山社區小達人 過關！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>認識社區設施、分清楚需要與想要、做個聰明消費者——你是鳳山的小達人！</p>`,
-      buttons:[{label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
-    App.afterLevel(4, v);
+    const v = await showModal({icon:'🎯', title:`第${'一二三四五'[n - 1]}單元 進階挑戰完成！`, center:true,
+      html:`<div class="stars-big">${starHTML(stars)}</div><p>5 題答對 <b>${5 - this.miss}</b> 題！考卷上的陷阱題難不倒你！</p>`,
+      buttons:[n < ADV.length ? {label:`下一個：第${'一二三四五'[n]}單元進階挑戰 ▶`, value:'next'} : {label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+    App.afterAdv(n, v);
   }
 };
 
@@ -1440,10 +1426,11 @@ const Level4 = {
    J. 結算與石虎白話小筆記
    ========================================================= */
 const NOTES = [
-  {icon:'💡', title:'《班會五字訣》', sub:'開會流程與民主', html:`
-    <div class="flow"><span>宣布</span><i>➔</i><span>報告</span><i>➔</i><span>提議與附議</span><i>➔</i><span>表決</span><i>➔</i><span>散會</span></div>
+  {icon:'💡', title:'《班會程序》', sub:'開會流程與民主', html:`
+    <div class="flow"><span>宣布開會</span><i>➔</i><span>報告</span><i>➔</i><span>提案討論</span><i>➔</i><span>臨時動議</span><i>➔</i><span>散會</span></div>
     <ul><li>開會時由<b>主席</b>先宣布開會，最後也由主席宣布散會。</li>
-    <li>幹部先把班上的事情<b>報告</b>給大家聽。</li></ul>
+    <li>主席和幹部先把班上的事情<b>報告</b>給大家聽；<b>司儀</b>宣布程序，<b>記錄</b>把內容寫下來。</li>
+    <li>提案討論時，提案要有人<b>附議</b>，再<b>表決</b>；臨時想到的事在<b>臨時動議</b>提出。</li></ul>
     <div class="star-tip">⭐ <b>提案需要有人附議</b>才能拿出來討論！<br>⭐ <b>少數服從多數，多數尊重少數</b>，投票結果大家都要遵守。</div>`},
   {icon:'💡', title:'《校園大幫手》', sub:'處室與幹部', html:`
     <ul><li>🏥 受傷了 ➔ 去<b>健康中心</b>找護理師</li>
@@ -1461,21 +1448,20 @@ const NOTES = [
     <li>⚖️ <b>性別平等</b>：男生可以哭、女生可以踢足球，興趣不分男女！</li>
     <li>🏠 家庭有很多樣子，每一種都是家；分擔家事、<b>感恩回饋</b>家人。</li></ul>
     <div class="star-tip">⭐ 在家、在學校，每個人都有不同的角色和責任，盡力做好就是最棒的小公民！</div>`},
-  {icon:'💡', title:'《聰明小消費者》', sub:'三下：社區與消費', html:`
-    <ul><li>🗺️ 社區裡有好多幫手：<b>火車站</b>搭車、<b>郵局</b>寄信、<b>派出所</b>找警察、<b>衛生所</b>打預防針、<b>消防隊</b>救火（119）。</li>
-    <li>🏯 鳳山的古蹟<b>鳳儀書院</b>，是清朝時讀書的地方。</li>
-    <li>🧺 <b>需要</b>：生活一定要有的；<b>想要</b>：有了更開心，沒有也可以。<b>先需要、後想要！</b></li>
-    <li>🛒 聰明消費：看<b>有效期限</b>、<b>貨比三家</b>、只買需要的、<b>核對找零拿發票</b>、自備購物袋。</li>
-    <li>📓 每天<b>記帳</b>，知道零用錢花到哪裡。</li></ul>
-    <div class="star-tip">⭐ 錢要用在刀口上：先想清楚「我真的需要嗎？」再買！</div>`}
+  {icon:'💡', title:'《打造美好班級》', sub:'第五單元・探究', html:`
+    <div class="flow"><span>發現問題</span><i>➔</i><span>找出原因</span><i>➔</i><span>想出方法</span><i>➔</i><span>評估選擇</span><i>➔</i><span>行動與檢討</span></div>
+    <ul><li>分清楚：看到的<b>情形</b>、發生的<b>原因</b>、改善的<b>做法</b>。</li>
+    <li>選做法要想：<b>做得到嗎？公平嗎？</b>會不會造成新問題？</li>
+    <li>做了之後要<b>檢討、調整</b>，班級就會越來越好！</li></ul>
+    <div class="star-tip">⭐ <b>班規不可以違反校規，校規不可以違反法律</b>；我們有權利，也要盡責任（遵守規範、尊重別人）。</div>`}
 ];
 const Result = {
   show(){
     const s = Store.get();
     $('trophy').innerHTML = Pix.trophy().replace('<svg', '<svg style="width:110px;height:auto"');
     $('catPix').innerHTML = Pix.cat();
-    const names = ['🎮 班會情境劇', '🏥 急救特派員', '🚦 小公民', '🛒 社區小達人'];
-    $('resultLevels').innerHTML = names.map((n, i) => `<div>${n}<b>${'★'.repeat(s[i + 1] || 0)}${'☆'.repeat(3 - (s[i + 1] || 0))}</b></div>`).join('');
+    const names = [['🎮 班會情境劇', 1], ['🏥 急救特派員', 2], ['🚦 小公民', 3], ...ADV.map(u => [`🎯 ${u.icon} 第${'一二三四五'[u.u - 1]}單元`, 'a' + u.u])];
+    $('resultLevels').innerHTML = names.map(([n, k]) => `<div>${n}<b>${'★'.repeat(s[k] || 0)}${'☆'.repeat(3 - (s[k] || 0))}</b></div>`).join('');
     $('notes').innerHTML = NOTES.map((n, i) => `<button class="note-card px" data-i="${i}"><span class="n-icon">📒</span>${n.title}<small>${n.sub}・點我閱讀</small></button>`).join('');
     $('notes').querySelectorAll('.note-card').forEach(b => b.addEventListener('click', () => {
       Sound.click(); const n = NOTES[+b.dataset.i];
@@ -1490,8 +1476,17 @@ const Result = {
 const App = {
   current:'lobby',
   init(){
+    $('advPortals').innerHTML = ADV.map(u => `<button class="portal px adv" data-adv="${u.u}">
+        <span class="p-icon" data-pix="target"></span>
+        <span class="p-info">
+          <span class="p-lv adv">🎯 第${'一二三四五'[u.u - 1]}單元・進階挑戰</span>
+          <span class="p-name">${u.icon} ${u.name}</span>
+          <span class="p-desc">考卷陷阱題 5 題・附詳解</span>
+          <span class="p-stars" data-stars="a${u.u}">★★★</span>
+        </span>
+      </button>`).join('');
     document.querySelectorAll('[data-pix]').forEach(el => el.innerHTML = Pix[el.dataset.pix]());
-    document.querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.unlock(); Sound.click(); this.startLevel(+p.dataset.level); }));
+    document.querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.unlock(); Sound.click(); p.dataset.adv ? this.startAdv(+p.dataset.adv) : this.startLevel(+p.dataset.level); }));
     $('homeBtn').addEventListener('click', () => { Sound.click(); this.go('lobby'); });
     $('resultHome').addEventListener('click', () => { Sound.click(); this.go('lobby'); });
     $('notesBtn').addEventListener('click', () => { Sound.click(); this.go('result'); });
@@ -1505,7 +1500,7 @@ const App = {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     this.current = id;
     $('homeBtn').hidden = id === 'lobby';
-    $('topTitle').textContent = {lobby:'🎒 三年級社會探險島', level1:'🎮 關卡一：麥塊班會情境劇', level2:'🏥 關卡二：校園急救特派員', level3:'🚦 關卡三：三年級小公民', level4:'🛒 關卡四：鳳山社區小達人（三下）', result:'🏆 全部過關！'}[id];
+    $('topTitle').textContent = {lobby:'🎒 三年級上學期社會探險島', level1:'🎮 關卡一：麥塊班會情境劇', level2:'🏥 關卡二：校園急救特派員', level3:'🚦 關卡三：三年級小公民', adv:'🎯 進階挑戰（考卷陷阱題）', result:'🏆 全部過關！'}[id];
     if (id === 'lobby') this.renderLobby();
     if (id === 'result') Result.show();
     $('overlay').classList.remove('open');
@@ -1518,11 +1513,17 @@ const App = {
   },
   startLevel(n){
     this.go('level' + n);
-    ({1:Level1, 2:Level2, 3:Level3, 4:Level4})[n].start();
+    ({1:Level1, 2:Level2, 3:Level3})[n].start();
   },
+  startAdv(n){ this.go('adv'); AdvLevel.start(n); },
   afterLevel(n, choice){
     if (choice === 'home') return this.go('lobby');
-    if (n < 4) return this.startLevel(n + 1);
+    if (n < 3) return this.startLevel(n + 1);
+    this.startAdv(1);
+  },
+  afterAdv(n, choice){
+    if (choice === 'home') return this.go('lobby');
+    if (n < ADV.length) return this.startAdv(n + 1);
     this.go(Store.allCleared() ? 'result' : 'lobby');
   }
 };
