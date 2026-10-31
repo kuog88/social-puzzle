@@ -66,6 +66,39 @@ h1{margin:0;text-align:center;font-size:clamp(26px,6.5vw,46px);font-weight:900;c
 .sem-card .go{display:inline-block;margin-top:14px;font-weight:900;font-size:18px;padding:10px 22px;border-radius:16px;background:#ff8a3d;color:#fff;box-shadow:0 5px 0 #d0621f}
 .sem-empty{color:#8a7a99;font-weight:700;text-align:center;padding:10px}
 </style>
+
+<style id="rwd-style">
+/* 手機：年級卡片改成「左邊圖示、右邊文字」的橫條，一頁看得到更多年級 */
+@media (max-width:640px){
+  body{padding:14px 10px 80px;gap:12px}
+  .sub{font-size:16px;padding:6px 12px}
+  .sem{margin:14px auto 4px;font-size:20px}
+  .grades,.sem-grid{gap:12px}
+  .grade{display:grid;grid-template-columns:64px 1fr;grid-template-areas:"ic badge" "ic name" "ic desc" "ic go";
+    column-gap:12px;row-gap:4px;align-items:center;justify-items:start;text-align:left;padding:12px 12px 14px}
+  .grade svg{grid-area:ic;width:64px;height:64px;align-self:center}
+  .grade .badge{grid-area:badge;font-size:15px;padding:2px 12px}
+  .grade .name{grid-area:name;font-size:19px}
+  .grade .desc{grid-area:desc;font-size:14px;line-height:1.5}
+  .grade .go{grid-area:go;font-size:16px;padding:6px 14px;margin-top:2px}
+  .sem-card{padding:16px 14px 14px;border-width:4px}
+  .sem-card .icon{font-size:40px;margin:6px 0 2px}
+  .sem-card h2{font-size:19px}
+  .sem-card .go{font-size:16px;padding:8px 16px;margin-top:10px}
+}
+/* 平板直式：卡片和字放大，填滿螢幕寬度 */
+@media (min-width:700px) and (orientation:portrait) and (min-height:900px){
+  .grades{grid-template-columns:repeat(2,minmax(0,1fr));max-width:980px;gap:24px}
+  .sem,.sem-grid{max-width:980px}
+  .grade svg{width:130px;height:130px}
+  .badge{font-size:23px}
+  .name{font-size:30px}
+  .desc{font-size:19px}
+  .grade .go,.sem-card .go{font-size:22px;padding:12px 26px}
+  .sem-card h2{font-size:28px}
+  .sem-card .units span{font-size:15px}
+}
+</style>
 </head>
 <body>
   <h1>🗺️ 社會科探險島</h1>

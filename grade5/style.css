@@ -218,3 +218,95 @@ button{font-family:inherit;cursor:pointer}
   .pinmap{max-width:380px;margin:0 auto}
   .pin-tag{font-size:12px}
 }
+
+/* ===== 平板直式自動放大（tools/gen_tablet_scale.py 產生，請勿手改） ===== */
+@media (min-width:700px) and (orientation:portrait) and (min-height:900px){
+  body{font-size:23.4px}
+  .px{border-radius:10.4px}
+  .px-btn{border-radius:13px;padding:13px 20.8px;font-size:23.4px}
+  .cloud{width:156px;height:36.4px}
+  .cloud.c2{width:117px}
+  .app{max-width:1430px;padding:13px 15.6px 91px;gap:13px}
+  .topbar{gap:10.4px}
+  .grade-btn{font-size:19.5px;padding:10.4px 13px}
+  .home-btn{font-size:20.8px;padding:10.4px 15.6px}
+  .topbar .title{padding:7.8px 15.6px;font-size:clamp(19.5px,3.6vw,26px)}
+  .mute-btn{width:59.8px;height:59.8px;font-size:26px}
+  .screen{gap:13px}
+  .lobby-title{margin:7.8px 0 0;font-size:clamp(36.4px,7vw,59.8px)}
+  .lobby-sub{font-size:20.8px;padding:5.2px 18.2px;border-radius:128.7px}
+  .total{padding:7.8px 20.8px;font-size:23.4px}
+  .portals{gap:18.2px;margin-top:5.2px}
+  .portal{gap:7.8px;padding:18.2px 13px;font-size:23.4px}
+  .portal .p-icon{font-size:72.8px}
+  .portal .p-lv{font-size:18.2px;padding:2.6px 15.6px;border-radius:128.7px}
+  .portal .p-name{font-size:27.3px}
+  .portal .p-desc{font-size:18.2px}
+  .portal .p-stars{font-size:28.6px;letter-spacing:1.3px}
+  .notes-btn{margin-top:10.4px;font-size:19.5px}
+  .level-head{gap:10.4px;padding:10.4px 15.6px}
+  .level-head h2{font-size:clamp(23.4px,4.4vw,31.2px)}
+  .chip{border-radius:128.7px;padding:3.9px 15.6px;font-size:19.5px}
+  .explain .trap{margin-top:7.8px}
+  .q-art svg.adv-fig{max-width:598px;border-radius:10.4px}
+  .xmap{width:min(100%,390px);border-radius:10.4px}
+  .xmap .xm{width:44.2px;height:44.2px;font-size:22.1px;line-height:39px}
+  .unit-desc{padding:13px 18.2px;font-size:20.8px}
+  .levels{gap:15.6px}
+  .lv-card{gap:7.8px;padding:18.2px;font-size:22.1px}
+  .lv-card .lv-ico{font-size:52px}
+  .lv-card .lv-name{font-size:26px}
+  .lv-card .lv-how{font-size:18.2px}
+  .lv-card .lv-st{font-size:28.6px}
+  .ask{gap:13px;padding:13px 18.2px;font-size:clamp(23.4px,4vw,28.6px)}
+  .say-btn{font-size:18.2px;padding:7.8px 13px}
+  .stage{gap:15.6px}
+  .panel{padding:15.6px}
+  .tray{gap:13px;min-height:91px}
+  .chipcard{gap:7.8px;border-radius:13px;padding:10.4px 15.6px;font-size:23.4px}
+  .chipcard .em{font-size:36.4px}
+  .bins{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15.6px}
+  .bin{min-height:195px;gap:10.4px;padding:13px}
+  .bin h3{font-size:26px}
+  .bin .bin-items{gap:7.8px}
+  .bin .bin-items .chipcard{font-size:19.5px;padding:5.2px 10.4px}
+  .bin .bin-items .chipcard .em{font-size:26px}
+  .q-art{font-size:83.2px}
+  .opts{gap:13px}
+  .opt{font-size:clamp(22.1px,3.8vw,26px);padding:18.2px}
+  .explain{border-radius:13px;padding:13px 15.6px;font-size:22.1px}
+  .slots{gap:10.4px}
+  .slot{min-width:156px;min-height:83.2px;border-radius:13px;gap:5.2px;padding:7.8px;font-size:20.8px}
+  .slot .n{font-size:18.2px}
+  .slot .em{font-size:33.8px}
+  .arrow{font-size:28.6px}
+  .mapwrap{gap:13px}
+  .map-title{font-size:28.6px;padding:7.8px;border-radius:10.4px}
+  .map-side{gap:13px}
+  .compass,.legend,.scalebar{border-radius:10.4px;padding:10.4px}
+  .compass svg{width:117px;height:117px}
+  .legend{font-size:19.5px}
+  .scalebar{font-size:18.2px}
+  .scalebar .bar{height:13px;width:78px;margin:5.2px auto}
+  .grid{gap:3.9px;width:min(100%, max(390px, calc(100dvh - 338px)));padding:3.9px;border-radius:10.4px}
+  .cell{border-radius:3.9px;font-size:clamp(23.4px,4.5vw,41.6px)}
+  .overlay{padding:20.8px}
+  .modal{max-width:676px;padding:23.4px}
+  .modal .m-icon{font-size:72.8px}
+  .modal h3{margin:7.8px 0;font-size:33.8px}
+  .modal .m-body{font-size:23.4px}
+  .modal .m-stars{font-size:57.2px}
+  .modal .m-btns{gap:13px;margin-top:15.6px}
+  .toast{bottom:23.4px;border-radius:13px;padding:13px 20.8px;font-size:23.4px}
+  .big-check{font-size:156px}
+  .confetti{top:-26px;width:15.6px;height:15.6px}
+  .pinmap-wrap{grid-template-columns:minmax(338px,546px) 1fr;gap:18.2px}
+  .pinmap.noimg::before{font-size:52px}
+  .pin{min-width:44.2px;height:44.2px;font:900 20.8px var(--font)}
+  .pin::after{inset:-10.4px}
+  .pin.filled{border-radius:10.4px;padding:2.6px 7.8px}
+  .pin-tag{gap:3.9px;font-size:16.9px}
+  .pin-tag .em{font-size:20.8px}
+  .compass-mini{right:10.4px;top:10.4px;border-radius:10.4px;padding:2.6px 7.8px;font-size:18.2px}
+}
+/* ===== 平板直式自動放大 結束 ===== */

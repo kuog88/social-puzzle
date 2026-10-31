@@ -216,13 +216,17 @@
       hot = t; if (hot) hot.classList.add("hot");
     });
     function hit(x, y) {
-      var ts = getTargets();
+      var ts = getTargets(), best = null, bd = Infinity;
       for (var i = 0; i < ts.length; i++) {
         var r = ts[i].getBoundingClientRect();
-        var pad = ts[i].classList.contains("pin") ? 14 : 0;
-        if (x >= r.left - pad && x <= r.right + pad && y >= r.top - pad && y <= r.bottom + pad) return ts[i];
+        if (ts[i].classList.contains("pin")) {
+          // 地圖釘：離最近的那一個在地圖寬度 13% 以內就算放到（手機手指比較粗）
+          var map = ts[i].closest(".pinmap"), reach = map ? Math.max(40, map.getBoundingClientRect().width * 0.13) : 30;
+          var d = Math.hypot(x - (r.left + r.width / 2), y - (r.top + r.height / 2));
+          if (d < reach && d < bd) { bd = d; best = ts[i]; }
+        } else if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return ts[i];
       }
-      return null;
+      return best;
     }
     function end(e) {
       if (!moved) return;

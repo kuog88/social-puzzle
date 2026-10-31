@@ -171,3 +171,81 @@ button{font-family:inherit}
   .ask,.q{font-size:18px}
   .opt{font-size:16px}
 }
+
+/* ===== 平板直式自動放大（tools/gen_tablet_scale.py 產生，請勿手改） ===== */
+@media (min-width:700px) and (orientation:portrait) and (min-height:900px){
+  body{font-size:23.4px}
+  .cloud{border-radius:1298.7px}
+  .cloud.c1{width:208px;height:59.8px;left:-260px}
+  .cloud.c1::before{width:91px;height:91px;left:31.2px;top:-44.2px}
+  .cloud.c1::after{width:67.6px;height:67.6px;left:109.2px;top:-28.6px}
+  .cloud.c2{width:156px;height:46.8px;left:-208px}
+  .cloud.c2::before{width:70.2px;height:70.2px;left:23.4px;top:-33.8px}
+  .cloud.c2::after{width:52px;height:52px;left:83.2px;top:-20.8px}
+  .cloud.c3{width:260px;height:67.6px;left:-312px}
+  .cloud.c3::before{width:109.2px;height:109.2px;left:46.8px;top:-54.6px}
+  .cloud.c3::after{width:78px;height:78px;left:143px;top:-33.8px}
+  .app{max-width:1352px;padding:15.6px 18.2px 52px}
+  .topbar{gap:15.6px;border-radius:28.6px;padding:10.4px 15.6px}
+  .back{padding:10.4px 18.2px;border-radius:1298.7px}
+  .brand{gap:13px;min-width:286px}
+  .sem-tag{font-size:26px;padding:7.8px 18.2px;border-radius:15.6px;letter-spacing:2.6px}
+  .brand-name{font-size:28.6px}
+  .brand-sub{font-size:18.2px}
+  .fuel{border-radius:1298.7px;padding:7.8px 18.2px}
+  .btn{border-radius:18.2px;padding:13px 20.8px;font-size:22.1px}
+  .link-btn{font-size:19.5px}
+  .hello{gap:20.8px;margin:23.4px 0;border-radius:33.8px;padding:20.8px 26px}
+  .balloon.big{font-size:96.2px}
+  .screen-title{font-size:36.4px}
+  .k{margin:2.6px 5.2px;padding:1.3px 13px;border-radius:1298.7px;font-size:19.5px}
+  .note{font-size:19.5px}
+  .route{grid-template-columns:repeat(auto-fit,minmax(234px,1fr));gap:20.8px}
+  .station{border-radius:31.2px;padding:20.8px 18.2px 18.2px;font-size:20.8px}
+  .station .s-ico{font-size:59.8px}
+  .station .s-no{top:-15.6px;left:18.2px;border-radius:1298.7px;padding:2.6px 15.6px;font-size:19.5px}
+  .station .s-name{font-size:23.4px;margin:5.2px 0 2.6px}
+  .station .s-st{font-size:18.2px}
+  .station .s-stars{margin-top:7.8px;letter-spacing:1.3px}
+  .foot{margin-top:33.8px}
+  .unit-head{margin:20.8px 0;border-radius:31.2px;padding:20.8px 26px;gap:18.2px}
+  .unit-head .u-ico{font-size:78px}
+  .unit-title{font-size:33.8px}
+  .task-list{grid-template-columns:repeat(auto-fit,minmax(312px,1fr));gap:18.2px}
+  .task{border-radius:26px;padding:20.8px;font-size:22.1px}
+  .task .t-kind{border-radius:1298.7px;padding:1.3px 13px;font-size:18.2px}
+  .task .t-name{font-size:26px;margin:7.8px 0}
+  .play-bar{gap:13px;margin:18.2px 0 10.4px}
+  .level-title{font-size:28.6px;min-width:208px}
+  .timer{border-radius:1298.7px;padding:5.2px 15.6px}
+  .altitude{height:18.2px;border-radius:1298.7px;margin:7.8px 0 20.8px}
+  .altitude span{border-radius:1298.7px}
+  .mini-balloon{top:-20.8px;font-size:31.2px}
+  .basket{border-radius:33.8px;padding:23.4px}
+  .ask{font-size:26px;margin:0 0 18.2px}
+  .pool{gap:13px;min-height:72.8px;padding:13px;border-radius:23.4px;margin-bottom:18.2px}
+  .chip{border-radius:18.2px;padding:10.4px 15.6px;font-size:22.1px}
+  .chip.ok{font-size:19.5px}
+  .bins{grid-template-columns:repeat(auto-fit,minmax(221px,1fr));gap:15.6px}
+  .bin{border-radius:26px;padding:13px;min-height:156px}
+  .bin h3{margin:0 0 10.4px;font-size:23.4px}
+  .bin .in{gap:7.8px}
+  .order-slots{gap:10.4px;margin-bottom:18.2px}
+  .slot{border-radius:18.2px;padding:13px 15.6px;min-height:62.4px;gap:13px}
+  .slot b{width:39px;height:39px}
+  .order-pool{gap:13px}
+  .qno{font-size:19.5px;margin-bottom:5.2px}
+  .q{font-size:26px;margin:0 0 15.6px}
+  .opts{grid-template-columns:repeat(auto-fit,minmax(286px,1fr));gap:13px}
+  .opt{border-radius:20.8px;padding:15.6px 18.2px;font-size:23.4px}
+  .why{margin-top:15.6px;padding:13px 18.2px;border-radius:18.2px}
+  .next-row{margin-top:15.6px}
+  .chart{max-width:806px;margin:0 auto 18.2px;border-radius:20.8px}
+  .modal{padding:20.8px}
+  .modal-card{border-radius:36.4px;padding:28.6px 31.2px;max-width:598px}
+  .m-stars{font-size:54.6px;letter-spacing:5.2px}
+  .modal-card h2{margin:7.8px 0}
+  .modal-btns{gap:13px;margin-top:15.6px}
+  .toast{bottom:31.2px;padding:13px 23.4px;border-radius:1298.7px;font-size:20.8px}
+}
+/* ===== 平板直式自動放大 結束 ===== */

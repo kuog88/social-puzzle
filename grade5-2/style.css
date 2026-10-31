@@ -191,3 +191,89 @@ button{font-family:inherit;cursor:pointer;touch-action:manipulation}
   .screen-frame{padding:40px 10px 14px;border-width:6px}
   .ask{font-size:19px}
 }
+
+/* ===== 平板直式自動放大（tools/gen_tablet_scale.py 產生，請勿手改） ===== */
+@media (min-width:700px) and (orientation:portrait) and (min-height:900px){
+  body{font-size:23.4px}
+  .app{max-width:1404px;padding:13px 18.2px 78px}
+  .topbar{gap:15.6px}
+  .back{padding:10.4px 18.2px;border-radius:1298.7px}
+  .brand{gap:13px;min-width:312px}
+  .sem-tag{font-size:28.6px;padding:7.8px 18.2px;border-radius:10.4px;letter-spacing:2.6px}
+  .brand-name{font-size:31.2px;letter-spacing:1.3px}
+  .brand-sub{font-size:18.2px}
+  .rating{border-radius:13px;padding:7.8px 15.6px;gap:7.8px}
+  .live-dot{width:13px;height:13px}
+  .ticker{margin:13px 0 18.2px;border-radius:7.8px;padding-left:124.8px}
+  .ticker::before{width:109.2px}
+  .ticker-in{padding:9.1px 0 9.1px 100%}
+  .anchor-desk{gap:20.8px;border-radius:23.4px;padding:20.8px 26px}
+  .anchor{font-size:72.8px}
+  .screen-title{margin:0 0 7.8px;font-size:36.4px}
+  .anchor-desk p{margin:7.8px 0}
+  .note{font-size:19.5px}
+  .k{margin:2.6px 5.2px;padding:1.3px 10.4px;border-radius:7.8px;font-size:19.5px}
+  .channels{grid-template-columns:repeat(auto-fill,minmax(390px,1fr));gap:18.2px;margin-top:20.8px}
+  .ch-card{border-radius:20.8px}
+  .ch-screen{height:124.8px;font-size:67.6px}
+  .ch-num{left:13px;top:10.4px;font-size:18.2px;padding:2.6px 10.4px;border-radius:5.2px}
+  .ch-body{padding:13px 18.2px 18.2px}
+  .ch-body h3{margin:0 0 5.2px;font-size:27.3px}
+  .ch-body .lessons{font-size:18.2px}
+  .ch-stars{margin-top:10.4px}
+  .foot{margin-top:28.6px}
+  .link-btn{font-size:19.5px}
+  .btn{font-size:22.1px;padding:11.7px 20.8px;border-radius:13px}
+  .unit-head{margin:15.6px 0;padding:20.8px 26px;border-radius:20.8px}
+  .unit-head .ch-num{margin-bottom:7.8px}
+  .unit-head h1{margin:0 0 7.8px;font-size:36.4px}
+  .unit-head ol{margin:7.8px 0;padding-left:31.2px}
+  .unit-head p{margin:7.8px 0}
+  .task-list{grid-template-columns:repeat(auto-fill,minmax(364px,1fr));gap:15.6px}
+  .task{gap:15.6px;border-radius:18.2px;padding:18.2px}
+  .task .ico{font-size:49.4px}
+  .task b{font-size:24.7px}
+  .tag{font-size:16.9px;padding:1.3px 10.4px;border-radius:7.8px;margin-right:7.8px}
+  .task .st{font-size:22.1px}
+  .play-bar{gap:13px}
+  .level-title{font-size:28.6px;min-width:234px}
+  .timer{border-radius:10.4px;padding:5.2px 13px}
+  .progress{height:13px;border-radius:1298.7px;margin:13px 0}
+  .screen-frame{border-radius:23.4px;padding:57.2px 23.4px 26px;min-height:442px}
+  .onair{left:18.2px;top:13px;font-size:16.9px;padding:2.6px 13px;border-radius:5.2px;gap:7.8px}
+  .ask{font-size:27.3px;margin:0 0 18.2px}
+  .stage{min-height:260px}
+  .why{margin-top:15.6px;border-radius:10.4px;padding:13px 18.2px}
+  .opts{grid-template-columns:repeat(auto-fit,minmax(286px,1fr));gap:13px}
+  .opt{font-size:24.7px;border-radius:15.6px;padding:15.6px 18.2px}
+  .next-row{margin-top:15.6px}
+  .headline{border-radius:15.6px;padding:20.8px;font-size:27.3px;gap:13px}
+  .headline::before{font-size:36.4px}
+  .tf{gap:15.6px;margin-top:15.6px}
+  .tf .opt{font-size:28.6px}
+  .tray{gap:10.4px;min-height:67.6px}
+  .card{border-radius:13px;padding:10.4px 15.6px;font-size:22.1px}
+  .bins{grid-template-columns:repeat(auto-fit,minmax(195px,1fr));gap:13px;margin-top:18.2px}
+  .bin{border-radius:18.2px;padding:13px;min-height:156px}
+  .bin h4{margin:0 0 10.4px;font-size:23.4px;gap:7.8px}
+  .bin .card{font-size:19.5px;padding:6.5px 10.4px;margin:3.9px}
+  .slots{gap:7.8px;margin-bottom:18.2px}
+  .slot{gap:13px;min-height:59.8px;border-radius:13px;padding:5.2px 13px}
+  .slot .n{width:39px;height:39px}
+  .match{gap:13px 23.4px}
+  .match .col{gap:10.4px}
+  .m-item{border-radius:13px;padding:13px 15.6px;font-size:22.1px}
+  .pinmap-wrap{grid-template-columns:minmax(312px,520px) 1fr;gap:20.8px}
+  .pinmap{border-radius:18.2px}
+  .pinmap.noimg::before{font-size:52px}
+  .pin{width:49.4px;height:49.4px}
+  .pin-label{font-size:16.9px;padding:2.6px 7.8px;border-radius:7.8px}
+  .compass{right:10.4px;top:10.4px;border-radius:7.8px;padding:2.6px 7.8px;font-size:18.2px}
+  .modal{padding:20.8px}
+  .modal-card{border-radius:23.4px;padding:28.6px;max-width:572px}
+  .m-stars{font-size:54.6px;letter-spacing:5.2px}
+  .modal-card h2{margin:7.8px 0}
+  .modal-btns{gap:13px}
+  .toast{bottom:31.2px;padding:13px 23.4px;border-radius:1298.7px}
+}
+/* ===== 平板直式自動放大 結束 ===== */

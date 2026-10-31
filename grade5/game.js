@@ -207,7 +207,7 @@ function makeDraggable(card, {findTarget, onDrop, onTap}){
     }
     if (st.moved){
       st.ghost.style.left = (e.clientX - st.dx) + 'px'; st.ghost.style.top = (e.clientY - st.dy) + 'px';
-      const t = findTarget(document.elementFromPoint(e.clientX, e.clientY));
+      const t = findTarget(document.elementFromPoint(e.clientX, e.clientY), e.clientX, e.clientY);
       if (t !== st.over){ st.over && st.over.classList.remove('over'); t && t.classList.add('over'); st.over = t; }
     }
   });
@@ -360,11 +360,23 @@ const RENDER = {
           restartAnim(card, 'shake'); miss(it.hint || `「${it.t}」不在這個位置喔，看看地圖再想一想！`);
         }
       };
+      // 放開時不用剛好壓在 📍 上：離最近的 📍 在地圖寬度 13% 以內就算放在那裡（手機手指比較粗）
+      const nearestPin = (x, y) => {
+        const map = $('pinmap'); if (!map) return null;
+        const mr = map.getBoundingClientRect();
+        if (x < mr.left || x > mr.right || y < mr.top || y > mr.bottom) return null;
+        let best = null, bd = Math.max(40, mr.width * .13);
+        map.querySelectorAll('.pin:not(.filled)').forEach(p => {
+          const r = p.getBoundingClientRect(), d = Math.hypot(x - (r.left + r.width / 2), y - (r.top + r.height / 2));
+          if (d < bd){ bd = d; best = p; }
+        });
+        return best;
+      };
       shuffle(r.items.map((it, i) => ({...it, i}))).forEach(it => {
         const c = document.createElement('div'); c.className = 'chipcard'; c.dataset.i = it.i;
         c.innerHTML = `<span class="em">${it.em}</span>${it.t}`;
         makeDraggable(c, {
-          findTarget: el => el && el.closest('.pin:not(.filled)'),
+          findTarget: (el, x, y) => (el && el.closest('.pin:not(.filled)')) || nearestPin(x, y),
           onDrop: drop,
           onTap: card => { Sound.click(); if (selected) selected.classList.remove('sel'); selected = selected === card ? null : card; selected && selected.classList.add('sel'); }
         });

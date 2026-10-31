@@ -148,3 +148,78 @@ button{font-family:inherit;cursor:pointer;color:inherit}
   .match{grid-template-columns:1fr}
   .screen-title{font-size:24px}
 }
+
+/* ===== 平板直式自動放大（tools/gen_tablet_scale.py 產生，請勿手改） ===== */
+@media (min-width:700px) and (orientation:portrait) and (min-height:900px){
+  body{font-size:23.4px}
+  .app{max-width:1300px;padding:0 18.2px 52px}
+  .topbar{gap:15.6px;padding:15.6px 0}
+  .back{border-radius:1298.7px;padding:7.8px 18.2px}
+  .brand{gap:13px;min-width:312px}
+  .sem-tag{font-size:26px;padding:7.8px 18.2px;border-radius:13px;letter-spacing:2.6px}
+  .brand-name{font-size:28.6px}
+  .brand-sub{font-size:18.2px}
+  .stamps{border-radius:15.6px;padding:7.8px 15.6px}
+  .hero{gap:23.4px;border-radius:26px;padding:23.4px}
+  .train{font-size:57.2px}
+  .train span{margin-left:-7.8px}
+  .screen-title{margin:0 0 7.8px;font-size:36.4px}
+  .hero p{margin:7.8px 0}
+  .note{font-size:19.5px}
+  .k{padding:0 10.4px;border-radius:10.4px;font-size:19.5px;margin:0 2.6px}
+  .route{margin:33.8px 0 10.4px;grid-template-columns:repeat(auto-fit,minmax(273px,1fr));gap:23.4px}
+  .route::before{left:7.8px;right:7.8px;top:44.2px;height:10.4px;border-radius:5.2px}
+  .station{border-radius:23.4px;padding:15.6px 18.2px 18.2px}
+  .station .dot{width:67.6px;height:67.6px;font-size:36.4px;margin-bottom:7.8px}
+  .station .no{font-size:18.2px}
+  .station .nm{font-size:26px}
+  .station .st{font-size:18.2px}
+  .station .bar{height:13px;border-radius:6.5px;margin-top:10.4px}
+  .station .sc{font-size:18.2px;margin-top:5.2px}
+  .foot{margin-top:31.2px}
+  .link-btn{font-size:18.2px}
+  .btn{font-size:22.1px;border-radius:15.6px;padding:10.4px 20.8px}
+  .btn.ghost{margin:5.2px 0 15.6px}
+  .unit-head{border-radius:20.8px;padding:18.2px 23.4px}
+  .unit-title{font-size:33.8px}
+  .unit-head .lessons{margin:7.8px 0;padding-left:26px}
+  .unit-head p{margin:5.2px 0}
+  .ticket-list{grid-template-columns:repeat(auto-fit,minmax(286px,1fr));gap:20.8px;margin-top:20.8px}
+  .ticket{gap:5.2px;border-radius:18.2px;padding:18.2px 20.8px 18.2px 28.6px}
+  .ticket::before{width:13px}
+  .ticket::after{right:-15.6px;width:31.2px;height:31.2px}
+  .ticket .kind{font-size:18.2px}
+  .ticket .tn{font-size:24.7px}
+  .ticket .ts{font-size:28.6px;letter-spacing:2.6px}
+  .play-bar{gap:13px}
+  .level-title{font-size:28.6px;min-width:260px}
+  .progress{height:15.6px;border-radius:10.4px;margin:13px 0}
+  .board{border-radius:26px;padding:20.8px}
+  .ask{font-size:27.3px;margin:0 0 15.6px}
+  .fig{border-radius:18.2px;padding:10.4px;margin:0 0 15.6px}
+  .fig svg{max-width:728px}
+  .mapfig{width:min(390px,80%);border-radius:13px}
+  .mpin{width:44.2px;height:44.2px;font-size:23.4px}
+  .opts{gap:13px}
+  .opt{border-radius:15.6px;padding:15.6px 18.2px;font-size:23.4px}
+  .explain{margin-top:15.6px;border-radius:13px;padding:13px 18.2px}
+  .explain .trap{margin-top:7.8px;border-radius:10.4px;padding:7.8px 13px}
+  .next-row{margin-top:15.6px}
+  .chips{gap:10.4px;min-height:67.6px;padding:10.4px;border-radius:15.6px}
+  .chip{border-radius:13px;padding:10.4px 15.6px;font-size:22.1px}
+  .bins{grid-template-columns:repeat(auto-fit,minmax(286px,1fr));gap:15.6px;margin-top:15.6px}
+  .bin{border-radius:18.2px;padding:13px;min-height:156px}
+  .bin h4{margin:0 0 10.4px;font-size:23.4px}
+  .match{gap:13px 20.8px}
+  .match .col{gap:10.4px}
+  .order-slots{gap:10.4px;margin-bottom:15.6px}
+  .slot{gap:13px;border-radius:13px;padding:10.4px 15.6px;min-height:59.8px}
+  .slot b{width:36.4px;height:36.4px}
+  .modal{padding:20.8px}
+  .modal-card{border-radius:28.6px;padding:28.6px;max-width:572px}
+  .m-stars{font-size:57.2px;letter-spacing:5.2px}
+  .modal-card h2{margin:7.8px 0}
+  .modal-btns{gap:13px;margin-top:15.6px}
+  .toast{bottom:31.2px;padding:13px 23.4px;border-radius:15.6px}
+}
+/* ===== 平板直式自動放大 結束 ===== */

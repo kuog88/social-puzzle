@@ -334,7 +334,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
 /* =========================================================
    7. RWD：手機與平板直式
    ========================================================= */
-@media (max-width:820px){
+@media (max-width:820px), (max-width:1023px) and (orientation:portrait){
   .topbar .title{display:none}
   .mute-btn{margin-left:auto}
   .podium{width:36%}
@@ -361,8 +361,116 @@ svg.pix{shape-rendering:crispEdges;display:block}
   .result-levels{grid-template-columns:repeat(2,1fr)}
   .shop-opts .px-btn{font-size:17px;padding:12px 10px}
 }
-@media (min-width:821px){.portal .p-info{display:contents}}
+@media (min-width:821px) and (orientation:landscape), (min-width:1024px){.portal .p-info{display:contents}}
+/* 平板直式：校園地圖改成接近正方形，人物和建築物更大 */
+@media (min-width:700px) and (max-width:1023px) and (orientation:portrait){.campus2{aspect-ratio:1/1}.scene{aspect-ratio:16/10}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
+
+/* ===== 平板直式自動放大（tools/gen_tablet_scale.py 產生，請勿手改） ===== */
+@media (min-width:700px) and (orientation:portrait) and (min-height:900px){
+  body{font-size:23.4px}
+  .px{border-radius:10.4px}
+  .px-btn{border-radius:13px;padding:13px 20.8px;font-size:23.4px}
+  .cloud{width:156px;height:36.4px}
+  .cloud.c2{width:117px}
+  .app{max-width:1534px;padding:13px 15.6px 91px;gap:13px}
+  .topbar{gap:10.4px}
+  .home-btn{font-size:20.8px;padding:10.4px 15.6px}
+  .topbar .title{padding:7.8px 15.6px;font-size:clamp(19.5px,3.6vw,26px)}
+  .mute-btn{width:59.8px;height:59.8px;font-size:26px}
+  .screen{gap:13px}
+  .lobby-title{margin:7.8px 0 0;font-size:clamp(31.2px,6vw,54.6px)}
+  .lobby-sub{font-size:22.1px;padding:5.2px 18.2px;border-radius:128.7px}
+  .portals{gap:18.2px;margin-top:10.4px}
+  .portal{gap:10.4px;padding:20.8px 15.6px 18.2px;font-size:23.4px}
+  .portal .p-icon{width:124.8px;height:124.8px}
+  .portal .p-lv{font-size:19.5px;padding:2.6px 15.6px;border-radius:128.7px}
+  .portal .p-name{font-size:27.3px}
+  .portal .p-desc{font-size:19.5px}
+  .portal .p-stars{font-size:33.8px;letter-spacing:2.6px}
+  .term-head{gap:13px;margin:13px 0 -2.6px;font-size:28.6px}
+  .term-soon{padding:23.4px 15.6px;border-radius:15.6px;font-size:23.4px}
+  .notes-btn{margin-top:10.4px}
+  .level-head{gap:13px;padding:10.4px 15.6px}
+  .level-head h2{font-size:clamp(23.4px,4.4vw,31.2px)}
+  .chip{border-radius:128.7px;padding:3.9px 15.6px;font-size:19.5px}
+  .scene{max-height:max(390px, calc(100dvh - 494px));border-radius:13px}
+  .board{font-size:max(15.6px,calc(var(--u)*3));gap:2.6px}
+  .board .b-title{padding-bottom:2.6px}
+  .board .b-list{gap:2.6px 18.2px}
+  .board .b-vote{gap:23.4px;margin-top:2.6px}
+  .slot-drop{border-radius:7.8px;font-size:max(15.6px,calc(var(--u)*2.8));padding:2.6px}
+  .act-banner{font-size:max(15.6px,calc(var(--u)*2.8));padding:3.9px 13px;border-radius:7.8px}
+  .bubble{max-width:min(429px,62%);border-radius:13px;padding:7.8px 13px;font-size:max(18.2px,calc(var(--u)*3.2))}
+  .bubble::after{bottom:-15.6px;margin-left:-10.4px}
+  .hand{font-size:max(20.8px,calc(var(--u)*5))}
+  .cards{gap:13px}
+  .card{gap:2.6px;min-height:109.2px;padding:10.4px 7.8px;font-size:clamp(19.5px,3.8vw,24.7px)}
+  .card .c-icon{font-size:36.4px}
+  .hint-line{padding:10.4px 15.6px;font-size:20.8px}
+  .l2-ask{gap:15.6px;padding:13px 18.2px;min-height:119.6px}
+  .l2-ask .a-icon{font-size:57.2px}
+  .l2-ask .a-text{font-size:clamp(22.1px,4.3vw,29.9px)}
+  .l2-ask .a-tip{font-size:18.2px}
+  .campus2{max-height:max(364px, calc(100dvh - 429px));border-radius:13px}
+  .flag{font-size:max(20.8px,calc(var(--u)*7))}
+  .bldg{border-radius:7.8px}
+  .bldg .roof{gap:5.2px;padding:2.6px 5.2px;font-size:clamp(15.6px,calc(var(--u)*4.4),28.6px)}
+  .bldg .wall{font-size:clamp(20.8px,calc(var(--u)*8),52px)}
+  .bldg.field .wall{border-radius:52px}
+  .officer .o-tag{border-radius:7.8px;font-size:clamp(14.3px,calc(var(--u)*3.4),20.8px);padding:0 6.5px;margin-top:2.6px}
+  .big-check{font-size:182px;width:247px;height:247px}
+  .l3-wrap{grid-template-columns:195px 1fr;gap:18.2px}
+  .traffic{gap:20.8px;padding:18.2px 13px}
+  .lamp{width:109.2px;height:109.2px;border-radius:15.6px}
+  .q-card{padding:20.8px 23.4px;gap:13px}
+  .q-card .q-num{font-size:19.5px}
+  .q-card .q-unit{margin-left:7.8px;border-radius:128.7px;padding:1.3px 13px;font-size:18.2px}
+  .q-card .q-scene{font-size:59.8px;letter-spacing:7.8px}
+  .q-card .q-text{font-size:clamp(24.7px,4.8vw,33.8px)}
+  .answer-btns{gap:18.2px}
+  .answer-btns .px-btn{font-size:clamp(24.7px,4.8vw,33.8px);padding:23.4px 13px;border-radius:28.6px}
+  .feedback{padding:15.6px 20.8px;font-size:23.4px;gap:10.4px}
+  .feedback .fb-title{font-size:28.6px}
+  .shop-card .q-num{font-size:19.5px}
+  .shop-card .q-unit{margin-left:7.8px;border-radius:128.7px;padding:1.3px 13px;font-size:18.2px}
+  .adv-fig{max-width:676px}
+  .trap{border-radius:13px;padding:7.8px 13px}
+  .shop-card{padding:18.2px 20.8px;gap:10.4px}
+  .shop-card .q-scene{font-size:54.6px;letter-spacing:7.8px}
+  .shop-card .q-text{font-size:clamp(23.4px,4.6vw,31.2px)}
+  .shop-opts{gap:13px}
+  .shop-opts .px-btn{font-size:26px;padding:18.2px 20.8px}
+  .overlay{padding:18.2px}
+  .modal{width:min(100%,728px);max-height:calc(100dvh - 36.4px);padding:23.4px}
+  .modal .m-icon{font-size:72.8px}
+  .modal .m-icon svg{width:143px}
+  .modal h3{margin:7.8px 0;font-size:clamp(27.3px,5vw,35.1px)}
+  .modal .m-body{font-size:23.4px}
+  .modal .m-btns{gap:13px;margin-top:18.2px}
+  .modal .m-btns .px-btn{font-size:26px;padding:16.9px}
+  .stars-big{font-size:59.8px;letter-spacing:7.8px}
+  .result-card{padding:20.8px;gap:15.6px}
+  .result-card h2{font-size:clamp(31.2px,6vw,46.8px)}
+  .result-levels{gap:13px}
+  .result-levels div{border-radius:13px;padding:10.4px 5.2px;font-size:19.5px}
+  .result-levels b{font-size:28.6px;letter-spacing:2.6px}
+  .cat-talk{gap:13px}
+  .cat-talk svg{width:109.2px}
+  .cat-talk .bubble-static{border-radius:15.6px;padding:10.4px 15.6px;font-size:22.1px}
+  .notes{gap:15.6px}
+  .note-card{gap:7.8px;padding:18.2px 13px;font-size:23.4px}
+  .note-card .n-icon{font-size:54.6px}
+  .note-card small{font-size:16.9px}
+  .note-body{font-size:23.4px}
+  .note-body .flow{gap:7.8px;margin:10.4px 0 15.6px}
+  .note-body .flow span{border-radius:10.4px;padding:5.2px 13px}
+  .note-body .star-tip{border-radius:15.6px;padding:10.4px 15.6px;margin-top:10.4px}
+  .note-body ul{margin:7.8px 0}
+  .toast{bottom:calc(20.8px + env(safe-area-inset-bottom));width:min(92vw,676px);border-radius:15.6px;padding:13px 18.2px;font-size:22.1px}
+  .spark{width:15.6px;height:15.6px}
+}
+/* ===== 平板直式自動放大 結束 ===== */
 </style>
 </head>
 <body>

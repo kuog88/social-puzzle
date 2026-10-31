@@ -1,0 +1,103 @@
+/* =========================================================
+   社會科遊戲共用：手機與平板版面補強（載入在各遊戲 style.css 後面）
+   手機：上方工具列縮成一行、按鈕夠大好按、地圖與卡片在同一個畫面
+   平板：地圖依螢幕高度放大（文字放大在各 style.css 最後的「平板直式自動放大」區塊）
+   ========================================================= */
+
+/* ---------- 所有尺寸：不要左右多出空白、按鈕好按 ---------- */
+body{overflow-x:clip}
+.link-btn{padding:10px 12px;min-height:44px}
+.mute-btn{flex:0 0 auto}
+/* 四、五、六年級上學期：大廳傳送門不要撐破畫面 */
+.portals{grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr))}
+.portal{min-width:0}
+.portal .p-name,.portal .p-desc{overflow-wrap:anywhere}
+
+/* ---------- 臺灣地圖拼圖（五上 pinmap、五下 地圖連線）：地圖大小跟著螢幕高度 ---------- */
+.pinmap-wrap{grid-template-columns:auto minmax(0,1fr)}
+.pinmap{width:min(100%, calc((100dvh - 250px) * .75));min-width:240px;max-width:none;container-type:inline-size}
+.pin{z-index:2}
+/* 五上：圓形編號釘，依地圖寬度放大 */
+.pinmap .pin:has(> .pin-n){min-width:clamp(40px,11cqw,58px);height:clamp(40px,11cqw,58px);font-size:clamp(17px,4.6cqw,24px)}
+.pinmap .pin-tag{font-size:clamp(12px,3.6cqw,17px)}
+.pinmap .pin-tag .em{font-size:clamp(15px,4.4cqw,22px)}
+.pinmap .pin.over{transform:translate(-50%,-50%) scale(1.3);box-shadow:0 0 0 6px rgba(255,207,63,.7)}
+/* 五下：水滴形地圖釘 */
+.pinmap .pin:has(> span:not([class])){width:clamp(40px,11cqw,58px);height:clamp(40px,11cqw,58px);font-size:clamp(16px,4.4cqw,22px)}
+.pinmap .pin-label{font-size:clamp(12px,3.6cqw,17px)}
+
+/* ---------- 手機（寬 600 以下） ---------- */
+@media (max-width:600px){
+  /* 四、五、六年級上學期：工具列只留按鈕，標題看下面那一列就好 */
+  .topbar .title{display:none}
+  .topbar .grade-btn,.topbar .home-btn{font-size:14px;padding:8px 9px}
+  .topbar .mute-btn{margin-left:auto;width:44px;height:44px}
+  .level-head{padding:6px 10px}
+  .level-head h2{font-size:18px}
+  .ask{font-size:17px;padding:8px 10px}
+  .say-btn{padding:6px 8px}
+  .portals{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .portal{padding:10px 6px}
+  .portal .p-icon{font-size:42px}
+  .portal .p-name{font-size:17px}
+
+  /* 三下、四下、五下、六下：上方工具列縮成一行 */
+  .topbar{flex-wrap:nowrap;gap:6px;padding:6px 8px}
+  .topbar .back{flex:0 0 auto;font-size:14px;padding:8px 10px;min-height:44px;display:inline-flex;align-items:center}
+  .topbar small{font-size:12px}
+  .topbar .brand{flex:1 1 auto;min-width:0;gap:6px;flex-wrap:nowrap}
+  .topbar .brand .sub,.topbar .brand-sub{display:none}
+  .topbar .brand-text{min-width:0}
+  .topbar .brand h1,.topbar .brand-name{font-size:15px;margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .topbar .sem-tag{flex:0 0 auto;font-size:13px;padding:3px 7px;letter-spacing:0;animation:none}
+  .topbar .stamp-total,.topbar .fuel,.topbar .rating,.topbar .stamps{flex:0 0 auto;font-size:14px;padding:4px 8px}
+  .topbar .stamp-total .ico{font-size:16px}
+  .play-bar{flex-wrap:nowrap;gap:6px;margin:8px 0 6px}
+  .play-bar .btn{flex:0 0 auto;font-size:14px;padding:8px 10px;min-height:44px}
+  .play-bar .play-title,.play-bar .level-title{flex:1 1 auto;min-width:0;font-size:16px;line-height:1.35}
+  small{font-size:max(12px,.8em)}
+
+  .portal .p-stars{letter-spacing:0;font-size:18px}
+  .say-btn,.btn.speak{min-height:44px}
+
+  /* 拖曳分類：卡片排成兩欄、籃子縮小，卡片和籃子盡量在同一個畫面 */
+  .tray,.pool,.chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;padding:6px}
+  .tray > .chipcard,.tray > .card,.pool > .chip,.pool > .card,.chips > .chip{
+    font-size:14px;line-height:1.3;padding:6px 8px;min-height:44px;margin:0;max-width:none;
+    justify-content:flex-start;text-align:left;overflow-wrap:anywhere}
+  .tray > .chipcard .em,.pool > .card .e{font-size:18px}
+  .bin .chips{display:flex}
+  .bins{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:8px}
+  .bin{min-height:76px;padding:6px}
+  .bin h3,.bin h4,.bin .bh{font-size:16px}
+  .bin .bh .e{font-size:22px}
+
+  /* 地圖拼圖：地圖跟卡片要在同一個畫面裡 */
+  .pinmap-wrap{grid-template-columns:1fr;gap:8px}
+  .pinmap{width:min(100%, max(250px, calc((100dvh - 430px) * .75)));margin:0 auto}
+  .pinmap-wrap .tray{gap:8px;min-height:0}
+  .pinmap-wrap .chipcard,.pinmap-wrap .card{font-size:15px;padding:6px 10px}
+  .pinmap-wrap .chipcard .em{font-size:20px}
+}
+
+/* ---------- 平板直式：地圖放大、卡片放地圖下面 ---------- */
+@media (min-width:601px) and (orientation:portrait){
+  /* 拖曳分類：卡片排成兩欄，卡片和籃子在同一個畫面 */
+  .tray,.pool,.chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .tray > .chipcard,.tray > .card,.pool > .chip,.pool > .card,.chips > .chip{margin:0;max-width:none;justify-content:flex-start;text-align:left;overflow-wrap:anywhere}
+  .bin .chips{display:flex}
+  .pinmap-wrap{grid-template-columns:1fr}
+  .pinmap{width:min(100%, calc((100dvh - 560px) * .75));min-width:320px;margin:0 auto}
+}
+
+/* 平板直式且夠寬：地圖在左、卡片排成一欄在右，整關在同一個畫面 */
+@media (min-width:700px) and (orientation:portrait){
+  .pinmap-wrap{grid-template-columns:auto minmax(0,1fr);align-items:start}
+  .pinmap{width:min(60vw, calc((100dvh - 480px) * .75));margin:0}
+  .pinmap-wrap .tray{grid-template-columns:1fr}
+}
+
+/* ---------- 橫式（平板橫放、手機橫放）：地圖在左、卡片在右，地圖高度貼齊螢幕 ---------- */
+@media (orientation:landscape){
+  .pinmap{width:min(60vw, max(220px, calc((100dvh - 285px) * .75)))}
+}
