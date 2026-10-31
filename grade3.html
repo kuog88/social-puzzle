@@ -1246,7 +1246,7 @@ const Level3 = {
   show(){
     const q = L3_QUESTIONS[this.i]; this.answered = false;
     $('l3Prog').textContent = `第 ${this.i + 1} / ${L3_QUESTIONS.length} 題`; $('l3Score').textContent = `答對 ${this.correct} 題`;
-    $('l3Num').innerHTML = `情境 ${this.i + 1}<span class="q-unit">${L3_LABEL[q.unit]}</span>`; $('l3Scene').textContent = q.scene; $('l3Text').textContent = `「${q.text}」`;
+    $('l3Num').textContent = `情境 ${this.i + 1}`; $('l3Scene').textContent = q.scene; $('l3Text').textContent = `「${q.text}」`;
     $('lampRed').classList.remove('on'); $('lampGreen').classList.remove('on');
     $('l3Btns').hidden = false; $('l3Feedback').hidden = true;
   },
@@ -1268,7 +1268,7 @@ const Level3 = {
     Sound.win(); confetti();
     const v = await showModal({icon:'🚦', title:'三年級小公民 過關！', center:true,
       html:`<div class="stars-big">${starHTML(stars)}</div><p>${L3_QUESTIONS.length} 題答對 <b>${this.correct}</b> 題！學習、班級、家庭生活、健康成長，你都是小公民高手！</p>`,
-      buttons:[{label:'下一關：🎯 第一單元進階挑戰 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+      buttons:[{label:'下一關：🎯 進階挑戰 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(3, v);
   }
 };
@@ -1488,7 +1488,7 @@ const AdvLevel = {
     this.n = n; this.i = 0; this.miss = 0;
     const unit = ADV[n - 1];
     this.qs = unit.qs;
-    $('advTitle').textContent = `🎯 進階挑戰・第${'一二三四五'[n - 1]}單元 ${unit.name}`;
+    $('advTitle').textContent = '🎯 進階挑戰';
     $('advMiss').textContent = '答錯 0 題';
     $('advNext').onclick = () => { Sound.click(); this.i++; this.i < this.qs.length ? this.show() : this.finish(); };
     this.show();
@@ -1496,7 +1496,7 @@ const AdvLevel = {
   show(){
     const q = this.qs[this.i];
     $('advProg').textContent = `第 ${this.i + 1} / ${this.qs.length} 題`;
-    $('advNum').innerHTML = `考卷挑戰 ${this.i + 1}<span class="q-unit">${ADV[this.n - 1].icon} 第${'一二三四五'[this.n - 1]}單元</span>`;
+    $('advNum').textContent = `第 ${this.i + 1} 題`;
     $('advFig').innerHTML = q.fig ? FIG[q.fig]() : '';
     $('advText').textContent = q.q;
     $('advFb').hidden = true;
@@ -1523,9 +1523,9 @@ const AdvLevel = {
   async finish(){
     const n = this.n, stars = starsByMiss(this.miss); Store.set('a' + n, stars);
     Sound.win(); confetti();
-    const v = await showModal({icon:'🎯', title:`第${'一二三四五'[n - 1]}單元 進階挑戰完成！`, center:true,
+    const v = await showModal({icon:'🎯', title:'進階挑戰完成！', center:true,
       html:`<div class="stars-big">${starHTML(stars)}</div><p>5 題答對 <b>${5 - this.miss}</b> 題！考卷上的陷阱題難不倒你！</p>`,
-      buttons:[n < ADV.length ? {label:`下一個：第${'一二三四五'[n]}單元進階挑戰 ▶`, value:'next'} : {label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+      buttons:[n < ADV.length ? {label:'下一組進階挑戰 ▶', value:'next'} : {label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterAdv(n, v);
   }
 };

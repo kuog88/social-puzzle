@@ -131,7 +131,6 @@
     $("#stage").innerHTML = "";
     setProg(0, 1);
     show("play");
-    toast(lv.how);
     RUN[lv.type](lv);
     if (lv.time) startTimer(lv.time);
   }
