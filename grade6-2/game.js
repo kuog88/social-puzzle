@@ -101,9 +101,15 @@
     show('unit');
   }
 
+  /* ---------- 家長報表 ---------- */
+  function rep(ok, q, a, c) { window.KGReport && KGReport.answer(ok, { q: q, a: a, c: c }); }
+
   /* ---------- 關卡 ---------- */
   function startLevel(l) {
-    cur.level = l; cur.r = 0; cur.miss = 0;
+    cur.level = l; cur.r = 0; cur.miss = 0; cur.qRight = 0; cur.qTotal = 0;
+    var ui = DATA.indexOf(cur.unit);
+    window.KGReport && KGReport.level((ui + 1) + '-' + (cur.unit.levels.indexOf(l) + 1) + ' ' +
+      (/^進階挑戰/.test(l.name) ? '' : KIND[l.kind].replace(/^\S+\s+/, '') + '：') + l.name, '第 ' + (ui + 1) + ' 單元 ' + cur.unit.name);
     $('playTitle').textContent = l.icon + ' ' + l.name;
     show('play');
     renderRound();
@@ -157,6 +163,8 @@
       b.dataset.i = i;
       b.addEventListener('click', function () {
         var ok = i === rd.a;
+        cur.qTotal++; if (ok) cur.qRight++;
+        rep(ok, rd.q, rd.opts[i], rd.opts[rd.a]);
         btns.forEach(function (x) {
           x.disabled = true;
           if (+x.dataset.i === rd.a) x.classList.add('right');
@@ -223,7 +231,10 @@
       binEls[bn[0]] = c;
       bins.appendChild(b);
     });
+    function binName(id) { for (var k = 0; k < rd.bins.length; k++) if (rd.bins[k][0] === id) return rd.bins[k][1]; return id; }
     function place(chip, bin) {
+      rep(chip.dataset.bin === bin, '「' + chip.textContent + '」要放進哪個車廂？（' + rd.ask + '）',
+        '放到「' + binName(bin) + '」', '放到「' + binName(chip.dataset.bin) + '」');
       if (chip.dataset.bin !== bin) { miss(chip, '這張卡不屬於這個車廂，再想想！'); return; }
       chip.classList.remove('sel'); chip.classList.add('done');
       binEls[bin].appendChild(chip);
@@ -252,6 +263,8 @@
     var box = el('div', 'match');
     var colL = el('div', 'col'), colR = el('div', 'col');
     function tryPair(l, r) {
+      var pr = rd.pairs[+l.dataset.k];
+      rep(l.dataset.k === r.dataset.k, rd.ask + '（「' + pr[0] + '」配哪一個？）', '「' + pr[0] + '」配「' + r.textContent + '」', '「' + pr[0] + '」配「' + pr[1] + '」');
       if (l.dataset.k !== r.dataset.k) { miss(r, '配錯了，再試一次！'); return; }
       l.classList.remove('sel'); l.classList.add('done'); r.classList.add('done');
       r.textContent = l.textContent + ' → ' + r.textContent;
@@ -299,6 +312,7 @@
     });
     var pool = el('div', 'chips');
     function pick(c) {
+      rep(+c.dataset.i === next, rd.ask + '（第 ' + (next + 1) + ' 步）', '第 ' + (next + 1) + ' 步選「' + c.textContent + '」', '第 ' + (next + 1) + ' 步是「' + rd.items[next] + '」');
       if (+c.dataset.i !== next) { miss(c, '順序不對，想想哪一件先發生？'); return; }
       var s = slotEls[next];
       s.classList.add('filled');
@@ -324,6 +338,7 @@
     var l = cur.level;
     var s = cur.miss === 0 ? 3 : cur.miss <= 2 ? 2 : 1;
     if (s > (stars[l.id] || 0)) { stars[l.id] = s; save(); }
+    window.KGReport && KGReport.done(cur.qTotal ? { stars: s, right: cur.qRight, total: cur.qTotal } : { stars: s });
     updateTotal();
     $('progBar').style.width = '100%';
     $('mStars').textContent = '⭐'.repeat(s) + '☆'.repeat(3 - s);
