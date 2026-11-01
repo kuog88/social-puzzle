@@ -967,7 +967,8 @@ const Level1 = {
 
   drop(card){
     if (this.busy) return false;
-    const id = card.dataset.id;
+    const id = card.dataset.id, txt = k => L1_CARDS.find(c => c.id === k).text;
+    report(id === this.expected, `班會第 ${this.act + 1} 幕（角色說：「${($('scene').querySelector('.bubble') || {}).innerHTML || ''}」）要放哪一張程序卡？`, txt(id), txt(this.expected));
     if (id !== this.expected){
       this.miss++; $('l1Miss').textContent = `想錯 ${this.miss} 次`;
       Sound.shiver(); restartAnim(card, 'wrong'); restartAnim($('podiumSlot'), 'shake');
@@ -1011,6 +1012,7 @@ const Level1 = {
     while (true){
       const pick = await showModal({icon:'🧠', title:'小腦袋二選一', html:`<p style="font-size:20px">${question}</p>`,
         buttons: order.map((o, i) => ({label:o.label, value:i, cls: i ? 'wood' : ''}))});
+      report(!!order[pick].ok, question, order[pick].label, order.find(o => o.ok).label);
       if (order[pick].ok){ Sound.ding(); await showModal({icon:'⭕', title:'答對了！', html:why, buttons:[{label:'繼續演下一幕 ▶', value:true}]}); return; }
       this.miss++; $('l1Miss').textContent = `想錯 ${this.miss} 次`; Sound.shiver();
       await showModal({icon:'🤔', title:'再想想看喔！', html:'這個選項不太對，再選一次吧！', buttons:[{label:'我再試試', value:true, cls:'wood'}]});
@@ -1027,6 +1029,7 @@ const Level1 = {
     this.kids.forEach(k => k.classList.remove('bounce'));
     Object.values(this.chars).forEach(c => c.classList.remove('clap'));
     const stars = starsByMiss(this.miss); Store.set(1, stars);
+    window.KGReport && KGReport.done({ stars });
     await showModal({icon:Pix.medal(), title:'獲得「小小班會主席獎章」！', center:true,
       html:`<div class="stars-big">${starHTML(stars)}</div><p>你學會了班會程序：<br><b>宣布開會 ➔ 報告 ➔ 提案討論（附議、表決）➔ 臨時動議 ➔ 散會</b></p>`,
       buttons:[{label:'下一關：校園急救特派員 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]})
@@ -1141,6 +1144,8 @@ const Level2 = {
     Sound.unlock(); Sound.click();
     const ev = this.queue[this.done];
     if (id === 'class'){ toast('🏫 教室裡有好多幹部！請直接<b>點教室門口的幹部</b>喔。', 2600); return; }
+    const who = k => (L2_PLACES.find(p => p.id === k) || L2_OFFICERS.find(o => o.id === k)).name.replace(/^S+s/, '');
+    report(id === ev.ans, `小方：「${ev.text}」要去哪裡呢？`, who(id), who(ev.ans));
     if (id !== ev.ans){
       this.miss++; $('l2Miss').textContent = `想錯 ${this.miss} 次`;
       Sound.shiver(); restartAnim(el, 'shake');
@@ -1174,12 +1179,15 @@ const Level2 = {
   async finish(){
     Sound.win(); confetti();
     const stars = starsByMiss(this.miss); Store.set(2, stars);
+    window.KGReport && KGReport.done({ stars });
     const v = await showModal({icon:'🚑', title:'校園急救特派員 任務完成！', center:true,
       html:`<div class="stars-big">${starHTML(stars)}</div><p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>，東西壞了找<b>總務處</b>、課本考試問<b>教務處</b>！<br>校園裡還有工友、警衛、導護志工、護理師為我們服務，記得說謝謝！</p>`,
       buttons:[{label:'下一關：三年級小公民 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(2, v);
   }
 };
+/* 家長報表：每次作答記一次（沒有共用檔時略過） */
+function report(ok, q, a, c){ window.KGReport && KGReport.answer(ok, {q, a, c}); }
 function bigCheck(){ const d = document.createElement('div'); d.className = 'big-check'; d.textContent = '✔'; document.body.appendChild(d); setTimeout(() => d.remove(), 1100); }
 
 /* =========================================================
@@ -1253,6 +1261,8 @@ const Level3 = {
   answer(a){
     if (this.answered) return; this.answered = true;
     const q = L3_QUESTIONS[this.i], ok = a === q.ans;
+    const lamp = k => k === 'go' ? '🟢 這樣做很棒' : '🔴 這樣不行喔';
+    report(ok, `「${q.text}」這樣做對嗎？`, lamp(a), lamp(q.ans));
     $(q.ans === 'go' ? 'lampGreen' : 'lampRed').classList.add('on');
     if (ok){ this.correct++; Sound.ding(); } else { Sound.shiver(); restartAnim($('l3Btns'), 'shiver'); }
     $('l3Score').textContent = `答對 ${this.correct} 題`;
@@ -1265,6 +1275,7 @@ const Level3 = {
   },
   async finish(){
     const n = L3_QUESTIONS.length, stars = this.correct >= n - 1 ? 3 : this.correct >= Math.ceil(n * .6) ? 2 : 1; Store.set(3, stars);
+    window.KGReport && KGReport.done({ stars, right: this.correct, total: n });
     Sound.win(); confetti();
     const v = await showModal({icon:'🚦', title:'三年級小公民 過關！', center:true,
       html:`<div class="stars-big">${starHTML(stars)}</div><p>${L3_QUESTIONS.length} 題答對 <b>${this.correct}</b> 題！學習、班級、家庭生活、健康成長，你都是小公民高手！</p>`,
@@ -1511,6 +1522,7 @@ const AdvLevel = {
   },
   answer(o, btn){
     const q = this.qs[this.i];
+    report(o.ok, q.q, o.t, q.opts[q.a]);
     $('advOpts').querySelectorAll('button').forEach(b => { b.disabled = true; if (b.dataset.ok) b.classList.add('right'); });
     if (o.ok) Sound.ding();
     else { this.miss++; $('advMiss').textContent = `答錯 ${this.miss} 題`; Sound.shiver(); btn.classList.add('wrongpick'); restartAnim($('advOpts'), 'shiver'); }
@@ -1522,6 +1534,7 @@ const AdvLevel = {
   },
   async finish(){
     const n = this.n, stars = starsByMiss(this.miss); Store.set('a' + n, stars);
+    window.KGReport && KGReport.done({ stars, right: this.qs.length - this.miss, total: this.qs.length });
     Sound.win(); confetti();
     const v = await showModal({icon:'🎯', title:'進階挑戰完成！', center:true,
       html:`<div class="stars-big">${starHTML(stars)}</div><p>5 題答對 <b>${5 - this.miss}</b> 題！考卷上的陷阱題難不倒你！</p>`,
@@ -1621,9 +1634,16 @@ const App = {
   },
   startLevel(n){
     this.go('level' + n);
+    const LV = {1: ['關卡一 麥塊班會情境劇', '第 2 單元 校園規範和班級自治'], 2: ['關卡二 校園急救特派員', '第 3 單元 我的校園和家庭生活'], 3: ['關卡三 三年級小公民', '第 1～4 單元 綜合']}[n];
+    window.KGReport && KGReport.level(LV[0], LV[1]);
     ({1:Level1, 2:Level2, 3:Level3})[n].start();
   },
-  startAdv(n){ this.go('adv'); AdvLevel.start(n); },
+  startAdv(n){
+    this.go('adv');
+    const u = ADV[n - 1];
+    window.KGReport && KGReport.level(`${n}-🎯 進階挑戰：${u.name}`, `第 ${n} 單元 ${u.name}`);
+    AdvLevel.start(n);
+  },
   afterLevel(n, choice){
     if (choice === 'home') return this.go('lobby');
     if (n < 3) return this.startLevel(n + 1);
