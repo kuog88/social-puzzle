@@ -10,15 +10,24 @@ const $ = id => document.getElementById(id);
 const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 const stripTags = html => String(html).replace(/<[^>]*>/g, '');
 function restartAnim(el, cls){ el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
+/* 延遲事件集中管理：所有 setTimeout 都經過 later()，換畫面或離開關卡時 clearLater() 全部取消，
+   避免等待中的「過關」記到別的關卡或在單元頁跳出過關視窗。 */
+let laterIds = [];
+function later(fn, ms){ const id = setTimeout(() => { laterIds = laterIds.filter(x => x !== id); fn(); }, ms); laterIds.push(id); return id; }
+function clearLater(){
+  laterIds.forEach(clearTimeout); laterIds = [];
+  clearTimeout(toastTimer); $('toast').classList.remove('show');
+  document.querySelectorAll('.confetti, .big-check').forEach(el => el.remove());
+}
 let toastTimer;
 function toast(html, ms = 3200){ $('toast').innerHTML = html; $('toast').classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => $('toast').classList.remove('show'), ms); }
-function bigCheck(){ const d = document.createElement('div'); d.className = 'big-check'; d.textContent = '✔'; document.body.appendChild(d); setTimeout(() => d.remove(), 1100); }
+function bigCheck(){ const d = document.createElement('div'); d.className = 'big-check'; d.textContent = '✔'; document.body.appendChild(d); later(() => d.remove(), 1100); }
 function confetti(){
   const colors = ['#ff9800', '#ffcf3f', '#5dbb3f', '#3b82f6', '#e8433a', '#8e3bd1'];
   for (let i = 0; i < 60; i++){
     const c = document.createElement('div'); c.className = 'confetti';
     c.style.left = Math.random() * 100 + 'vw'; c.style.background = colors[i % colors.length];
-    c.style.animationDelay = Math.random() * .8 + 's'; document.body.appendChild(c); setTimeout(() => c.remove(), 3400);
+    c.style.animationDelay = Math.random() * .8 + 's'; document.body.appendChild(c); later(() => c.remove(), 3400);
   }
 }
 
@@ -71,7 +80,20 @@ const Store = {
   },
   clear(){ this.mem = {}; try { localStorage.removeItem(this.key); } catch(e){} }
 };
-const starsByMiss = miss => miss === 0 ? 3 : miss <= 2 ? 2 : 1;
+/* 星星規則（社會各年級統一，詳見 README）：題數＝要答對的題目／卡片數，答錯＝錯誤的嘗試次數
+   全對 3 顆；答錯 ≤ 題數的 1/4（至少容許 1 次）2 顆；答錯 ≤ 題數的一半 1 顆；再多就 0 顆，鼓勵再試 */
+function starsFor(miss, total){
+  total = Math.max(1, total);
+  if (miss === 0) return 3;
+  if (miss <= Math.max(1, Math.round(total / 4))) return 2;
+  return miss <= total / 2 ? 1 : 0;
+}
+function starVerdict(stars, miss){
+  return stars === 3 ? '全對！太厲害了！'
+    : stars === 2 ? `答錯 ${miss} 次，很棒！再細心一點就能拿到 3 顆星。`
+    : stars === 1 ? `答錯 ${miss} 次，過關了！再複習一下，可以拿到更多星星。`
+    : `答錯 ${miss} 次，這次還沒拿到星星。先看看下面的重點，再挑戰一次吧！💪`;
+}
 const starHTML = n => '<b>' + '★'.repeat(n) + '</b>' + '☆'.repeat(3 - n);
 const KIND = { hand: ['🖐️ 動手做', 'k-hand'], idea: ['💡 觀念題', 'k-idea'], boss: ['🔥 挑戰題', 'k-boss'], adv: ['🎯 進階挑戰', 'k-adv'] };
 
@@ -92,7 +114,8 @@ let curUnit = null, curLevel = null, timerId = null;
 function show(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
   $('homeBtn').hidden = id === 'lobby';
-  stopTimer(); if (window.speechSynthesis) speechSynthesis.cancel();
+  stopTimer(); clearLater(); $('overlay').classList.remove('open');
+  if (window.speechSynthesis) speechSynthesis.cancel();
   window.scrollTo(0, 0);
 }
 function unitStars(u){ const s = Store.get(); return u.levels.reduce((n, l) => n + (s[l.id] || 0), 0); }
@@ -132,7 +155,7 @@ let game = null;   // { level, miss, over }
 function startLevel(level){
   curLevel = level;
   show('play');
-  game = { level, miss: 0, over: false };
+  game = { level, miss: 0, right: 0, over: false };
   const ui = UNITS.indexOf(curUnit), li = curUnit.levels.indexOf(level);
   window.KGReport && KGReport.level(`${ui + 1}-${li + 1} ${level.name}`, `第 ${ui + 1} 單元 ${curUnit.name}`);
   $('lvTitle').textContent = `${level.icon} ${level.name}`;
@@ -148,7 +171,7 @@ function miss(tip){
   game.miss++; Sound.bad();
   if (tip) toast('🤔 ' + tip, 4200);
 }
-function good(){ Sound.ding(); }
+function good(){ if (game) game.right++; Sound.ding(); }
 // 家長報表：每次作答記一次（沒有共用檔時略過）
 function report(ok, q, a, c){ window.KGReport && KGReport.answer(ok, {q, a, c}); }
 
@@ -172,18 +195,18 @@ async function timeUp(){
 }
 
 async function finishLevel(){
-  if (game.over) return;
+  if (!game || game.over) return;
   game.over = true; stopTimer();
-  const stars = starsByMiss(game.miss);
+  const stars = starsFor(game.miss, game.right);
   Store.set(curLevel.id, stars);
   window.KGReport && KGReport.done({ stars });
-  Sound.win(); confetti();
+  if (stars) { Sound.win(); confetti(); } else Sound.bad();
   const idx = curUnit.levels.indexOf(curLevel), next = curUnit.levels[idx + 1];
   const btns = [{label: '🔁 再玩一次', value: 'again', cls: 'wood'}];
   if (next) btns.push({label: '▶ 下一關', value: 'next', cls: 'orange'});
   btns.push({label: '📋 回單元', value: 'unit', cls: 'stone'});
-  const v = await showModal({icon: '🎉', title: '過關！', center: true,
-    html: `<div class="m-stars">${starHTML(stars)}</div>${game.miss === 0 ? '全對！太厲害了！' : `答錯 ${game.miss} 次，${stars === 1 ? '多練習就能拿到 3 顆星！' : '很棒，再細心一點就是滿分！'}`}
+  const v = await showModal({icon: stars ? '🎉' : '💪', title: stars ? '過關！' : '再試一次！', center: true,
+    html: `<div class="m-stars">${starHTML(stars)}</div>${starVerdict(stars, game.miss)}
       ${curLevel.recap ? `<div class="explain" style="margin-top:10px;text-align:left">📌 ${curLevel.recap}</div>` : ''}`,
     buttons: btns});
   if (v === 'again') startLevel(curLevel);
@@ -249,7 +272,7 @@ const RENDER = {
         good(); card.classList.add('ok'); bin.querySelector('.bin-items').appendChild(card);
         restartAnim(bin, 'flash-ok'); done++; setProg(done, items.length);
         if (it.tip) toast('✅ ' + it.tip, 2600);
-        if (done === items.length) setTimeout(finishLevel, 600);
+        if (done === items.length) later(finishLevel, 600);
       } else {
         restartAnim(card, 'shake'); miss(it.hint || '再想想看，它應該放在別的地方喔！');
       }
@@ -362,7 +385,7 @@ const RENDER = {
     let ti = 0;
     const step = () => {
       if (game.over) return;
-      if (ti >= lv.tasks.length) return setTimeout(finishLevel, 400);
+      if (ti >= lv.tasks.length) return later(finishLevel, 400);
       const t = lv.tasks[ti]; setAsk(t.q); setProg(ti + 1, lv.tasks.length);
     };
     const PART = {title: '圖名', compass: '方位標', legend: '圖例', scale: '比例尺'};
