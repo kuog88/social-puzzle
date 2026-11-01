@@ -133,6 +133,8 @@ function startLevel(level){
   curLevel = level;
   show('play');
   game = { level, miss: 0, over: false };
+  const ui = UNITS.indexOf(curUnit), li = curUnit.levels.indexOf(level);
+  window.KGReport && KGReport.level(`${ui + 1}-${li + 1} ${level.name}`, `第 ${ui + 1} 單元 ${curUnit.name}`);
   $('lvTitle').textContent = `${level.icon} ${level.name}`;
   $('lvKind').textContent = KIND[level.kind][0]; $('lvKind').className = 'chip ' + KIND[level.kind][1];
   $('lvProg').textContent = '';
@@ -147,6 +149,8 @@ function miss(tip){
   if (tip) toast('🤔 ' + tip, 4200);
 }
 function good(){ Sound.ding(); }
+// 家長報表：每次作答記一次（沒有共用檔時略過）
+function report(ok, q, a, c){ window.KGReport && KGReport.answer(ok, {q, a, c}); }
 
 function startTimer(sec){
   let left = sec;
@@ -172,6 +176,7 @@ async function finishLevel(){
   game.over = true; stopTimer();
   const stars = starsByMiss(game.miss);
   Store.set(curLevel.id, stars);
+  window.KGReport && KGReport.done({ stars });
   Sound.win(); confetti();
   const idx = curUnit.levels.indexOf(curLevel), next = curUnit.levels[idx + 1];
   const btns = [{label: '🔁 再玩一次', value: 'again', cls: 'wood'}];
@@ -238,6 +243,8 @@ const RENDER = {
     const drop = (card, bin) => {
       const it = items[+card.dataset.i];
       if (selected){ selected.classList.remove('sel'); selected = null; }
+      const binName = id => (lv.bins.find(b => b.id === id) || {}).name;
+      report(it.bin === bin.dataset.b, `「${it.t}」要放到哪一區？（${stripTags(lv.ask)}）`, `把「${it.t}」放到「${binName(bin.dataset.b)}」`, `把「${it.t}」放到「${binName(it.bin)}」`);
       if (it.bin === bin.dataset.b){
         good(); card.classList.add('ok'); bin.querySelector('.bin-items').appendChild(card);
         restartAnim(bin, 'flash-ok'); done++; setProg(done, items.length);
@@ -275,6 +282,7 @@ const RENDER = {
       $('stage').querySelectorAll('.opt').forEach(b => b.addEventListener('click', () => {
         if (game.over) return;
         const o = opts[+b.dataset.i];
+        report(o.right, q.q, o.t, q.opts[0]);
         if (o.right){
           good(); bigCheck(); b.classList.add('right');
           $('stage').querySelectorAll('.opt').forEach(x => x.disabled = true);
@@ -303,6 +311,8 @@ const RENDER = {
       setProg(0, r.items.length);
       const tryPlace = card => {
         const i = +card.dataset.i;
+        const pos = r.labels ? `「${r.labels[next]}」` : `第 ${next + 1} 個`;
+        report(i === next, `${r.ask}（排${pos}）`, `${pos}放「${r.items[i].t}」`, `${pos}是「${r.items[next].t}」`);
         if (i === next){
           good(); const slot = $('slots').children[next * 2];
           slot.classList.add('filled'); slot.innerHTML = `<span class="em">${r.items[i].em}</span>${r.items[i].t}`;
@@ -347,6 +357,8 @@ const RENDER = {
         const it = r.items[+card.dataset.i];
         if (selected){ selected.classList.remove('sel'); selected = null; }
         if (pin.classList.contains('filled')) return;
+        const pinNo = id => '📍' + (r.pins.findIndex(p => p.id === id) + 1);
+        report(it.pin === pin.dataset.p, `${r.ask}（「${it.t}」在地圖上哪裡？）`, `把「${it.t}」放到${pinNo(pin.dataset.p)}`, `把「${it.t}」放到${pinNo(it.pin)}`);
         if (it.pin === pin.dataset.p){
           good(); pin.classList.add('filled'); pin.innerHTML = `<span class="pin-tag"><span class="em">${it.em}</span>${it.t}</span>`;
           restartAnim(pin, 'flash-ok'); card.remove(); done++; setProg(done, r.items.length);
@@ -419,9 +431,14 @@ const RENDER = {
       if (ti >= lv.tasks.length) return setTimeout(finishLevel, 400);
       const t = lv.tasks[ti]; setAsk(t.q); setProg(ti + 1, lv.tasks.length);
     };
+    const PART = {title: '圖名', compass: '方位標', legend: '圖例', scale: '比例尺'};
+    const cellName = (r, c) => `${(m.legend[m.grid[r][c]] || {}).name || '空地'}（第 ${r + 1} 列第 ${c + 1} 格）`;
     const judge = (ok, el) => {
       if (game.over || ti >= lv.tasks.length) return;
       const t = lv.tasks[ti];
+      const a = el.dataset.part ? PART[el.dataset.part] : cellName(+el.dataset.r, +el.dataset.c);
+      const c = t.part ? PART[t.part] : t.at ? cellName(t.at[0], t.at[1]) : (m.legend[t.ch] || {}).name;
+      report(ok, t.q, '點了' + a, c);
       if (ok){
         good(); restartAnim(el, 'flash-ok'); if (t.tip) toast('✅ ' + t.tip, 3000);
         ti++; step();
