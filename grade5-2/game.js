@@ -120,6 +120,9 @@
     show("unit");
   }
 
+  // ---------- 家長報表 ----------
+  function rep(ok, q, a, c) { window.KGReport && KGReport.answer(ok, { q: q, a: a, c: c }); }
+
   // ---------- 關卡共用 ----------
   var game = null;
   function startLevel(ui, li) {
@@ -130,6 +133,7 @@
     $("#playTitle").textContent = DATA[ui].ch + "｜" + lv.icon + " " + lv.name;
     $("#stage").innerHTML = "";
     setProg(0, 1);
+    window.KGReport && KGReport.level((ui + 1) + "-" + (li + 1) + " " + KIND[lv.kind] + "：" + lv.name, "第 " + (ui + 1) + " 單元 " + DATA[ui].name);
     show("play");
     RUN[lv.type](lv);
     if (lv.time) startTimer(lv.time);
@@ -163,6 +167,8 @@
     var n = starsByMistakes(game.mistakes, game.total || 1);
     var lv = game.lv;
     if (n > getStar(lv)) { stars[lv.id] = n; saveStars(); }
+    window.KGReport && KGReport.done(lv.type === "quiz" || lv.type === "fact" ?
+      { stars: n, right: game.total - game.mistakes, total: game.total } : { stars: n });
     $("#totalStars").textContent = totalStars();
     var msg = game.mistakes === 0 ? "零失誤，完美播報！" : "失誤 " + game.mistakes + " 次。";
     showResult(n, n === 3 ? "頭條新聞！" : "播報完成！", msg + (extra ? "<br>" + extra : ""));
@@ -267,6 +273,7 @@
       shuffle([q.a].concat(q.o)).forEach(function (o) {
         var b = el("button", "opt", esc(o)); b.type = "button";
         b.addEventListener("click", function () {
+          rep(o === q.a, q.q, o, q.a);
           if (o === q.a) {
             b.classList.add("ok"); beep(true);
             box.querySelectorAll(".opt").forEach(function (x) { x.disabled = true; });
@@ -301,6 +308,7 @@
         b.addEventListener("click", function () {
           row.querySelectorAll(".opt").forEach(function (x) { x.disabled = true; });
           var ok = p[0] === q.a;
+          rep(ok, "這則新聞正確嗎？" + q.s, p[0] ? "正確" : "錯誤", q.a ? "正確" : "錯誤");
           b.classList.add(ok ? "ok" : "no"); beep(ok);
           if (!ok) game.mistakes++;
           st.appendChild(whyBox((ok ? "答對了！" : "這則要再查證：") + q.why, !ok));
@@ -331,6 +339,7 @@
         var c = el("button", "card", esc(t)); c.type = "button";
         c.addEventListener("click", function () {
           if (game.over) return;
+          rep(t === r.items[next], r.ask + "（第 " + (next + 1) + " 個）", "第 " + (next + 1) + " 個選「" + t + "」", "第 " + (next + 1) + " 個是「" + r.items[next] + "」");
           if (t === r.items[next]) {
             beep(true);
             var s = slots.children[next]; s.classList.add("filled"); s.querySelector(".t").textContent = t;
@@ -365,9 +374,12 @@
       d.addEventListener("click", function () { if (sel.card) { tryDrop(sel.card, d); } });
       bins.appendChild(d);
     });
+    function binName(id) { for (var k = 0; k < lv.bins.length; k++) if (lv.bins[k].id === id) return lv.bins[k].t; return id; }
     function tryDrop(card, bin) {
       if (game.over) return;
       if (sel.card) { sel.card.classList.remove("sel"); sel.card = null; }
+      rep(card.dataset.bin === bin.dataset.bin, "「" + card.dataset.t + "」要歸到哪個資料夾？（" + lv.how + "）",
+        "放到「" + binName(bin.dataset.bin) + "」", "放到「" + binName(card.dataset.bin) + "」");
       if (card.dataset.bin === bin.dataset.bin) {
         beep(true); card.remove();
         var c = el("span", "card", esc(card.dataset.t)); bin.appendChild(c);
@@ -411,6 +423,8 @@
       b.addEventListener("click", function () {
         if (b.classList.contains("done") || game.over) return;
         if (!pickL) { toast("先點左邊的一項，再點右邊！"); return; }
+        var pr = lv.pairs.filter(function (x) { return x[0] === pickL.dataset.k; })[0];
+        rep(pickL.dataset.k === b.dataset.k, lv.how + "（「" + pr[0] + "」配哪一個？）", "「" + pr[0] + "」配「" + b.textContent + "」", "「" + pr[0] + "」配「" + pr[1] + "」");
         if (pickL.dataset.k === b.dataset.k) {
           beep(true);
           pickL.classList.remove("sel"); pickL.classList.add("done"); b.classList.add("done");
@@ -459,6 +473,9 @@
       function drop(card, pin) {
         if (game.over || pin.classList.contains("done")) return;
         if (sel.card) { sel.card.classList.remove("sel"); sel.card = null; }
+        var pinNo = function (id) { for (var k = 0; k < r.pins.length; k++) if (r.pins[k].id === id) return k + 1; return "?"; };
+        rep(card.dataset.pin === pin.dataset.p, r.ask + "（「" + card.dataset.t + "」在地圖上哪個位置？）",
+          "把「" + card.dataset.t + "」放到位置 " + pinNo(pin.dataset.p), "把「" + card.dataset.t + "」放到位置 " + pinNo(card.dataset.pin));
         if (card.dataset.pin === pin.dataset.p) {
           beep(true);
           pin.classList.add("done");
