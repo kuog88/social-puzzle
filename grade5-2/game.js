@@ -35,9 +35,29 @@
     var t = $("#toast"); t.textContent = msg; t.hidden = false;
     clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 1900);
   }
+  // 延遲事件集中管理：所有延遲都經過 later()，換畫面時 clearLater() 全部取消
+  var laterIds = [];
+  function later(fn, ms) {
+    var id = setTimeout(function () { laterIds = laterIds.filter(function (x) { return x !== id; }); fn(); }, ms);
+    laterIds.push(id); return id;
+  }
+  function clearLater() {
+    laterIds.forEach(clearTimeout); laterIds = [];
+    clearTimeout(toastTimer); $("#toast").hidden = true;
+  }
+  // 星星規則（社會各年級統一，詳見 README）：全對 3 顆；答錯 ≤ 題數 1/4（至少容許 1 次）2 顆；
+  // 答錯 ≤ 題數一半 1 顆；再多就 0 顆，鼓勵再試
   function starsByMistakes(m, total) {
+    total = Math.max(1, total);
     if (m === 0) return 3;
-    return m <= Math.max(1, Math.round(total * 0.25)) ? 2 : 1;
+    if (m <= Math.max(1, Math.round(total / 4))) return 2;
+    return m <= total / 2 ? 1 : 0;
+  }
+  function starVerdict(n, m) {
+    return n === 3 ? "零失誤，完美播報！"
+      : n === 2 ? "失誤 " + m + " 次，很棒！再細心一點就能拿到 3 顆星。"
+      : n === 1 ? "失誤 " + m + " 次，播報完成！再複習一下，可以拿到更多星星。"
+      : "失誤 " + m + " 次，這次還沒拿到星星。先看看記者小筆記，再挑戰一次吧！💪";
   }
 
   // ---------- 音效 ----------
@@ -71,6 +91,8 @@
   var curUnit = 0, curLevel = 0;
   function show(id) {
     ["home", "unit", "play"].forEach(function (s) { $("#" + s).hidden = s !== id; });
+    clearLater(); $("#modal").hidden = true;
+    if (id !== "play") { stopTimer(); if (game) game.over = true; }
     if ("speechSynthesis" in window) speechSynthesis.cancel();
     window.scrollTo(0, 0);
   }
@@ -157,7 +179,7 @@
   function timeUp() {
     if (!game || game.over) return;
     game.over = true;
-    showResult(0, "時間到！", "新聞截稿時間到了，再挑戰一次吧！");
+    showResult(-1, "時間到！", "新聞截稿時間到了，再挑戰一次吧！");
   }
 
   function finishLevel(extra) {
@@ -170,20 +192,20 @@
     window.KGReport && KGReport.done(lv.type === "quiz" || lv.type === "fact" ?
       { stars: n, right: game.total - game.mistakes, total: game.total } : { stars: n });
     $("#totalStars").textContent = totalStars();
-    var msg = game.mistakes === 0 ? "零失誤，完美播報！" : "失誤 " + game.mistakes + " 次。";
-    showResult(n, n === 3 ? "頭條新聞！" : "播報完成！", msg + (extra ? "<br>" + extra : ""));
+    var msg = starVerdict(n, game.mistakes);
+    showResult(n, n === 3 ? "頭條新聞！" : n > 0 ? "播報完成！" : "再試一次！", msg + (extra ? "<br>" + extra : ""));
   }
 
   function showResult(n, title, text) {
-    $("#mStars").textContent = n ? starText(n) : "📺";
+    $("#mStars").textContent = n < 0 ? "📺" : starText(n);
     $("#mTitle").textContent = title;
     $("#mText").innerHTML = text;
     var u = DATA[curUnit];
     var hasNext = curLevel + 1 < u.levels.length || curUnit + 1 < DATA.length;
-    $("#mNext").hidden = !hasNext || n === 0;
+    $("#mNext").hidden = !hasNext || n < 0;
     $("#mNext").textContent = curLevel + 1 < u.levels.length ? "下一則 →" : "下一個頻道 →";
     $("#modal").hidden = false;
-    if (n) beep(true);
+    if (n > 0) beep(true);
   }
   $("#mAgain").addEventListener("click", function () { $("#modal").hidden = true; startLevel(curUnit, curLevel); });
   $("#mNext").addEventListener("click", function () {
