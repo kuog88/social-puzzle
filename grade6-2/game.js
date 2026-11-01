@@ -43,8 +43,19 @@
 
   /* ---------- 畫面切換 ---------- */
   var cur = { unit: null, level: null, r: 0, miss: 0 };
+  // 延遲事件集中管理：所有延遲都經過 later()，換畫面時 clearLater() 全部取消
+  var laterIds = [];
+  function later(fn, ms) {
+    var id = setTimeout(function () { laterIds = laterIds.filter(function (x) { return x !== id; }); fn(); }, ms);
+    laterIds.push(id); return id;
+  }
+  function clearLater() {
+    laterIds.forEach(clearTimeout); laterIds = [];
+    $('toast').hidden = true;
+  }
   function show(id) {
     ['home', 'unit', 'play'].forEach(function (s) { $(s).hidden = s !== id; });
+    clearLater(); $('modal').hidden = true;
     window.scrollTo(0, 0);
     if (window.speechSynthesis) speechSynthesis.cancel();
   }
@@ -52,7 +63,7 @@
     var t = $('toast');
     t.textContent = msg; t.hidden = false;
     clearTimeout(toast.tm);
-    toast.tm = setTimeout(function () { t.hidden = true; }, 2200);
+    toast.tm = later(function () { t.hidden = true; }, 2200);
   }
 
   /* ---------- 首頁：路線圖 ---------- */
@@ -107,6 +118,8 @@
   /* ---------- 關卡 ---------- */
   function startLevel(l) {
     cur.level = l; cur.r = 0; cur.miss = 0; cur.qRight = 0; cur.qTotal = 0;
+    // 題數：選擇題 1 題算 1，分類／配對／排序每張卡算 1（星星規則用）
+    cur.total = l.rounds.reduce(function (n, rd) { return n + (rd.type === 'quiz' ? 1 : (rd.items || rd.pairs).length); }, 0);
     var ui = DATA.indexOf(cur.unit);
     window.KGReport && KGReport.level((ui + 1) + '-' + (cur.unit.levels.indexOf(l) + 1) + ' ' +
       (/^進階挑戰/.test(l.name) ? '' : KIND[l.kind].replace(/^\S+\s+/, '') + '：') + l.name, '第 ' + (ui + 1) + ' 單元 ' + cur.unit.name);
@@ -334,18 +347,31 @@
   }
 
   /* ---------- 結算 ---------- */
+  // 星星規則（社會各年級統一，詳見 README）：全對 3 顆；答錯 ≤ 題數 1/4（至少容許 1 次）2 顆；
+  // 答錯 ≤ 題數一半 1 顆；再多就 0 顆，鼓勵再試
+  function starsFor(m, total) {
+    total = Math.max(1, total);
+    if (m === 0) return 3;
+    if (m <= Math.max(1, Math.round(total / 4))) return 2;
+    return m <= total / 2 ? 1 : 0;
+  }
+  function starVerdict(n, m) {
+    return n === 3 ? '全對！太厲害了！'
+      : n === 2 ? '答錯 ' + m + ' 次，很棒！再細心一點就能拿到 3 顆星。'
+      : n === 1 ? '答錯 ' + m + ' 次，過關了！再複習一下，可以拿到更多星星。'
+      : '答錯 ' + m + ' 次，這次還沒拿到星星。先看看詳解，再挑戰一次吧！💪';
+  }
   function finish() {
     var l = cur.level;
-    var s = cur.miss === 0 ? 3 : cur.miss <= 2 ? 2 : 1;
+    var s = starsFor(cur.miss, cur.total);
     if (s > (stars[l.id] || 0)) { stars[l.id] = s; save(); }
     window.KGReport && KGReport.done(cur.qTotal ? { stars: s, right: cur.qRight, total: cur.qTotal } : { stars: s });
     updateTotal();
     $('progBar').style.width = '100%';
     $('mStars').textContent = '⭐'.repeat(s) + '☆'.repeat(3 - s);
-    $('mTitle').textContent = s === 3 ? '全對抵達！' : s === 2 ? '順利抵達！' : '抵達車站！';
+    $('mTitle').textContent = s === 3 ? '全對抵達！' : s === 2 ? '順利抵達！' : s === 1 ? '抵達車站！' : '再試一次！';
     var all = allLevels(), done = all.every(function (x) { return stars[x.id]; });
-    $('mText').textContent = '答錯 ' + cur.miss + ' 次。' +
-      (s < 3 ? '全對可以拿到 3 顆星，再挑戰一次吧！' : '太厲害了！') +
+    $('mText').textContent = starVerdict(s, cur.miss) +
       (done ? ' 🎉 所有車站都跑完了，你是合格的世界公民！' : '');
     var idx = cur.unit.levels.indexOf(l);
     var nextL = cur.unit.levels[idx + 1];
