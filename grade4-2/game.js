@@ -35,9 +35,29 @@
     var t = $("#toast"); t.textContent = msg; t.hidden = false;
     clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 1900);
   }
+  // 延遲事件集中管理：延遲的過關都經過 later()，換畫面時 clearLater() 全部取消，避免記到別的任務
+  var laterIds = [];
+  function later(fn, ms) {
+    var id = setTimeout(function () { laterIds = laterIds.filter(function (x) { return x !== id; }); fn(); }, ms);
+    laterIds.push(id); return id;
+  }
+  function clearLater() {
+    laterIds.forEach(clearTimeout); laterIds = [];
+    clearTimeout(toastTimer); $("#toast").hidden = true;
+  }
+  // 星星規則（社會各年級統一，詳見 README）：全對 3 顆；答錯 ≤ 題數 1/4（至少容許 1 次）2 顆；
+  // 答錯 ≤ 題數一半 1 顆；再多就 0 顆，鼓勵再試
   function starsByMistakes(m, total) {
+    total = Math.max(1, total);
     if (m === 0) return 3;
-    return m <= Math.max(1, Math.round(total * 0.25)) ? 2 : 1;
+    if (m <= Math.max(1, Math.round(total / 4))) return 2;
+    return m <= total / 2 ? 1 : 0;
+  }
+  function starVerdict(n, m) {
+    return n === 3 ? "全對！太厲害了！"
+      : n === 2 ? "答錯 " + m + " 次，很棒！再細心一點就能拿到 3 顆星。"
+      : n === 1 ? "答錯 " + m + " 次，過關了！再複習一下，可以拿到更多星星。"
+      : "答錯 " + m + " 次，這次還沒拿到星星。先看看重點，再挑戰一次吧！💪";
   }
 
   // ---------- 音效 ----------
@@ -76,6 +96,8 @@
   var curUnit = 0, curLevel = 0;
   function show(id) {
     ["home", "unit", "play"].forEach(function (s) { $("#" + s).hidden = s !== id; });
+    clearLater(); $("#modal").hidden = true;
+    if (id !== "play") stopTimer();
     if ("speechSynthesis" in window) speechSynthesis.cancel();
     window.scrollTo(0, 0);
   }
@@ -155,7 +177,7 @@
     setProg(0, 1);
     window.KGReport && KGReport.level((i + 1) + "-" + (j + 1) + " " + (/^挑戰/.test(lv.title) ? "" : KIND[lv.kind] + "：") + lv.title, "第 " + (i + 1) + " 單元 " + DATA[i].name);
     var stage = $("#stage"); stage.innerHTML = "";
-    stopTimer();
+    stopTimer(); overTime = false;
     if (lv.time) startTimer(lv.time);
     show("play");
     ({ sort: playSort, order: playOrder, quiz: playQuiz })[lv.type](lv, stage);
@@ -169,13 +191,13 @@
     window.KGReport && KGReport.done(lv.type === "quiz" ? { stars: s, right: total - mistakes, total: total } : { stars: s });
     updateStarBar();
     $("#mStars").textContent = starText(s);
-    $("#mTitle").textContent = s === 3 ? "完美航行！" : s === 2 ? "順利抵達！" : "完成任務！";
-    $("#mText").textContent = (lv.done ? lv.done + " " : "") + "（答錯 " + mistakes + " 次）";
+    $("#mTitle").textContent = s === 3 ? "完美航行！" : s === 2 ? "順利抵達！" : s === 1 ? "完成任務！" : "再試一次！";
+    $("#mText").textContent = (overTime && mistakes === 0 ? "全部答對，但超過時間，最多 2 顆星。" : starVerdict(s, mistakes)) + (lv.done ? " " + lv.done : "");
     var u = DATA[curUnit];
     var hasNext = curLevel + 1 < u.levels.length || curUnit + 1 < DATA.length;
     $("#mNext").textContent = curLevel + 1 < u.levels.length ? "下一個任務 →" : (hasNext ? "飛往下一站 →" : "回航線圖");
     $("#modal").hidden = false;
-    beep(true);
+    beep(s > 0);
   }
   $("#mAgain").addEventListener("click", function () { $("#modal").hidden = true; startLevel(curUnit, curLevel); });
   $("#mNext").addEventListener("click", function () {
@@ -224,7 +246,7 @@
         flash(c, "pop"); beep(true);
         selected = null; placed++;
         setProg(placed, total);
-        if (placed === total) setTimeout(function () { finish(lv, mistakes, total); }, 450);
+        if (placed === total) later(function () { finish(lv, mistakes, total); }, 450);
       } else {
         mistakes++; beep(false);
         flash(binEls[k], "shake");
@@ -300,7 +322,7 @@
           flash(slotEls[next], "pop");
           c.remove(); beep(true); next++;
           setProg(next, total);
-          if (next === total) setTimeout(function () { finish(lv, mistakes, total); }, 450);
+          if (next === total) later(function () { finish(lv, mistakes, total); }, 450);
         } else {
           mistakes++; beep(false); flash(c, "shake");
           toast("順序不對喔！想想第 " + (next + 1) + " 步應該先做什麼？");
