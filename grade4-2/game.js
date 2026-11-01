@@ -143,6 +143,9 @@
 
   $("#quitBtn").addEventListener("click", function () { stopTimer(); openUnit(curUnit); });
 
+  // ---------- 家長報表 ----------
+  function rep(ok, q, a, c) { window.KGReport && KGReport.answer(ok, { q: q, a: a, c: c }); }
+
   // ---------- 關卡 ----------
   function startLevel(i, j) {
     curUnit = i; curLevel = j;
@@ -150,6 +153,7 @@
     $("#playTitle").textContent = "第" + (i + 1) + "站・任務 " + (j + 1) + "：" + lv.title;
     setAsk(lv.ask);
     setProg(0, 1);
+    window.KGReport && KGReport.level((i + 1) + "-" + (j + 1) + " " + (/^挑戰/.test(lv.title) ? "" : KIND[lv.kind] + "：") + lv.title, "第 " + (i + 1) + " 單元 " + DATA[i].name);
     var stage = $("#stage"); stage.innerHTML = "";
     stopTimer();
     if (lv.time) startTimer(lv.time);
@@ -162,6 +166,7 @@
     var s = starsByMistakes(mistakes, total);
     if (overTime && s > 2) s = 2;
     if (s > getStar(lv.id)) { stars[lv.id] = s; saveStars(); }
+    window.KGReport && KGReport.done(lv.type === "quiz" ? { stars: s, right: total - mistakes, total: total } : { stars: s });
     updateStarBar();
     $("#mStars").textContent = starText(s);
     $("#mTitle").textContent = s === 3 ? "完美航行！" : s === 2 ? "順利抵達！" : "完成任務！";
@@ -210,7 +215,9 @@
       selected = selected === c ? null : c;
       if (selected) selected.classList.add("sel");
     }
+    function binLabel(k) { for (var n = 0; n < lv.bins.length; n++) if (lv.bins[n].k === k) return lv.bins[n].label; return k; }
     function tryPlace(c, k) {
+      rep(c.dataset.b === k, "「" + c.textContent + "」要放到哪一區？（" + lv.ask + "）", "放到「" + binLabel(k) + "」", "放到「" + binLabel(c.dataset.b) + "」");
       if (c.dataset.b === k) {
         c.classList.remove("sel", "dragging"); c.classList.add("ok");
         binEls[k].querySelector(".in").appendChild(c);
@@ -286,6 +293,7 @@
       var c = el("button", "chip", esc(it.t));
       c.type = "button";
       c.addEventListener("click", function () {
+        rep(it.i === next, lv.ask + "（第 " + (next + 1) + " 步）", "第 " + (next + 1) + " 步選「" + it.t + "」", "第 " + (next + 1) + " 步是「" + lv.items[next] + "」");
         if (it.i === next) {
           slotEls[next].classList.add("filled");
           slotEls[next].querySelector("span").textContent = it.t;
@@ -360,6 +368,7 @@
         b.type = "button";
         b.addEventListener("click", function () {
           if (solved || b.classList.contains("wrong")) return;
+          rep(oi === q.a, (lv.chart ? "（看統計圖）" : "") + q.q, q.opts[oi], q.opts[q.a]);
           if (oi === q.a) {
             solved = true; b.classList.add("right"); beep(true);
             stage.appendChild(el("div", "why", "💡 " + esc(q.why)));
