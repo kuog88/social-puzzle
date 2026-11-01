@@ -33,8 +33,32 @@
     var t = $("#toast"); t.textContent = msg; t.hidden = false;
     clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.hidden = true; }, 1800);
   }
-  function starsByMistakes(m, ok2) { return m === 0 ? 3 : (m <= ok2 ? 2 : 1); }
-  function starsByRatio(r) { return r >= 0.9 ? 3 : (r >= 0.7 ? 2 : 1); }
+  // 延遲事件集中管理：所有延遲都經過 later()，換畫面時 clearLater() 全部取消，避免記到別的信件
+  var laterIds = [];
+  function later(fn, ms) {
+    var id = setTimeout(function () { laterIds = laterIds.filter(function (x) { return x !== id; }); fn(); }, ms);
+    laterIds.push(id); return id;
+  }
+  function clearLater() {
+    laterIds.forEach(clearTimeout); laterIds = [];
+    clearTimeout(toastTimer); $("#toast").hidden = true;
+  }
+  // 星星規則（社會各年級統一，詳見 README）：全對 3 顆；答錯 ≤ 題數 1/4（至少容許 1 次）2 顆；
+  // 答錯 ≤ 題數一半 1 顆；再多就 0 顆，鼓勵再試
+  function starsFor(m, total) {
+    total = Math.max(1, total);
+    if (m === 0) return 3;
+    if (m <= Math.max(1, Math.round(total / 4))) return 2;
+    return m <= total / 2 ? 1 : 0;
+  }
+  function starVerdict(n, m) {
+    return n === 3 ? "全對！太厲害了！"
+      : n === 2 ? "答錯 " + m + " 次，很棒！再細心一點就能拿到 3 顆星。"
+      : n === 1 ? "答錯 " + m + " 次，過關了！再複習一下，可以拿到更多星星。"
+      : "答錯 " + m + " 次，這次還沒拿到星星。先看看說明，再挑戰一次吧！💪";
+  }
+  // 依答錯次數與題數結算：done(星數, 評語＋補充說明)
+  function doneBy(done, m, total, text) { var n = starsFor(m, total); done(n, starVerdict(n, m) + (text ? " " + text : "")); }
 
   // ---------- 朗讀 ----------
   var speakText = "";
@@ -51,6 +75,7 @@
   var curUnit = 0, curLevel = 0;
   function show(id) {
     ["home", "unit", "play"].forEach(function (s) { $("#" + s).hidden = s !== id; });
+    clearLater(); $("#modal").hidden = true;
     if ("speechSynthesis" in window) speechSynthesis.cancel();
     window.scrollTo(0, 0);
   }
@@ -117,7 +142,7 @@
     window.KGReport && KGReport.done(rd);
     setProg(1);
     $("#mStamp").textContent = starText(n);
-    $("#mTitle").textContent = n === 3 ? "完美送達！" : (n === 2 ? "順利送達！" : "送到了，再接再厲！");
+    $("#mTitle").textContent = n === 3 ? "完美送達！" : n === 2 ? "順利送達！" : n === 1 ? "送到了，再接再厲！" : "再試一次！";
     $("#mText").textContent = text || "";
     var last = curUnit === DATA.length - 1 && curLevel === DATA[curUnit].levels.length - 1;
     $("#mNext").textContent = last ? "回小鎮地圖" : "下一封信 →";
@@ -200,8 +225,8 @@
       if (c._item.bin === bin.dataset.id) {
         bin.appendChild(c); flash(c, "pop"); placed++;
         setProg(placed / items.length);
-        if (placed === items.length) setTimeout(function () {
-          done(starsByMistakes(mistakes, 2), lv.tip || "");
+        if (placed === items.length) later(function () {
+          doneBy(done, mistakes, items.length, lv.tip || "");
         }, 500);
       } else {
         mistakes++; flash(c, "shake"); toast("再想一想喔！");
@@ -213,7 +238,7 @@
   RENDER.quiz = function (stage, lv, done) {
     var qs = shuffle(lv.qs), i = 0, right = 0;
     function next() {
-      if (i >= qs.length) { repTally = { right: right, total: qs.length }; done(starsByRatio(right / qs.length), "答對 " + right + " / " + qs.length + " 題"); return; }
+      if (i >= qs.length) { repTally = { right: right, total: qs.length }; doneBy(done, qs.length - right, qs.length, "（答對 " + right + " / " + qs.length + " 題）"); return; }
       var q = qs[i], ans = q.o[0], opts = shuffle(q.o);
       speakText = q.q + "。" + opts.map(function (o, k) { return "選項" + (k + 1) + "，" + o; }).join("。");
       stage.innerHTML = '<div class="q-num">第 ' + (i + 1) + ' / ' + qs.length + ' 題</div><h3 class="prompt">' + esc(q.q) + '</h3>';
@@ -244,7 +269,7 @@
     lv.rounds.forEach(function (x) { total += x.steps.length; });
     var filledAll = 0;
     function round() {
-      if (r >= lv.rounds.length) { done(starsByMistakes(mistakes, 3), "全部排對了！"); return; }
+      if (r >= lv.rounds.length) { doneBy(done, mistakes, total, "全部排對了！"); return; }
       var rd = lv.rounds[r], k = 0, choices = shuffle(rd.steps);
       if (choices.join() === rd.steps.join()) choices.reverse();
       speakText = rd.prompt;
@@ -260,7 +285,7 @@
           if (s === rd.steps[k]) {
             var sl = slots.children[k]; sl.textContent = s; sl.classList.add("filled"); flash(sl, "pop");
             c.remove(); k++; filledAll++; setProg(filledAll / total);
-            if (k === rd.steps.length) { r++; setTimeout(round, 700); }
+            if (k === rd.steps.length) { r++; later(round, 700); }
           } else { mistakes++; flash(c, "shake"); toast("順序不對，再想想！"); }
         });
         box.appendChild(c);
@@ -274,7 +299,7 @@
     var r = 0, mistakes = 0, total = 0, doneAll = 0;
     lv.rounds.forEach(function (x) { total += x.pairs.length; });
     function round() {
-      if (r >= lv.rounds.length) { done(starsByMistakes(mistakes, 3), "全部配對成功！"); return; }
+      if (r >= lv.rounds.length) { doneBy(done, mistakes, total, "全部配對成功！"); return; }
       var rd = lv.rounds[r], left = shuffle(rd.pairs), right = shuffle(rd.pairs), sel = null, got = 0;
       speakText = rd.prompt;
       stage.innerHTML = '<div class="q-num">第 ' + (r + 1) + ' / ' + lv.rounds.length + ' 回</div><h3 class="prompt">🔗 ' + esc(rd.prompt) +
@@ -296,7 +321,7 @@
           if (sel._p === p) {
             sel.classList.remove("sel"); sel.classList.add("done"); c.classList.add("done"); flash(c, "pop");
             sel = null; got++; doneAll++; setProg(doneAll / total);
-            if (got === rd.pairs.length) { r++; setTimeout(round, 700); }
+            if (got === rd.pairs.length) { r++; later(round, 700); }
           } else {
             mistakes++; flash(c, "shake"); toast("配錯了，再試一次！");
             sel.classList.remove("sel"); sel = null;
@@ -320,7 +345,7 @@
       return shuffle(out);
     }
     function next() {
-      if (i >= rs.length) { repTally = { right: right, total: rs.length }; done(starsByRatio(right / rs.length), "答對 " + right + " / " + rs.length + " 題。" + (lv.tip || "")); return; }
+      if (i >= rs.length) { repTally = { right: right, total: rs.length }; doneBy(done, rs.length - right, rs.length, "（答對 " + right + " / " + rs.length + " 題）" + (lv.tip || "")); return; }
       var q = rs[i];
       speakText = lv.intro + q.q;
       stage.innerHTML = '<div class="q-num">第 ' + (i + 1) + ' / ' + rs.length + ' 題</div><p class="hint">' + esc(lv.intro) + '</p>';
@@ -376,7 +401,7 @@
         b.classList.add("found"); flash(b, "pop"); foundAll++; setProg(foundAll / total);
         if (need() === 0) {
           r++;
-          if (r >= lv.rounds.length) { setTimeout(function () { done(starsByMistakes(mistakes, 3), lv.tip || ""); }, 500); return; }
+          if (r >= lv.rounds.length) { later(function () { doneBy(done, mistakes, total, lv.tip || ""); }, 500); return; }
           toast("找齊了！下一回");
         }
         ask();

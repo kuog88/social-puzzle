@@ -635,7 +635,16 @@ svg.pix{shape-rendering:crispEdges;display:block}
    A. 小工具
    ========================================================= */
 const $ = id => document.getElementById(id);
-const wait = ms => new Promise(r => setTimeout(r, ms));
+/* 延遲事件集中管理：所有 setTimeout / setInterval / wait() 都登記在 timers，
+   App.go() 換畫面時 cancelLater() 全部取消；被取消的 wait() 永遠不會結束，後面的過關、記星星也就不會執行。 */
+const timers = new Set(); let waitGen = 0;
+function later(fn, ms){ const id = setTimeout(() => { timers.delete(id); fn(); }, ms); timers.add(id); return id; }
+function every(fn, ms){ const id = setInterval(fn, ms); timers.add(id); return id; }
+function cancelLater(){
+  waitGen++; timers.forEach(id => { clearTimeout(id); clearInterval(id); }); timers.clear();
+  document.querySelectorAll('.spark, body > .big-check').forEach(el => el.remove());
+}
+const wait = ms => { const g = waitGen; return new Promise(r => later(() => { if (g === waitGen) r(); }, ms)); };
 const shuffle = arr => { const a = [...arr]; for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
 function restartAnim(el, cls){ el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); }
 let toastTimer;
@@ -752,7 +761,22 @@ const Store = {
   },
   allCleared(){ const s = this.get(); return [1, 2, 3, 'a1', 'a2', 'a3', 'a4', 'a5'].every(l => (s[l] || 0) > 0); }
 };
-const starsByMiss = miss => miss === 0 ? 3 : miss <= 2 ? 2 : 1;
+/* 星星規則（社會各年級統一）：題數＝要答對的步驟／題目數，答錯＝錯誤的嘗試次數
+   全對 3 顆；答錯 ≤ 題數的 1/4（至少容許 1 次）2 顆；答錯 ≤ 題數的一半 1 顆；再多就 0 顆，鼓勵再試 */
+function starsFor(miss, total){
+  total = Math.max(1, total);
+  if (miss === 0) return 3;
+  if (miss <= Math.max(1, Math.round(total / 4))) return 2;
+  return miss <= total / 2 ? 1 : 0;
+}
+function starVerdict(stars, miss){
+  return stars === 3 ? '全對！太厲害了！'
+    : stars === 2 ? `答錯 ${miss} 次，很棒！再細心一點就能拿到 3 顆星。`
+    : stars === 1 ? `答錯 ${miss} 次，過關了！再複習一下，可以拿到更多星星。`
+    : `答錯 ${miss} 次，這次還沒拿到星星。看看下面的重點，再挑戰一次吧！💪`;
+}
+/* 結算彈窗的共用開頭：星星＋依表現的評語 */
+const resultHead = (stars, miss) => `<div class="stars-big">${starHTML(stars)}</div><p><b>${starVerdict(stars, miss)}</b></p>`;
 const starHTML = n => '<b>' + '★'.repeat(n) + '</b>' + '☆'.repeat(3 - n);
 
 /* =========================================================
@@ -882,7 +906,7 @@ const Level1 = {
     const from = parseFloat(ch.style.left);
     ch.classList.toggle('face-left', spot.x < from);
     ch.classList.add('walking');
-    const steps = setInterval(() => Sound.step(), 360);
+    const steps = every(() => Sound.step(), 360);
     ch.style.left = spot.x + '%'; ch.style.top = spot.y + '%';
     await wait(1450);
     clearInterval(steps); ch.classList.remove('walking', 'face-left');
@@ -947,7 +971,7 @@ const Level1 = {
       await this.walk(chair, SPOT.podium);
       this.say(chair, '贊成買新足球的請舉手！');
       await wait(900);
-      [0, 1, 2, 4, 5, 6, 7].forEach((n, j) => setTimeout(() => this.kids[n].insertAdjacentHTML('beforeend', '<span class="hand">✋</span>'), j * 120));
+      [0, 1, 2, 4, 5, 6, 7].forEach((n, j) => later(() => this.kids[n].insertAdjacentHTML('beforeend', '<span class="hand">✋</span>'), j * 120));
       await wait(1100);
       this.renderBoard('<div class="b-vote b-item"><span class="yes">贊成 18 票 正正正丅</span><span class="no">反對 7 票 正丅</span></div>');
       this.expected = 'vote';
@@ -1028,10 +1052,10 @@ const Level1 = {
     await wait(2200);
     this.kids.forEach(k => k.classList.remove('bounce'));
     Object.values(this.chars).forEach(c => c.classList.remove('clap'));
-    const stars = starsByMiss(this.miss); Store.set(1, stars);
+    const stars = starsFor(this.miss, L1_CARDS.length + 2); Store.set(1, stars);
     window.KGReport && KGReport.done({ stars });
     await showModal({icon:Pix.medal(), title:'獲得「小小班會主席獎章」！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>你學會了班會程序：<br><b>宣布開會 ➔ 報告 ➔ 提案討論（附議、表決）➔ 臨時動議 ➔ 散會</b></p>`,
+      html:`${resultHead(stars, this.miss)}<p>班會程序：<br><b>宣布開會 ➔ 報告 ➔ 提案討論（附議、表決）➔ 臨時動議 ➔ 散會</b></p>`,
       buttons:[{label:'下一關：校園急救特派員 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]})
       .then(v => App.afterLevel(1, v));
   }
@@ -1113,7 +1137,7 @@ const Level2 = {
     m.classList.toggle('face-left', x < fx); m.classList.add('walking');
     m.style.transitionDuration = sec + 's';
     m.style.left = x + '%'; m.style.top = y + '%';
-    const steps = setInterval(() => Sound.step(), 360);
+    const steps = every(() => Sound.step(), 360);
     await wait(sec * 1000 + 60);
     clearInterval(steps); m.classList.remove('walking', 'face-left');
   },
@@ -1137,7 +1161,7 @@ const Level2 = {
     $('l2Next').hidden = true;
     $('campus2').querySelectorAll('.right').forEach(n => n.classList.remove('right'));
     this.place(L2_START.x, L2_START.y);
-    setTimeout(() => this.say('要去哪裡呢？🤔'), 60);
+    later(() => this.say('要去哪裡呢？🤔'), 60);
   },
   async pick(id, el){
     if (this.busy) return;
@@ -1177,18 +1201,19 @@ const Level2 = {
     return {x:o.x - 5, y:57};
   },
   async finish(){
-    Sound.win(); confetti();
-    const stars = starsByMiss(this.miss); Store.set(2, stars);
+    const stars = starsFor(this.miss, L2_EVENTS.length);
+    stars ? (Sound.win(), confetti()) : Sound.shiver();
+    Store.set(2, stars);
     window.KGReport && KGReport.done({ stars });
     const v = await showModal({icon:'🚑', title:'校園急救特派員 任務完成！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>，東西壞了找<b>總務處</b>、課本考試問<b>教務處</b>！<br>校園裡還有工友、警衛、導護志工、護理師為我們服務，記得說謝謝！</p>`,
+      html:`${resultHead(stars, this.miss)}<p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>，東西壞了找<b>總務處</b>、課本考試問<b>教務處</b>！<br>校園裡還有工友、警衛、導護志工、護理師為我們服務，記得說謝謝！</p>`,
       buttons:[{label:'下一關：三年級小公民 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(2, v);
   }
 };
 /* 家長報表：每次作答記一次（沒有共用檔時略過） */
 function report(ok, q, a, c){ window.KGReport && KGReport.answer(ok, {q, a, c}); }
-function bigCheck(){ const d = document.createElement('div'); d.className = 'big-check'; d.textContent = '✔'; document.body.appendChild(d); setTimeout(() => d.remove(), 1100); }
+function bigCheck(){ const d = document.createElement('div'); d.className = 'big-check'; d.textContent = '✔'; document.body.appendChild(d); later(() => d.remove(), 1100); }
 
 /* =========================================================
    I. 關卡三：三年級小公民（是非紅綠燈）
@@ -1274,11 +1299,11 @@ const Level3 = {
     fb.scrollIntoView({behavior:'smooth', block:'nearest'});
   },
   async finish(){
-    const n = L3_QUESTIONS.length, stars = this.correct >= n - 1 ? 3 : this.correct >= Math.ceil(n * .6) ? 2 : 1; Store.set(3, stars);
+    const n = L3_QUESTIONS.length, stars = starsFor(n - this.correct, n); Store.set(3, stars);
     window.KGReport && KGReport.done({ stars, right: this.correct, total: n });
-    Sound.win(); confetti();
-    const v = await showModal({icon:'🚦', title:'三年級小公民 過關！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>${L3_QUESTIONS.length} 題答對 <b>${this.correct}</b> 題！學習、班級、家庭生活、健康成長，你都是小公民高手！</p>`,
+    stars ? (Sound.win(), confetti()) : Sound.shiver();
+    const v = await showModal({icon:'🚦', title: stars ? '三年級小公民 過關！' : '三年級小公民 再試一次！', center:true,
+      html:`${resultHead(stars, n - this.correct)}<p>${n} 題答對 <b>${this.correct}</b> 題。${stars === 3 ? '學習、班級、家庭生活、健康成長，你都是小公民高手！' : stars ? '再複習一下學習、班級、家庭生活、健康成長的重點，就能更厲害！' : '別灰心！先回去玩前面的關卡複習一下，再來挑戰。'}</p>`,
       buttons:[{label:'下一關：🎯 進階挑戰 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(3, v);
   }
@@ -1533,11 +1558,11 @@ const AdvLevel = {
     fb.hidden = false; fb.scrollIntoView({behavior:'smooth', block:'nearest'});
   },
   async finish(){
-    const n = this.n, stars = starsByMiss(this.miss); Store.set('a' + n, stars);
+    const n = this.n, stars = starsFor(this.miss, this.qs.length); Store.set('a' + n, stars);
     window.KGReport && KGReport.done({ stars, right: this.qs.length - this.miss, total: this.qs.length });
-    Sound.win(); confetti();
-    const v = await showModal({icon:'🎯', title:'進階挑戰完成！', center:true,
-      html:`<div class="stars-big">${starHTML(stars)}</div><p>5 題答對 <b>${5 - this.miss}</b> 題！考卷上的陷阱題難不倒你！</p>`,
+    stars ? (Sound.win(), confetti()) : Sound.shiver();
+    const v = await showModal({icon:'🎯', title: stars ? '進階挑戰完成！' : '進階挑戰 再試一次！', center:true,
+      html:`${resultHead(stars, this.miss)}<p>${this.qs.length} 題答對 <b>${this.qs.length - this.miss}</b> 題。${stars === 3 ? '考卷上的陷阱題難不倒你！' : '記住剛才的「小心陷阱」提醒，下次就不會被騙了！'}</p>`,
       buttons:[n < ADV.length ? {label:'下一組進階挑戰 ▶', value:'next'} : {label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterAdv(n, v);
   }
@@ -1618,6 +1643,7 @@ const App = {
     this.go('lobby');
   },
   go(id){
+    cancelLater();
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     this.current = id;
     $('homeBtn').hidden = id === 'lobby';
@@ -1664,7 +1690,7 @@ function confetti(){
     s.style.left = Math.random() * innerWidth + 'px'; s.style.top = '-12px'; s.style.background = colors[i % colors.length];
     s.style.setProperty('--dx', (Math.random() - .5) * 140 + 'px'); s.style.setProperty('--dy', innerHeight * (.6 + Math.random() * .5) + 'px');
     s.style.animationDuration = 1.4 + Math.random() + 's';
-    document.body.appendChild(s); setTimeout(() => s.remove(), 2800);
+    document.body.appendChild(s); later(() => s.remove(), 2800);
   }
 }
 
