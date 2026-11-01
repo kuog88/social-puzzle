@@ -91,12 +91,18 @@
   }
 
   // ---------- 關卡 ----------
+  // ---------- 家長報表 ----------
+  var repTally = null;
+  function rep(ok, q, a, c) { window.KGReport && KGReport.answer(ok, { q: q, a: a, c: c }); }
+
   function setProg(f) { $("#progBar").style.width = Math.round(Math.min(1, f) * 100) + "%"; }
   function startLevel(ui, li) {
     curUnit = ui; curLevel = li;
     var lv = DATA[ui].levels[li];
     $("#playTitle").textContent = "第" + DATA[ui].no + "單元・" + lv.kind + "：" + lv.title;
     setProg(0);
+    repTally = null;
+    window.KGReport && KGReport.level(DATA[ui].no + "-" + (li + 1) + " " + lv.kind + "：" + lv.title, "第" + DATA[ui].no + "單元 " + DATA[ui].name);
     var stage = $("#stage"); stage.innerHTML = "";
     show("play");
     RENDER[lv.type](stage, lv, finish);
@@ -106,6 +112,9 @@
   function finish(n, text) {
     var key = DATA[curUnit].id + "-" + curLevel;
     if (n > (stars[key] || 0)) { stars[key] = n; saveStars(); }
+    var rd = { stars: n };
+    if (repTally) { rd.right = repTally.right; rd.total = repTally.total; }
+    window.KGReport && KGReport.done(rd);
     setProg(1);
     $("#mStamp").textContent = starText(n);
     $("#mTitle").textContent = n === 3 ? "完美送達！" : (n === 2 ? "順利送達！" : "送到了，再接再厲！");
@@ -185,6 +194,9 @@
     function tryPlace(c, bin) {
       if (c.parentNode !== pool) return;
       c.classList.remove("sel"); selected = null;
+      var binLabel = function (id) { for (var k = 0; k < lv.bins.length; k++) if (lv.bins[k].id === id) return lv.bins[k].label; return id; };
+      rep(c._item.bin === bin.dataset.id, "「" + c._item.t + "」要放進哪個信箱？（" + lv.prompt + "）",
+        "放到「" + binLabel(bin.dataset.id) + "」", "放到「" + binLabel(c._item.bin) + "」");
       if (c._item.bin === bin.dataset.id) {
         bin.appendChild(c); flash(c, "pop"); placed++;
         setProg(placed / items.length);
@@ -201,7 +213,7 @@
   RENDER.quiz = function (stage, lv, done) {
     var qs = shuffle(lv.qs), i = 0, right = 0;
     function next() {
-      if (i >= qs.length) { done(starsByRatio(right / qs.length), "答對 " + right + " / " + qs.length + " 題"); return; }
+      if (i >= qs.length) { repTally = { right: right, total: qs.length }; done(starsByRatio(right / qs.length), "答對 " + right + " / " + qs.length + " 題"); return; }
       var q = qs[i], ans = q.o[0], opts = shuffle(q.o);
       speakText = q.q + "。" + opts.map(function (o, k) { return "選項" + (k + 1) + "，" + o; }).join("。");
       stage.innerHTML = '<div class="q-num">第 ' + (i + 1) + ' / ' + qs.length + ' 題</div><h3 class="prompt">' + esc(q.q) + '</h3>';
@@ -212,6 +224,7 @@
           if (box.dataset.done) return; box.dataset.done = 1;
           var ok = o === ans;
           if (ok) right++;
+          rep(ok, q.q, o, ans);
           b.classList.add(ok ? "right" : "wrong");
           if (!ok) Array.prototype.forEach.call(box.children, function (x) { if (x.textContent === ans) x.classList.add("right"); });
           stage.appendChild(el("div", "why", (ok ? "✅ 答對了！" : "❌ 正確答案是：" + esc(ans) + "。") + " " + esc(q.why || "")));
@@ -243,6 +256,7 @@
       choices.forEach(function (s) {
         var c = el("button", "card", esc(s)); c.type = "button";
         c.addEventListener("click", function () {
+          rep(s === rd.steps[k], rd.prompt + "（第 " + (k + 1) + " 步）", "第 " + (k + 1) + " 步選「" + s + "」", "第 " + (k + 1) + " 步是「" + rd.steps[k] + "」");
           if (s === rd.steps[k]) {
             var sl = slots.children[k]; sl.textContent = s; sl.classList.add("filled"); flash(sl, "pop");
             c.remove(); k++; filledAll++; setProg(filledAll / total);
@@ -276,6 +290,9 @@
             sel = sel === c ? null : c; if (sel) c.classList.add("sel");
             return;
           }
+          var lp = side === 1 ? sel._p : p;
+          rep(sel._p === p, rd.prompt + "（「" + lp[0] + "」配哪一個？）",
+            "「" + (side === 1 ? sel._p[0] : p[0]) + "」配「" + (side === 1 ? p[1] : sel._p[1]) + "」", "「" + lp[0] + "」配「" + lp[1] + "」");
           if (sel._p === p) {
             sel.classList.remove("sel"); sel.classList.add("done"); c.classList.add("done"); flash(c, "pop");
             sel = null; got++; doneAll++; setProg(doneAll / total);
@@ -303,7 +320,7 @@
       return shuffle(out);
     }
     function next() {
-      if (i >= rs.length) { done(starsByRatio(right / rs.length), "答對 " + right + " / " + rs.length + " 題。" + (lv.tip || "")); return; }
+      if (i >= rs.length) { repTally = { right: right, total: rs.length }; done(starsByRatio(right / rs.length), "答對 " + right + " / " + rs.length + " 題。" + (lv.tip || "")); return; }
       var q = rs[i];
       speakText = lv.intro + q.q;
       stage.innerHTML = '<div class="q-num">第 ' + (i + 1) + ' / ' + rs.length + ' 題</div><p class="hint">' + esc(lv.intro) + '</p>';
@@ -316,6 +333,7 @@
         b.addEventListener("click", function () {
           if (box.dataset.done) return; box.dataset.done = 1;
           var ok = v === q.ans; if (ok) right++;
+          rep(ok, q.q, v + " " + q.unit, q.ans + " " + q.unit);
           b.classList.add(ok ? "right" : "wrong");
           if (!ok) Array.prototype.forEach.call(box.children, function (x) { if (x.textContent === q.ans + " " + q.unit) x.classList.add("right"); });
           $(".bar span", wrap).style.width = "100%";
@@ -351,6 +369,9 @@
     }
     function hit(b) {
       if (b.classList.contains("found")) return;
+      var rest = nodes.filter(function (n) { return n._it.cat === lv.rounds[r].cat && !n.classList.contains("found"); })
+        .map(function (n) { return n._it.t; }).join("、");
+      rep(b._it.cat === lv.rounds[r].cat, lv.rounds[r].ask, "點了「" + b._it.t + "」", b._it.cat === lv.rounds[r].cat ? "「" + b._it.t + "」" : "這一類還有：" + rest);
       if (b._it.cat === lv.rounds[r].cat) {
         b.classList.add("found"); flash(b, "pop"); foundAll++; setProg(foundAll / total);
         if (need() === 0) {
