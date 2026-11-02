@@ -71,12 +71,9 @@ button{font-family:inherit;cursor:pointer;color:inherit}
 .btn.primary{background:var(--rust);border-color:var(--rust-dark);color:#fff;box-shadow:0 4px 0 var(--rust-dark)}
 .btn.primary:hover{background:var(--rust-dark)}
 .btn.ghost{margin:4px 0 12px}
-.unit-head{background:var(--paper);border-left:10px solid var(--c,var(--teal));border-radius:16px;padding:14px 18px;box-shadow:0 4px 0 rgba(0,0,0,.08)}
-.unit-title{margin:0;font-size:26px;color:var(--c,var(--teal))}
-.unit-head .lessons{margin:6px 0;padding-left:20px;color:var(--ink)}
-.unit-head p{margin:4px 0;color:var(--muted)}
-.ticket-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:16px}
-.ticket{position:relative;display:flex;flex-direction:column;gap:4px;background:#fff;border:2px solid var(--ink);border-radius:14px;padding:14px 16px 14px 22px;text-align:left;
+/* 📝 月考測驗卷區塊（內容由 kg-exam.js 畫） */
+.exam-sec{background:#fff;border-radius:16px;padding:14px;margin:18px 0;box-shadow:0 4px 0 rgba(0,0,0,.15);max-width:100%;box-sizing:border-box;align-self:stretch;text-align:left;color:#222}
+.exam-sec:empty,.exam-sec #exam-box:empty{display:none}
   box-shadow:0 5px 0 rgba(0,0,0,.15);transition:transform .12s;overflow:hidden}
 .ticket::before{content:"";position:absolute;left:0;top:0;bottom:0;width:10px;background:var(--kc)}
 .ticket::after{content:"";position:absolute;right:-12px;top:50%;width:24px;height:24px;border-radius:50%;background:var(--sand);border:2px solid var(--ink);transform:translateY(-50%)}
