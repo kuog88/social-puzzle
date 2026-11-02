@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>四年級社會・家鄉探險隊（南一四上）</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261102x">
 <link rel="stylesheet" href="../assets/rwd.css">
 </head>
 <body>
@@ -24,6 +24,7 @@
     <p class="lobby-sub">四年級上學期社會（南一版）｜收集全部 ⭐ 成為家鄉小導遊！</p>
     <div class="total px" id="totalStars"></div>
     <div class="portals" id="portals"></div>
+    <section class="exam-sec" aria-label="月考測驗卷"><div id="exam-box"></div></section>
     <button class="px-btn wood notes-btn" id="resetBtn">🧹 清除星星紀錄</button>
   </section>
 
@@ -50,8 +51,13 @@
 <div class="overlay" id="overlay"><div class="modal px" role="dialog" aria-modal="true" id="modal"></div></div>
 <div class="toast" id="toast" role="status" aria-live="assertive"></div>
 
-<script src="data.js"></script>
-<script src="game.js"></script>
+<script src="data.js?v=20261102x"></script>
+<script src="game.js?v=20261102x"></script>
+<script src="exam-bank.js?v=20261102x"></script>
+<script src="https://kuog88.github.io/kg-exam.js" defer></script>
+<script>
+window.addEventListener('load', function m() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), EXAM_BANK); else setTimeout(m, 200); });
+</script>
 <script src="../assets/rwd.js"></script>
 <script src="https://kuog88.github.io/home-button.js" defer></script>
 <script src="https://kuog88.github.io/bgm.js" defer></script>
