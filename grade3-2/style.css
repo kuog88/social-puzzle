@@ -113,6 +113,9 @@ button{font-family:inherit;cursor:pointer}
 .btn.speak{background:var(--mustard);box-shadow:0 3px 0 #b98418}
 .link-btn{background:none;border:none;color:#8a7a62;text-decoration:underline;font-size:14px}
 .foot{text-align:center}
+/* 📝 月考測驗卷區塊（內容由 kg-exam.js 畫） */
+.exam-sec{background:#fff;border-radius:16px;padding:14px;margin:18px 0;box-shadow:0 4px 0 rgba(0,0,0,.15);max-width:100%;box-sizing:border-box;align-self:stretch;text-align:left;color:#222}
+.exam-sec:empty,.exam-sec #exam-box:empty{display:none}
 
 /* 關卡畫面 */
 .play-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
