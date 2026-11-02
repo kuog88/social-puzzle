@@ -66,7 +66,9 @@ button{font-family:inherit}
 .btn.ghost{background:#fff;color:var(--violet-dark);box-shadow:0 3px 0 var(--line);border:2px solid var(--line)}
 .btn.speak{background:var(--mint);box-shadow:0 4px 0 #239677}
 .btn:disabled{opacity:.5;cursor:default}
-.link-btn{background:none;border:none;color:#7a6fae;text-decoration:underline;cursor:pointer;font-size:15px}
+/* 📝 月考測驗卷區塊（內容由 kg-exam.js 畫） */
+.exam-sec{background:#fff;border-radius:16px;padding:14px;margin:18px 0;box-shadow:0 4px 0 rgba(0,0,0,.15);max-width:100%;box-sizing:border-box;align-self:stretch;text-align:left;color:#222}
+.exam-sec:empty,.exam-sec #exam-box:empty{display:none}
 
 /* 首頁 */
 .hello{display:flex;gap:16px;align-items:center;margin:18px 0;background:rgba(255,255,255,.9);border-radius:26px;padding:16px 20px;border:2px solid var(--line)}
