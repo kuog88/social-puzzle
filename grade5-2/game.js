@@ -2,7 +2,18 @@
    關卡類型：quiz（選擇題）、fact（新聞查證對錯）、order（排順序）、sort（分類歸檔）、match（配對）、pinmap（地圖連線） */
 (function () {
   "use strict";
-  var DATA = window.G52_DATA;
+  // 三版本：DATA＝目前版本的單元（BOOK），任務從 G52_DATA＋G52_EXTRA（js/x-*.js）依 id 找出來；星星仍記在任務 id 上
+  var BASE = window.G52_DATA.concat(window.G52_EXTRA || []), DATA = [], LV = {};
+  BASE.forEach(function (u) { u.levels.forEach(function (lv) { LV[lv.id] = { lv: lv, u: u }; }); });
+  function rebuild() {
+    var list = window.KGVer ? KGVer.units(BOOK) : BOOK.versions[BOOK.defaultVersion];
+    DATA = list.map(function (b) {
+      var p = LV[b.levels[0]].u;
+      return { no: b.no, ch: "CH" + b.no, em: b.em || p.em, color: b.color || p.color, name: b.title, lessons: b.lessons || p.lessons,
+        desc: b.desc || p.desc, levels: b.levels.map(function (id) { return LV[id].lv; }) };
+    });
+  }
+  rebuild();
   var KEY = "social-g5-2-stars";
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var KIND = { hand: "現場連線", idea: "新聞解析", boss: "查證快報" };
@@ -12,7 +23,7 @@
   try { stars = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { stars = {}; }
   function saveStars() { try { localStorage.setItem(KEY, JSON.stringify(stars)); } catch (e) {} }
   function getStar(lv) { return stars[lv.id] || 0; }
-  function totalStars() { var t = 0; for (var k in stars) t += stars[k]; return t; }
+  function totalStars() { var t = 0; DATA.forEach(function (u) { u.levels.forEach(function (lv) { t += stars[lv.id] || 0; }); }); return t; }
   function maxStars() { var t = 0; DATA.forEach(function (u) { t += u.levels.length * 3; }); return t; }
   function starText(n) { return "⭐".repeat(n) + "☆".repeat(3 - n); }
 
@@ -102,9 +113,14 @@
   });
 
   // 跑馬燈
-  $("#ticker").textContent = DATA.map(function (u) { return u.ch + "｜" + u.name + "：" + u.desc; }).join("　　★　　");
+  function ticker() { $("#ticker").textContent = DATA.map(function (u) { return u.ch + "｜" + u.name + "：" + u.desc; }).join("　　★　　"); }
 
   function renderHome() {
+    rebuild(); ticker();
+    var pub = window.KGVer ? KGVer.PUB[KGVer.cur(BOOK).version] : "翰林";
+    $("#verSub").textContent = pub + "版社會 5 下";
+    $("#chCount").textContent = DATA.length + " 個頻道";
+    window.mountExam && mountExam();
     $("#totalStars").textContent = totalStars();
     $("#maxStars").textContent = "/" + maxStars();
     var box = $("#channels"); box.innerHTML = "";
@@ -155,7 +171,7 @@
     $("#playTitle").textContent = DATA[ui].ch + "｜" + lv.icon + " " + lv.name;
     $("#stage").innerHTML = "";
     setProg(0, 1);
-    window.KGReport && KGReport.level((ui + 1) + "-" + (li + 1) + " " + KIND[lv.kind] + "：" + lv.name, "第 " + (ui + 1) + " 單元 " + DATA[ui].name);
+    window.KGReport && KGReport.level(DATA[ui].no + "-" + (li + 1) + " " + KIND[lv.kind] + "：" + lv.name, "第 " + DATA[ui].no + " 單元 " + DATA[ui].name);
     show("play");
     RUN[lv.type](lv);
     if (lv.time) startTimer(lv.time);
@@ -531,5 +547,6 @@
     if (confirm("確定要清除五年級下學期的星星紀錄嗎？")) { stars = {}; saveStars(); renderHome(); }
   });
 
+  window.G52_REDRAW = function () { renderHome(); show("home"); };
   renderHome();
 })();
