@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>六年級下學期社會・環球永續列車（翰林六下）</title>
-<link rel="stylesheet" href="style.css?v=20261102x">
-<link rel="stylesheet" href="../assets/rwd.css">
+<title>六年級下學期社會・環球永續列車（六下）</title>
+<link rel="stylesheet" href="style.css?v=20261103v">
+<link rel="stylesheet" href="../assets/rwd.css?v=20261103v">
 </head>
 <body>
 <div class="app">
@@ -15,7 +15,7 @@
       <span class="sem-tag">下學期</span>
       <div class="brand-text">
         <div class="brand-name">六年級下學期・環球永續列車</div>
-        <div class="brand-sub">翰林版社會 6 下</div>
+        <div class="brand-sub" id="verSub">社會 6 下</div>
       </div>
     </div>
     <div class="stamps" title="收集到的星星">⭐ <b id="totalStars">0</b><small id="maxStars">/45</small></div>
@@ -27,12 +27,13 @@
       <div class="train" aria-hidden="true">🚂<span>🚃</span><span>🚃</span><span>🚃</span></div>
       <div>
         <h1 class="screen-title" id="homeTitle">歡迎搭乘環球永續列車！</h1>
-        <p>你是列車上的見習世界公民。六下社會有 <b>4 個車站</b>，每站有
+        <p>你是列車上的見習世界公民。六下社會有 <b id="stCount">4 個車站</b>，每站有
           <span class="k hand">動手做</span><span class="k idea">觀念題</span><span class="k boss">挑戰題</span>，最後還有
           <span class="k extra">🎯 進階挑戰</span>（考卷程度、有陷阱題）。答得越好，車票上蓋的 ⭐ 越多！</p>
         <p class="note">這是<b>六年級下學期</b>的內容；上學期的「未來公民挑戰營」請回「選年級」找。</p>
       </div>
     </section>
+    <div id="verBar"></div>
     <section class="route" id="route"></section>
     <section class="exam-sec" aria-label="月考測驗卷"><div id="exam-box"></div></section>
     <p class="foot"><button class="link-btn" id="resetBtn" type="button">清除下學期進度</button></p>
@@ -74,14 +75,25 @@
 
 <div class="toast" id="toast" hidden></div>
 
-<script src="data.js?v=20261102x"></script>
-<script src="game.js?v=20261102x"></script>
-<script src="exam-bank.js?v=20261102x"></script>
+<script src="https://kuog88.github.io/kg-ver.js?v=20261103v"></script>
+<script src="js/book.js?v=20261103v"></script>
+<script src="data.js?v=20261103v"></script>
+<script src="js/x-move.js?v=20261103v"></script>
+<script src="js/x-new.js?v=20261103v"></script>
+<script src="exam-bank.js?v=20261103v"></script>
+<script src="js/exam-move.js?v=20261103v"></script>
+<script src="js/exam-x.js?v=20261103v"></script>
+<script>
+/* 月考測驗卷依目前版本、範圍組卷；切換版本或範圍時重新掛上 */
+function mountExam() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), window.KGVer ? KGVer.examBank(BOOK, EXAM_BANK) : EXAM_BANK); }
+</script>
+<script src="game.js?v=20261103v"></script>
 <script src="https://kuog88.github.io/kg-exam.js" defer></script>
 <script>
-window.addEventListener('load', function m() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), EXAM_BANK); else setTimeout(m, 200); });
+window.KGVer && KGVer.bar(document.getElementById('verBar'), BOOK, function () { window.G62_REDRAW && G62_REDRAW(); });
+window.addEventListener('load', function m() { if (window.KGExam) mountExam(); else setTimeout(m, 200); });
 </script>
-<script src="../assets/rwd.js"></script>
+<script src="../assets/rwd.js?v=20261103v"></script>
 <script src="https://kuog88.github.io/home-button.js" defer></script>
 <script src="https://kuog88.github.io/bgm.js" defer></script>
 </body>

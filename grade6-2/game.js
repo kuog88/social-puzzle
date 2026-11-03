@@ -2,7 +2,18 @@
 (function () {
   'use strict';
 
-  var DATA = window.G62_DATA;
+  // 三版本：DATA＝目前版本的單元（BOOK），關卡從 G62_DATA＋G62_EXTRA（js/x-*.js）依 id 找出來；星星仍記在關卡 id 上
+  var BASE = window.G62_DATA.concat(window.G62_EXTRA || []), DATA = [], LV = {};
+  BASE.forEach(function (u) { u.levels.forEach(function (l) { LV[l.id] = { l: l, u: u }; }); });
+  function rebuild() {
+    var list = window.KGVer ? KGVer.units(BOOK) : BOOK.versions[BOOK.defaultVersion];
+    DATA = list.map(function (b) {
+      var p = LV[b.levels[0]].u;
+      return { n: b.no, no: '第' + '一二三四五六'[b.no - 1] + '站', em: b.em || p.em, color: b.color || p.color, station: b.station || p.station,
+        name: b.title, lessons: b.lessons || p.lessons, desc: b.desc || p.desc, levels: b.levels.map(function (id) { return LV[id].l; }) };
+    });
+  }
+  rebuild();
   var FIG = window.G62_FIG;
   var KEY = 'social-g6-2-stars';
   var KIND = {
@@ -68,6 +79,10 @@
 
   /* ---------- 首頁：路線圖 ---------- */
   function renderHome() {
+    rebuild();
+    $('verSub').textContent = (window.KGVer ? KGVer.PUB[KGVer.cur(BOOK).version] : '翰林') + '版社會 6 下';
+    $('stCount').textContent = DATA.length + ' 個車站';
+    window.mountExam && mountExam();
     var box = $('route');
     box.innerHTML = '';
     DATA.forEach(function (u) {
@@ -78,7 +93,7 @@
       b.innerHTML = '<div class="dot">' + u.em + '</div>' +
         '<div class="no">' + u.no + '・' + u.station + '</div>' +
         '<div class="nm">' + u.name + '</div>' +
-        '<div class="st">' + u.levels.length + ' 關（含 🎯 進階挑戰）</div>' +
+        '<div class="st">' + u.levels.length + ' 關' + (u.levels.some(function (l) { return l.kind === 'extra'; }) ? '（含 🎯 進階挑戰）' : '') + '</div>' +
         '<div class="bar"><i style="width:' + Math.round(got / max * 100) + '%"></i></div>' +
         '<div class="sc">⭐ ' + got + ' / ' + max + '</div>';
       b.addEventListener('click', function () { openUnit(u); });
@@ -120,7 +135,7 @@
     cur.level = l; cur.r = 0; cur.miss = 0; cur.qRight = 0; cur.qTotal = 0;
     // 題數：選擇題 1 題算 1，分類／配對／排序每張卡算 1（星星規則用）
     cur.total = l.rounds.reduce(function (n, rd) { return n + (rd.type === 'quiz' ? 1 : (rd.items || rd.pairs).length); }, 0);
-    var ui = DATA.indexOf(cur.unit);
+    var ui = cur.unit.n - 1;
     window.KGReport && KGReport.level((ui + 1) + '-' + (cur.unit.levels.indexOf(l) + 1) + ' ' +
       (/^進階挑戰/.test(l.name) ? '' : KIND[l.kind].replace(/^\S+\s+/, '') + '：') + l.name, '第 ' + (ui + 1) + ' 單元 ' + cur.unit.name);
     $('playTitle').textContent = l.icon + ' ' + l.name;
@@ -400,5 +415,6 @@
     if (confirm('確定要清除六年級下學期的所有星星嗎？')) { stars = {}; save(); renderHome(); }
   });
 
+  window.G62_REDRAW = renderHome;
   renderHome();
 })();
