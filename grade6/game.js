@@ -118,31 +118,32 @@ function show(id){
   if (window.speechSynthesis) speechSynthesis.cancel();
   window.scrollTo(0, 0);
 }
+/* 三版本：大廳的單元＝目前版本的單元（BOOK），關卡從 UNITS 依 id 找出來；星星仍記在關卡 id 上 */
+const LV_BY_ID = {}; UNITS.forEach(u => u.levels.forEach(l => { LV_BY_ID[l.id] = {l, u}; }));
+function vUnits(){
+  const list = window.KGVer ? KGVer.units(BOOK) : BOOK.versions[BOOK.defaultVersion];
+  return list.map(b => {
+    const parent = LV_BY_ID[b.levels[0]].u;
+    return {no: b.no, icon: b.icon || parent.icon, name: b.title, lessons: b.lessons || parent.lessons, desc: b.desc || parent.desc, levels: b.levels.map(id => LV_BY_ID[id].l)};
+  });
+}
 function unitStars(u){ const s = Store.get(); return u.levels.reduce((n, l) => n + (s[l.id] || 0), 0); }
 
 function renderLobby(){
-  const all = UNITS.reduce((n, u) => n + unitStars(u), 0), max = UNITS.reduce((n, u) => n + u.levels.length * 3, 0);
+  const VU = vUnits();
+  const all = VU.reduce((n, u) => n + unitStars(u), 0), max = VU.reduce((n, u) => n + u.levels.length * 3, 0);
+  const pub = window.KGVer ? KGVer.PUB[KGVer.cur(BOOK).version] : '翰林';
+  $('lobbySub').textContent = `六年級上學期社會（${pub}版）｜收集全部 ⭐ 成為未來好公民！`;
   $('totalStars').innerHTML = `目前收集 <b>★ ${all}</b> / ${max}` + (all === max ? '　🏆 你是未來好公民！' : '');
-  const card = (u, i, k) => {
+  $('portals').innerHTML = VU.map((u, i) => {
     const st = unitStars(u), mx = u.levels.length * 3;
     return `<button class="portal px" data-u="${i}">
-      <span class="p-icon">${u.icon}</span><span class="p-lv">第${'一二三四五六'[k]}單元</span>
+      <span class="p-icon">${u.icon}</span><span class="p-lv">第${'一二三四五六'[u.no - 1]}單元</span>
       <span class="p-name">${u.name}</span><span class="p-desc">${u.lessons.join('、')}</span>
       <span class="p-stars"><b>${'★'.repeat(Math.min(st, mx))}</b>${'☆'.repeat(mx - st)}</span></button>`;
-  };
-  // 單元依學期分區：data.js 的單元可加 term: '下'，沒寫就算上學期
-  const term = t => {
-    const list = UNITS.map((u, i) => [u, i]).filter(([u]) => (u.term || '上') === t);
-    if (!list.length) return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3><div class="term-soon">🚧 下學期單元製作中，敬請期待！</div>`;
-    // 再依月考分組：單元可加 exam: 1 / 2（第一次／第二次月考），沒寫就不分組
-    let last = null;
-    return `<h3 class="term-head">${t === '上' ? '📘 上學期' : '📗 下學期'}</h3>` + list.map(([u, i], k) => {
-      const head = u.exam && u.exam !== last ? `<div class="exam-head">📝 第${'一二三'[u.exam - 1]}次月考範圍</div>` : '';
-      last = u.exam; return head + card(u, i, k);
-    }).join('');
-  };
-  $('portals').innerHTML = term('上') + term('下');
-  $('portals').querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.click(); openUnit(UNITS[+p.dataset.u]); }));
+  }).join('');
+  $('portals').querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.click(); openUnit(VU[+p.dataset.u]); }));
+  window.mountExam && mountExam();
   $('topTitle').textContent = '🧑‍⚖️ 六年級社會・未來公民挑戰營';
   show('lobby');
 }
@@ -168,8 +169,8 @@ function startLevel(level){
   curLevel = level;
   show('play');
   game = { level, miss: 0, right: 0, over: false };
-  const ui = UNITS.indexOf(curUnit), li = curUnit.levels.indexOf(level);
-  window.KGReport && KGReport.level(`${ui + 1}-${li + 1} ${level.name}`, `第 ${ui + 1} 單元 ${curUnit.name}`);
+  const li = curUnit.levels.indexOf(level);
+  window.KGReport && KGReport.level(`${curUnit.no}-${li + 1} ${level.name}`, `第 ${curUnit.no} 單元 ${curUnit.name}`);
   $('lvTitle').textContent = `${level.icon} ${level.name}`;
   $('lvKind').textContent = KIND[level.kind][0]; $('lvKind').className = 'chip ' + KIND[level.kind][1];
   $('lvProg').textContent = '';
