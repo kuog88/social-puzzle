@@ -490,39 +490,9 @@ svg.pix{shape-rendering:crispEdges;display:block}
   <!-- ===== 大廳（關卡選單） ===== -->
   <section class="screen active" id="lobby">
     <h1 class="lobby-title">🎒 三年級上學期社會探險島：<br>麥塊校園大冒險！</h1>
-    <p class="lobby-sub">翰林版三上・選一個傳送門開始冒險，每關最多拿 ★★★！</p>
-    <div class="portals">
-      <h3 class="term-head">📘 三年級上學期（翰林版）</h3>
-      <button class="portal px p1" data-level="1">
-        <span class="p-icon" data-pix="grass"></span>
-        <span class="p-info">
-          <span class="p-lv">關卡一・第二單元</span>
-          <span class="p-name">🎮 麥塊班會情境劇</span>
-          <span class="p-desc">班會程序與民主素養</span>
-          <span class="p-stars" data-stars="1">★★★</span>
-        </span>
-      </button>
-      <button class="portal px p2" data-level="2">
-        <span class="p-icon" data-pix="cross"></span>
-        <span class="p-info">
-          <span class="p-lv">關卡二・第二、三單元</span>
-          <span class="p-name">🏥 校園急救特派員</span>
-          <span class="p-desc">點地圖找處室與幹部</span>
-          <span class="p-stars" data-stars="2">★★★</span>
-        </span>
-      </button>
-      <button class="portal px p3" data-level="3">
-        <span class="p-icon" data-pix="light"></span>
-        <span class="p-info">
-          <span class="p-lv">關卡三・第一～四單元</span>
-          <span class="p-name">🚦 三年級小公民</span>
-          <span class="p-desc">學習・班級・家庭・健康成長紅綠燈</span>
-          <span class="p-stars" data-stars="3">★★★</span>
-        </span>
-      </button>
-      <h3 class="term-head">🎯 進階挑戰（考卷陷阱題，每單元 5 題）</h3>
-      <div id="advPortals" style="display:contents"></div>
-    </div>
+    <p class="lobby-sub" id="lobbySub">選一個傳送門開始冒險，每關最多拿 ★★★！</p>
+    <div id="verBar"></div>
+    <div class="portals" id="portals"></div>
     <section class="exam-sec" aria-label="月考測驗卷"><div id="exam-box"></div></section>
     <button class="px-btn gold notes-btn" id="notesBtn" hidden>📒 看石虎白話小筆記</button>
     <a class="px-btn wood notes-btn" href="index.html" style="text-decoration:none">⬅ 換年級</a>
@@ -568,7 +538,7 @@ svg.pix{shape-rendering:crispEdges;display:block}
   <!-- ===== 關卡三：三年級小公民 ===== -->
   <section class="screen" id="level3">
     <div class="level-head px">
-      <h2>🚦 關卡三：三年級小公民</h2>
+      <h2 id="l3H2">🚦 關卡三：三年級小公民</h2>
       <span class="chip" id="l3Prog">第 1 / 10 題</span>
       <span class="chip warn" id="l3Score">答對 0 題</span>
     </div>
@@ -634,6 +604,41 @@ svg.pix{shape-rendering:crispEdges;display:block}
 <div class="overlay" id="overlay"><div class="modal px" role="dialog" aria-modal="true" id="modal"></div></div>
 <div class="toast" id="toast" role="status" aria-live="assertive"></div>
 
+<script src="https://kuog88.github.io/kg-ver.js?v=20261103v"></script>
+<script>
+/* 三版本（南一・康軒・翰林）三上單元對照：給 KGVer（kg-ver.js）用。單元名稱、順序依 curriculum/social.json（115 學年度）。
+   levels：關卡代號（L1 班會情境劇、L2 校園急救特派員、L3 三年級小公民〈綜合〉、t-… 主題紅綠燈、a1～a10 進階挑戰）
+   bankUnits：grade3-exam-bank.js 的 unit 名稱；星星仍記在關卡代號上，換版本不會遺失。 */
+window.BOOK = (function () {
+  var U1 = '第一單元 升上三年級的新學習', U2 = '第二單元 校園規範和班級自治', U3 = '第三單元 我的校園和家庭生活',
+    U4 = '第四單元 健康成長的快樂童年', U5 = '第五單元 打造更美好的班級',
+    UF = '家庭的組成、功能與親人往來', UH = '居家安全與提問的方法', UR = '與人共好',
+    US = '學校是個小社會', UL = '我可以學更多（圖書館與找答案）';
+  return { subject: 'social', grade: 3, sem: '上', defaultVersion: 'han', versions: {
+    nani: [
+      { no: 1, title: '我的新學習', levels: ['t-learn', 'a1'], bankUnits: [U1] },
+      { no: 2, title: '學校生活', levels: ['L1', 't-class', 'a2', 'a4'], bankUnits: [U2, U4] },
+      { no: 3, title: '我的家庭', levels: ['t-fam', 't-kin', 't-safe', 'a6', 'a7'], bankUnits: [UF, UH] },
+      { no: 4, title: '與人共好', levels: ['t-good', 't-rel', 'a8'], bankUnits: [UR] },
+      { no: 5, title: '〈探究〉我可以學更多', levels: ['t-lib', 'a10'], bankUnits: [UL] }
+    ],
+    kang: [
+      { no: 1, title: '我的家庭', levels: ['t-fam', 't-kin', 'a6'], bankUnits: [UF] },
+      { no: 2, title: '學習與成長', levels: ['t-learn', 'a1'], bankUnits: [U1] },
+      { no: 3, title: '班級與我', levels: ['L1', 't-class', 't-good', 'a2', 'a8'], bankUnits: [U2, UR] },
+      { no: 4, title: '學校與我', levels: ['L2', 't-school', 't-rel', 'a9'], bankUnits: [US] },
+      { no: 5, title: '主題探究與實作：讓班級更美好', levels: ['a5'], bankUnits: [U5] }
+    ],
+    han: [
+      { no: 1, title: '升上三年級的新學習', levels: ['t-learn', 'a1'], bankUnits: [U1] },
+      { no: 2, title: '校園規範和班級自治', levels: ['L1', 't-class', 'a2'], bankUnits: [U2] },
+      { no: 3, title: '我的校園和家庭生活', levels: ['L2', 't-fam', 'a3'], bankUnits: [U3] },
+      { no: 4, title: '健康成長的快樂童年', levels: ['t-rel', 'a4'], bankUnits: [U4] },
+      { no: 5, title: '打造更美好的班級（探究）', levels: ['a5'], bankUnits: [U5] }
+    ]
+  } };
+})();
+</script>
 <script>
 /* =========================================================
    A. 小工具
@@ -763,7 +768,7 @@ const Store = {
     const s = this.get(); s[level] = Math.max(s[level] || 0, stars); this.mem = s;
     try { localStorage.setItem(this.key, JSON.stringify(s)); } catch(e){}
   },
-  allCleared(){ const s = this.get(); return [1, 2, 3, 'a1', 'a2', 'a3', 'a4', 'a5'].every(l => (s[l] || 0) > 0); }
+  allCleared(){ const s = this.get(); return App.seq().every(k => (s[App.store(k)] || 0) > 0); }
 };
 /* 星星規則（社會各年級統一）：題數＝要答對的步驟／題目數，答錯＝錯誤的嘗試次數
    全對 3 顆；答錯 ≤ 題數的 1/4（至少容許 1 次）2 顆；答錯 ≤ 題數的一半 1 顆；再多就 0 顆，鼓勵再試 */
@@ -1060,7 +1065,7 @@ const Level1 = {
     window.KGReport && KGReport.done({ stars });
     await showModal({icon:Pix.medal(), title:'獲得「小小班會主席獎章」！', center:true,
       html:`${resultHead(stars, this.miss)}<p>班會程序：<br><b>宣布開會 ➔ 報告 ➔ 提案討論（附議、表決）➔ 臨時動議 ➔ 散會</b></p>`,
-      buttons:[{label:'下一關：校園急救特派員 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]})
+      buttons:[App.nextBtn('L1'), {label:'🏠 回關卡選單', value:'home', cls:'wood'}]})
       .then(v => App.afterLevel(1, v));
   }
 };
@@ -1211,7 +1216,7 @@ const Level2 = {
     window.KGReport && KGReport.done({ stars });
     const v = await showModal({icon:'🚑', title:'校園急救特派員 任務完成！', center:true,
       html:`${resultHead(stars, this.miss)}<p>受傷去<b>健康中心</b>、難過去<b>輔導室</b>、撿到東西送<b>學務處</b>、借書找<b>圖書館</b>，東西壞了找<b>總務處</b>、課本考試問<b>教務處</b>！<br>校園裡還有工友、警衛、導護志工、護理師為我們服務，記得說謝謝！</p>`,
-      buttons:[{label:'下一關：三年級小公民 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+      buttons:[App.nextBtn('L2'), {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterLevel(2, v);
   }
 };
@@ -1222,11 +1227,9 @@ function bigCheck(){ const d = document.createElement('div'); d.className = 'big
 /* =========================================================
    I. 關卡三：三年級小公民（是非紅綠燈）
    ========================================================= */
-/* 題庫依翰林版三上四大主題分類；每次從各主題平均抽題，共 L3_ROUND 題 */
+/* 原本的「三年級小公民」依翰林版三上四大主題分類，每次從各主題平均抽題，共 L3_ROUND 題；其他主題只用在主題紅綠燈 */
 const L3_ROUND = 10;
 const L3_UNITS = ['🌱 自我與學習', '🗳️ 班級自治與規範', '🤝 人際互動與性別平等', '🏠 社會角色與家庭'];
-/* 畫面上顯示翰林三上單元名稱 */
-const L3_LABEL = {'🌱 自我與學習':'🌱 一、新學習', '🗳️ 班級自治與規範':'🗳️ 二、校園規範和班級自治', '🤝 人際互動與性別平等':'🛡️ 四、健康成長的快樂童年', '🏠 社會角色與家庭':'🏠 三、校園和家庭生活'};
 const L3_POOL = [
   // 🌱 自我與學習適應
   {unit:'🌱 自我與學習', scene:'🏫🍱😴', text:'升上三年級開始上整天課，中午好好吃飯、午休養足精神', ans:'go', tag:'適應新生活！', why:'中年級作息改變了，<b>吃飽、睡好</b>，下午上課才有精神！'},
@@ -1259,7 +1262,53 @@ const L3_POOL = [
   {unit:'🏠 社會角色與家庭', scene:'💐💌👩', text:'母親節自己動手做卡片，謝謝媽媽平常的照顧', ans:'go', tag:'感恩回饋！', why:'用行動<b>感謝家人</b>，是回饋家庭最溫暖的方式！'},
   {unit:'🏠 社會角色與家庭', scene:'🍽️🧽🗑️', text:'週末主動幫忙家人洗碗、倒垃圾，一起分擔家事', ans:'go', tag:'家人分工合作！', why:'家是大家的，每個人都<b>分擔家事</b>，家人就不會那麼累！'},
   {unit:'🏠 社會角色與家庭', scene:'🧧👵🙇', text:'過年到親戚家，主動跟長輩打招呼、說新年快樂', ans:'go', tag:'有禮貌的好孩子！', why:'和親人常常<b>往來、互相問候</b>，親戚之間的感情會更好！'},
-  {unit:'🏠 社會角色與家庭', scene:'🏠😠📢', text:'不喜歡家裡的規定，就大吵大鬧、甩門不理人', ans:'stop', tag:'要好好溝通！', why:'有不同的想法，要<b>心平氣和跟家人說</b>，大家一起討論，不是生氣吵鬧。'}
+  {unit:'🏠 社會角色與家庭', scene:'🏠😠📢', text:'不喜歡家裡的規定，就大吵大鬧、甩門不理人', ans:'stop', tag:'要好好溝通！', why:'有不同的想法，要<b>心平氣和跟家人說</b>，大家一起討論，不是生氣吵鬧。'},
+  // ===== 三版本補充：南一、康軒獨有的課（各自是一個主題關卡，不加入原本的綜合抽題） =====
+  // 👪 家庭與親人往來（康軒第一單元、南一第三單元）
+  {unit:'👪 家庭與親人往來', scene:'👨‍👩‍👧👴👵', text:'過年見到爸爸的哥哥，有禮貌地叫他「伯伯」', ans:'go', tag:'稱呼正確！', why:'爸爸的哥哥是<b>伯伯</b>、弟弟是<b>叔叔</b>；正確稱呼親人是一種禮貌。'},
+  {unit:'👪 家庭與親人往來', scene:'👩👭🙋', text:'看到媽媽的妹妹，開心地叫她「姑姑」', ans:'stop', tag:'要叫阿姨！', why:'媽媽的姊妹是<b>阿姨</b>；爸爸的姊妹才是<b>姑姑</b>。'},
+  {unit:'👪 家庭與親人往來', scene:'🏠💑👧👦', text:'小傑的爸爸再婚，小傑主動和新家人一起準備晚餐', ans:'go', tag:'重組家庭也是家！', why:'<b>重組家庭</b>的成員互相接納、一起生活，也是溫暖的家。'},
+  {unit:'👪 家庭與親人往來', scene:'🤒🏥👩', text:'生病時媽媽請假帶我去看醫生，這是家庭的照顧功能', ans:'go', tag:'家庭會照顧我們！', why:'家庭提供<b>照顧與關懷</b>，讓我們平安長大。'},
+  {unit:'👪 家庭與親人往來', scene:'💰🛒🧸', text:'家裡的錢是爸媽賺的，所以我想買什麼都要馬上買給我', ans:'stop', tag:'家庭收入有限！', why:'家庭<b>收入有限</b>，要和家人討論、分辨需要和想要，也要學會儲蓄。'},
+  {unit:'👪 家庭與親人往來', scene:'📛❓😆', text:'同學的名字很少見，就一直拿他的名字開玩笑', ans:'stop', tag:'尊重不同的命名！', why:'每個家庭、族群<b>取名的方式不一樣</b>，名字都有特別的意義，要尊重。'},
+  {unit:'👪 家庭與親人往來', scene:'📞👵💬', text:'常常打電話問候住在外地的外公外婆', ans:'go', tag:'維繫親人感情！', why:'親人常<b>往來、互相問候</b>，感情會更好。'},
+  {unit:'👪 家庭與親人往來', scene:'👦🙅🧹', text:'覺得做家事是大人的事，自己的房間也都等媽媽整理', ans:'stop', tag:'要分擔家務！', why:'家是大家的，孩子也要<b>負起責任、分擔家事</b>。'},
+  // 🔥 居家安全（南一第三單元第 2 課）
+  {unit:'🔥 居家安全', scene:'🔥🏃📞', text:'家裡起火了，立刻逃到屋外，再打 119 求救', ans:'go', tag:'先逃生再求救！', why:'火災時<b>生命最重要</b>，先逃到安全的地方，再打 <b>119</b>。'},
+  {unit:'🔥 居家安全', scene:'🛗🔥💨', text:'大樓失火時，趕快搭電梯下樓比較快', ans:'stop', tag:'火災不能搭電梯！', why:'火災時電梯可能停電，或讓濃煙灌進來，<b>不可以搭電梯</b>。'},
+  {unit:'🔥 居家安全', scene:'👃🔥🪟', text:'聞到瓦斯味，先打開窗戶，也不去開關電燈', ans:'go', tag:'開窗通風！', why:'開關電器可能產生火花引爆瓦斯，要<b>先開窗、關瓦斯、到屋外求助</b>。'},
+  {unit:'🔥 居家安全', scene:'🔌🔌🔌', text:'一條延長線同時插電暖器、吹風機和電鍋', ans:'stop', tag:'電線會過熱！', why:'延長線<b>插太多高耗電電器</b>，電線會過熱甚至起火。'},
+  {unit:'🔥 居家安全', scene:'🚪🔔🙅', text:'一個人在家時，陌生人說要修水管，我先不開門、打電話問爸媽', ans:'go', tag:'保護自己！', why:'不認識的人<b>不隨便開門</b>，先聯絡家人確認。'},
+  {unit:'🔥 居家安全', scene:'♨️🧴🦷', text:'被熱水燙到，趕快塗牙膏止痛', ans:'stop', tag:'要用冷水沖！', why:'燙傷口訣：<b>沖、脫、泡、蓋、送</b>，先用冷水沖，不要亂塗東西。'},
+  {unit:'🔥 居家安全', scene:'💊🧴⬆️', text:'把藥品和清潔劑收到小孩拿不到的高櫃子', ans:'go', tag:'預防誤食！', why:'藥品、清潔劑<b>放高處、不裝飲料瓶</b>，可以避免誤食。'},
+  {unit:'🔥 居家安全', scene:'❓🗣️🏠', text:'討論居家安全時，問「怎麼做才能預防跌倒？」來找出方法', ans:'go', tag:'會用「如何」提問！', why:'六何法的「<b>如何</b>」能問出比較詳細的<b>過程和做法</b>。'},
+  // 💞 與人共好（南一第四單元、康軒第三單元）
+  {unit:'💞 與人共好', scene:'😠🌬️🙂', text:'和弟弟吵架時，先深呼吸冷靜，再說出自己的感受', ans:'go', tag:'先冷靜再表達！', why:'情緒來時<b>先冷靜</b>，再好好說，問題才能解決。'},
+  {unit:'💞 與人共好', scene:'🙇💥😤', text:'同學已經道歉了，我還是故意撞回去才甘心', ans:'stop', tag:'學會原諒！', why:'對方真心<b>道歉</b>，就要學著<b>原諒</b>，報復只會讓衝突更大。'},
+  {unit:'💞 與人共好', scene:'😢🤝💬', text:'同學比賽輸了很難過，我陪在旁邊安慰他', ans:'go', tag:'有同理心！', why:'<b>同理心</b>就是體會別人的感受，在他需要時給予支持。'},
+  {unit:'💞 與人共好', scene:'🤫📝🙅', text:'好朋友要我幫他在聯絡簿上假冒家長簽名，我有禮貌地拒絕', ans:'go', tag:'拒絕不合理要求！', why:'不合理的要求要<b>有禮貌地拒絕</b>，真正的朋友不會要你做錯事。'},
+  {unit:'💞 與人共好', scene:'🗣️👂❌', text:'聽說小美說我壞話，沒問清楚就在群組罵她', ans:'stop', tag:'可能是誤會！', why:'有誤會要<b>當面問清楚、好好溝通</b>，不在網路上罵人。'},
+  {unit:'💞 與人共好', scene:'🍽️🧽👵', text:'晚餐後主動幫奶奶收碗、擦桌子', ans:'go', tag:'用行動關懷家人！', why:'主動<b>分擔家務</b>，就是表達關心家人的實際行動。'},
+  {unit:'💞 與人共好', scene:'👓😂👉', text:'同學戴了新眼鏡，大家一直叫他綽號取笑他', ans:'stop', tag:'尊重人我差異！', why:'取笑別人的外表會讓人受傷，要<b>尊重彼此的不同</b>。'},
+  {unit:'💞 與人共好', scene:'🧩🙋🧑‍🤝‍🧑', text:'分組時看到有同學落單，主動邀請他加入', ans:'go', tag:'不排擠！', why:'<b>主動邀請、不排擠</b>，班上每個人都能感到被接納。'},
+  // 🏫 學校是個小社會（康軒第四單元）
+  {unit:'🏫 學校是個小社會', scene:'🧹🧑‍🤝‍🧑✨', text:'大掃除時大家分配工作，有人掃地、有人擦窗，很快就完成', ans:'go', tag:'分工合作！', why:'<b>分工合作</b>讓工作又快又好。'},
+  {unit:'🏫 學校是個小社會', scene:'🏆😝👎', text:'比賽贏了，就對輸的班級做鬼臉', ans:'stop', tag:'勝不驕！', why:'有<b>運動家精神</b>要尊重對手，勝不驕、敗不餒。'},
+  {unit:'🏫 學校是個小社會', scene:'🎤😢📝', text:'合唱比賽輸了，全班一起討論哪裡可以再練習', ans:'go', tag:'從失敗中學習！', why:'<b>檢討原因、再接再厲</b>，下次就會更好。'},
+  {unit:'🏫 學校是個小社會', scene:'🩰👦🚫', text:'小傑想學芭蕾舞，同學說：「男生學跳舞很奇怪！」', ans:'stop', tag:'打破性別刻板印象！', why:'興趣和能力<b>不分男女</b>，每個人都可以學自己喜歡的事。'},
+  {unit:'🏫 學校是個小社會', scene:'🦺🚸🙏', text:'過馬路時聽從導護志工的指揮，還跟他說謝謝', ans:'go', tag:'感謝服務的人！', why:'導護志工守護我們的安全，要<b>配合指揮、表達感謝</b>。'},
+  {unit:'🏫 學校是個小社會', scene:'🚽🧻😝', text:'廁所的衛生紙拿來玩，丟得滿地都是', ans:'stop', tag:'愛護公物！', why:'公物是大家的，<b>不愛護會造成別人的不便</b>。'},
+  {unit:'🏫 學校是個小社會', scene:'📚🤫🙂', text:'別班在考試，經過走廊時放輕腳步、不大聲說話', ans:'go', tag:'尊重別人的學習權！', why:'保持安靜是<b>尊重他人的學習權益</b>。'},
+  {unit:'🏫 學校是個小社會', scene:'✋🙅‍♀️🛑', text:'同學一直拍我的頭讓我不舒服，我清楚說「請不要這樣」', ans:'go', tag:'身體界線！', why:'身體有<b>界線</b>，不舒服可以說不，也要尊重別人的界線。'},
+  // 📚 我可以學更多（南一〈探究〉）
+  {unit:'📚 我可以學更多', scene:'🦋📗🔍', text:'想認識蝴蝶的樣子，到圖書館找蝴蝶圖鑑來看', ans:'go', tag:'會用參考工具！', why:'<b>圖鑑</b>有清楚的圖片和說明，最適合辨認動植物。'},
+  {unit:'📚 我可以學更多', scene:'📱➡️✅', text:'網路上轉傳的消息，看到就直接相信，還分享給全班', ans:'stop', tag:'要查證！', why:'資料要<b>看出處、多方比較</b>，判斷正確性後再分享。'},
+  {unit:'📚 我可以學更多', scene:'📰🗞️🆕', text:'想知道最近發生的大事，去看今天的報紙', ans:'go', tag:'報紙最新！', why:'<b>報紙</b>天天出刊，內容最新。'},
+  {unit:'📚 我可以學更多', scene:'📖✂️🖼️', text:'圖鑑上的圖片好漂亮，偷偷撕下來帶回家', ans:'stop', tag:'愛惜圖書！', why:'圖書是大家共用的，<b>不撕、不畫、不弄髒</b>。'},
+  {unit:'📚 我可以學更多', scene:'🅺🆆🅻', text:'用 KWL 表時，先寫下「我已經知道的事」', ans:'go', tag:'K 是已知！', why:'KWL 表：<b>K 已知 → W 想知道 → L 學到</b>。'},
+  {unit:'📚 我可以學更多', scene:'📚📚🤔', text:'兩本書寫的不一樣，就隨便挑一本相信', ans:'stop', tag:'要比較資料！', why:'說法不同時，要<b>再找其他資料比較、看出處</b>。'},
+  {unit:'📚 我可以學更多', scene:'🤫📚🪑', text:'在圖書館輕聲細語，看完的書放回還書車', ans:'go', tag:'遵守圖書館規則！', why:'遵守規則，<b>尊重其他使用的人</b>。'},
+  {unit:'📚 我可以學更多', scene:'✍️🔑📒', text:'讀資料時找出關鍵詞，整理成自己的筆記', ans:'go', tag:'會摘取重點！', why:'<b>找關鍵詞、做筆記</b>，就能抓住資料的重點。'}
 ];
 /* 從每個主題輪流抽題，讓每一輪四大主題都會考到 */
 function drawL3Round(){
@@ -1270,12 +1319,16 @@ function drawL3Round(){
   }
   return shuffle(out);
 }
+/* 主題紅綠燈：每個主題（課）自成一關，題目全部出、順序打亂；星星記在 t-… 代號上 */
+const TL = {'t-learn':'🌱 自我與學習', 't-class':'🗳️ 班級自治與規範', 't-rel':'🤝 人際互動與性別平等', 't-fam':'🏠 社會角色與家庭',
+  't-kin':'👪 家庭與親人往來', 't-safe':'🔥 居家安全', 't-good':'💞 與人共好', 't-school':'🏫 學校是個小社會', 't-lib':'📚 我可以學更多'};
 let L3_QUESTIONS = [];
 const Level3 = {
-  i:0, correct:0, answered:false,
-  start(){
-    this.i = 0; this.correct = 0;
-    L3_QUESTIONS = drawL3Round();
+  i:0, correct:0, answered:false, set:null,
+  start(set){
+    this.i = 0; this.correct = 0; this.set = set || null;
+    L3_QUESTIONS = this.set ? shuffle(L3_POOL.filter(q => q.unit === TL[this.set])) : drawL3Round();
+    $('l3H2').textContent = this.set ? `🚦 小公民紅綠燈：${TL[this.set]}` : '🚦 關卡三：三年級小公民';
     $('l3Btns').querySelectorAll('button').forEach(b => b.onclick = () => this.answer(b.dataset.ans));
     $('l3Next').onclick = () => { Sound.click(); this.i++; this.i < L3_QUESTIONS.length ? this.show() : this.finish(); };
     this.show();
@@ -1303,18 +1356,19 @@ const Level3 = {
     fb.scrollIntoView({behavior:'smooth', block:'nearest'});
   },
   async finish(){
-    const n = L3_QUESTIONS.length, stars = starsFor(n - this.correct, n); Store.set(3, stars);
+    const n = L3_QUESTIONS.length, stars = starsFor(n - this.correct, n), key = this.set || 'L3'; Store.set(this.set || 3, stars);
     window.KGReport && KGReport.done({ stars, right: this.correct, total: n });
     stars ? (Sound.win(), confetti()) : Sound.shiver();
-    const v = await showModal({icon:'🚦', title: stars ? '三年級小公民 過關！' : '三年級小公民 再試一次！', center:true,
-      html:`${resultHead(stars, n - this.correct)}<p>${n} 題答對 <b>${this.correct}</b> 題。${stars === 3 ? '學習、班級、家庭生活、健康成長，你都是小公民高手！' : stars ? '再複習一下學習、班級、家庭生活、健康成長的重點，就能更厲害！' : '別灰心！先回去玩前面的關卡複習一下，再來挑戰。'}</p>`,
-      buttons:[{label:'下一關：🎯 進階挑戰 ▶', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
-    App.afterLevel(3, v);
+    const name = this.set ? TL[this.set] : '三年級小公民';
+    const v = await showModal({icon:'🚦', title: stars ? `${name} 過關！` : `${name} 再試一次！`, center:true,
+      html:`${resultHead(stars, n - this.correct)}<p>${n} 題答對 <b>${this.correct}</b> 題。${this.set ? (stars === 3 ? '這一課的生活情境你都判斷對了，真是小公民高手！' : stars ? '再看看剛才的說明，下次就能全對！' : '別灰心！看看每題的說明，再挑戰一次。') : (stars === 3 ? '學習、班級、家庭生活、人際相處，你都是小公民高手！' : stars ? '再複習一下學習、班級、家庭生活、人際相處的重點，就能更厲害！' : '別灰心！先回去玩前面的關卡複習一下，再來挑戰。')}</p>`,
+      buttons:[App.nextBtn(key), {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+    App.afterLevel(key, v);
   }
 };
 
 /* =========================================================
-   I-2. 🎯 進階挑戰：翰林三上五個單元，每單元 5 題考卷程度題
+   I-2. 🎯 進階挑戰：翰林三上五個單元（a1～a5）＋南一、康軒獨有的課（a6～a10），每組 5 題考卷程度題
    每題 a 是正解在 opts 裡的位置（顯示時會打亂）；ex 詳解；trap 陷阱提醒
    ========================================================= */
 const FIG = {
@@ -1410,7 +1464,7 @@ const FIG = {
 };
 
 const ADV = [
-  {u:1, name:'升上三年級的新學習', icon:'🌱', qs:[
+  {u:1, name:'學習方法與成長', icon:'🌱', qs:[
     {q:'參觀博物館、上網查資料都是很好的「學習資源」。下列哪一個做法「不」恰當？',
      opts:['用手摸摸博物館的展示品，看看是不是真的', '在圖書館借書，看完按時歸還', '上網查資料時請大人陪同，並確認網站可不可信', '戶外學習時聽從老師指導、注意安全'], a:0,
      ex:'博物館的展示品很珍貴，要<b>用眼睛看、不用手摸</b>，遵守參觀規定。其他三個都是使用學習資源的好方法。',
@@ -1432,7 +1486,7 @@ const ADV = [
      ex:'每個人的<b>特質和優點都不一樣</b>，要欣賞並尊重彼此的差異，不能只看一件事就否定一個人。',
      trap:'「多練跑步就好」聽起來像好建議，可是沒有指出這句話「看輕別人」的錯誤。'}
   ]},
-  {u:2, name:'校園規範和班級自治', icon:'🗳️', qs:[
+  {u:2, name:'校園規範與班級自治', icon:'🗳️', qs:[
     {q:'下列哪一個是「班會程序」正確的順序？',
      opts:['宣布開會 ➔ 報告 ➔ 提案討論 ➔ 臨時動議 ➔ 散會', '宣布開會 ➔ 提案討論 ➔ 報告 ➔ 臨時動議 ➔ 散會', '宣布開會 ➔ 報告 ➔ 臨時動議 ➔ 提案討論 ➔ 散會', '報告 ➔ 宣布開會 ➔ 提案討論 ➔ 散會 ➔ 臨時動議'], a:0,
      ex:'班會由主席<b>宣布開會</b>，接著主席與幹部<b>報告</b>，再進行<b>提案討論</b>（附議、表決），最後是<b>臨時動議</b>，然後<b>散會</b>。',
@@ -1454,7 +1508,7 @@ const ADV = [
      ex:'<b>主席</b>主持會議、<b>司儀</b>宣布開會程序、<b>記錄</b>把內容寫下來、<b>提案人</b>提出要討論的事。',
      trap:'司儀和記錄常被搞混：司儀是「說」程序，記錄是「寫」內容。'}
   ]},
-  {u:3, name:'我的校園和家庭生活', icon:'🏫', qs:[
+  {u:3, name:'校園與家庭生活', icon:'🏫', qs:[
     {q:'校園裡有很多為我們服務的人。下列配對哪一個是「錯誤」的？',
      opts:['警衛：幫同學批改作業', '導護志工：上放學時在校門口維護交通安全', '圖書館志工：協助大家借書、還書', '護理師：受傷時幫忙擦藥、量身高體重'], a:0,
      ex:'<b>警衛</b>守護校門，不讓陌生人隨便進學校；批改作業是<b>老師</b>的工作。接受別人服務時，要<b>有禮貌、說謝謝</b>。',
@@ -1476,7 +1530,7 @@ const ADV = [
      ex:'家庭能<b>照顧生活、給予關愛、教導生活習慣</b>；作業是自己的責任，家人可以陪伴、指導，但不是幫忙寫完。',
      trap:'題目問「不是」，選出不屬於家庭功能的那一個。'}
   ]},
-  {u:4, name:'健康成長的快樂童年', icon:'🛡️', qs:[
+  {u:4, name:'健康、安全與隱私', icon:'🛡️', qs:[
     {q:'幾個同學故意約好「都不要跟小凱玩」，分組時也不讓他加入。這是哪一種霸凌？',
      opts:['關係霸凌', '肢體霸凌', '網路霸凌', '只是開玩笑，不算霸凌'], a:0,
      ex:'故意<b>排擠、孤立</b>別人，讓他交不到朋友，是<b>關係霸凌</b>。遇到霸凌要勇敢拒絕、告訴師長，或向學校申訴。',
@@ -1498,7 +1552,7 @@ const ADV = [
      ex:'有乾淨的水（生存）、上學（學習權）、日記不被偷看（隱私權）都是<b>權利</b>；<b>遵守規範、尊重他人</b>是我們應盡的<b>責任</b>。',
      trap:'權利是「我可以得到的保障」，責任是「我應該做到的事」，不要弄反了。'}
   ]},
-  {u:5, name:'打造更美好的班級', icon:'🌟', qs:[
+  {u:5, name:'讓班級更美好（探究）', icon:'🌟', qs:[
     {fig:'steps', q:'全班要用「探究」的方法讓班級變得更好。圖中問號那一步應該是什麼？',
      opts:['想出可能的解決方法', '直接處罰犯錯的人', '宣布散會', '放棄這個問題'], a:0,
      ex:'探究的步驟：<b>發現問題 ➔ 找出原因 ➔ 想出可能的方法 ➔ 評估選擇 ➔ 行動與檢討</b>。',
@@ -1519,6 +1573,117 @@ const ADV = [
      opts:['檢討原因，調整做法再試一次', '宣布方法失敗，從此放棄', '怪罪這週的節能小天使', '當作沒看到，不要再討論'], a:0,
      ex:'行動之後要<b>檢討</b>：找出還沒做好的原因（例如忘記輪到誰），<b>調整做法</b>再試，班級就會越來越好。',
      trap:'沒有一次就成功很正常，「檢討、修正」也是探究的一部分。'}
+  ]},
+  /* ===== 三版本補充：南一、康軒獨有的課 ===== */
+  {u:6, name:'家庭的組成、功能與親人往來', icon:'👪', qs:[
+    {q:'小宇的爸爸有一個妹妹，她的兒子比小宇小兩歲。小宇應該叫他什麼？',
+     opts:['表弟', '堂弟', '表哥', '堂哥'], a:0,
+     ex:'爸爸的妹妹是<b>姑姑</b>；姑姑的孩子和小宇不同姓，是<b>表</b>兄弟姊妹；比小宇小，所以是<b>表弟</b>。',
+     trap:'是「爸爸那邊」的親戚，但姑姑的孩子不是「堂」，叔叔、伯伯的孩子才是堂。'},
+    {q:'下列哪一件事最能表現家庭的「教育」功能？',
+     opts:['奶奶教我吃飯要等長輩先動筷', '爸爸每天出門工作賺錢', '週末全家一起去露營', '媽媽生病時大家照顧她'], a:0,
+     ex:'家人教我們<b>生活禮儀和做人道理</b>，是家庭的教育功能；工作賺錢是經濟，照顧生病家人是照顧與關懷。',
+     trap:'四件都是家人做的好事，要選和「教導」有關的那一個。'},
+    {q:'小芸的爸媽到外地工作，她平常跟阿公、阿嬤住。下列說法哪一個正確？',
+     opts:['這是隔代教養家庭，也是溫暖的家', '沒有和爸媽同住就不算是家庭', '這一定是單親家庭', '阿公阿嬤不能算是她的家人'], a:0,
+     ex:'由祖父母照顧孫子女的是<b>隔代教養家庭</b>；爸媽都在，只是在外地工作，所以<b>不是單親家庭</b>。',
+     trap:'「沒有和爸媽一起住」不等於單親，要看清楚家庭成員。'},
+    {q:'小明想要買最新的遊戲機，媽媽說這個月家裡要繳房租和學費。小明最好怎麼做？',
+     opts:['先存零用錢，和家人討論再決定', '一直吵到媽媽答應為止', '拿家裡的錢偷偷去買', '跟同學借錢馬上去買'], a:0,
+     ex:'家庭的<b>收入有限</b>，要先支付必要的開銷；想要的東西可以<b>儲蓄</b>，和家人討論後再決定。',
+     trap:'跟同學借錢看起來能馬上買到，但借的錢還是要還，而且沒有和家人討論。'},
+    {q:'下列哪一個做法最符合「把對家人的愛擴大到關心別人」？',
+     opts:['常常幫忙隔壁行動不便的老奶奶提東西', '只對自己的爺爺奶奶有禮貌', '假日都待在家裡不出門', '過年只想著拿紅包'], a:0,
+     ex:'把<b>孝順長輩、友愛家人</b>的心意，擴大成<b>關懷鄰居和社會</b>上需要幫助的人。',
+     trap:'只對自己家人好是很棒，但題目問的是「擴大」到關心別人。'}
+  ]},
+  {u:7, name:'居家安全與提問的方法', icon:'🔥', qs:[
+    {q:'晚上在家聞到很濃的瓦斯味，下列哪一個做法「錯誤」？',
+     opts:['立刻打開電燈看看哪裡漏氣', '打開窗戶讓空氣流通', '關閉瓦斯開關', '到屋外再打電話求助'], a:0,
+     ex:'開關電燈、電器可能產生<b>火花</b>，引爆瓦斯。要<b>開窗、關瓦斯、到屋外求助</b>。',
+     trap:'想看清楚很自然，但「開電燈」正是最危險的動作！'},
+    {q:'下列哪一個問題是「開放式問題」？',
+     opts:['你覺得怎麼做可以讓家裡更安全？', '你家有裝火災警報器嗎？', '你今天有關瓦斯嗎？', '你家有沒有滅火器？'], a:0,
+     ex:'開放式問題可以讓人<b>說出想法、做法和原因</b>；其他三題只能回答「有」或「沒有」，是<b>封閉性問題</b>。',
+     trap:'問題裡有「家裡」「安全」不代表就是開放式，要看能不能自由回答。'},
+    {q:'用六何法訪問消防員，想知道「火災時要怎麼逃生」，應該用哪一種問法？',
+     opts:['如何', '何時', '何人', '何地'], a:0,
+     ex:'問「<b>如何</b>」可以得到比較詳細的<b>過程和做法</b>。',
+     trap:'「何時」只能知道時間，問不到逃生的方法。'},
+    {q:'住在大樓裡，發生火災、樓梯間已經充滿濃煙，下列哪一個做法最正確？',
+     opts:['關上房門，到有窗戶的房間求救', '捏著鼻子衝下樓梯', '搭電梯到一樓', '躲進衣櫃裡等人來找'], a:0,
+     ex:'濃煙很危險，<b>不穿越濃煙、不搭電梯</b>；關門可以擋住濃煙，再到窗邊<b>求救</b>，讓消防員找到你。',
+     trap:'躲衣櫃看起來很安全，但消防員找不到你，濃煙也可能飄進來。'},
+    {q:'被熱湯燙傷了，處理步驟的順序哪一個正確？',
+     opts:['沖 ➔ 脫 ➔ 泡 ➔ 蓋 ➔ 送', '脫 ➔ 沖 ➔ 蓋 ➔ 泡 ➔ 送', '泡 ➔ 沖 ➔ 脫 ➔ 送 ➔ 蓋', '送 ➔ 蓋 ➔ 泡 ➔ 脫 ➔ 沖'], a:0,
+     ex:'燙傷五步驟：先用冷水<b>沖</b>，在水中小心<b>脫</b>去衣物，再<b>泡</b>冷水，用乾淨的布<b>蓋</b>住，最後<b>送</b>醫。',
+     trap:'要先沖冷水降溫，再脫衣物，順序弄反容易讓皮膚受傷更嚴重。'}
+  ]},
+  {u:8, name:'與人共好', icon:'💞', qs:[
+    {q:'小安不小心把水灑在小琪的作業上，小琪很生氣。下列哪一個做法最能讓兩人和好？',
+     opts:['小安真誠道歉並幫忙擦乾', '小安說是桌子太滑了', '小琪把小安的作業也弄濕', '兩個人從此都不說話'], a:0,
+     ex:'做錯事要<b>真誠道歉、想辦法彌補</b>；對方道歉後，也要學著<b>原諒</b>。',
+     trap:'「以牙還牙」看起來公平，其實只會讓衝突變大。'},
+    {q:'下列哪一個做法最能表現「同理心」？',
+     opts:['想想如果我是他，會有什麼感受', '只要我覺得好笑就可以', '別人難過不關我的事', '用自己的想法要求別人'], a:0,
+     ex:'<b>同理心</b>就是站在對方的立場，體會他的感受。',
+     trap:'同理心不是「我覺得」，而是想想「他覺得」。'},
+    {q:'好朋友說：「借我抄作業，不然就不跟你好了！」下列哪一個回答最恰當？',
+     opts:['「抄作業不對，我可以教你怎麼寫。」', '「好啦，給你抄，不要告訴老師。」', '「你很煩，走開啦！」', '「我也要抄別人的。」'], a:0,
+     ex:'不合理的要求要<b>有禮貌地拒絕</b>，還可以提出幫忙的好辦法。',
+     trap:'罵人「很煩」雖然拒絕了，卻不禮貌，會傷感情。'},
+    {q:'小華聽說小美在背後說他壞話，下列哪一個做法最能解決問題？',
+     opts:['找小美當面問清楚', '在群組裡說小美的壞話', '叫大家不要跟小美玩', '在小美的桌上亂畫'], a:0,
+     ex:'聽說的事不一定是真的，可能是<b>誤會</b>；要<b>當面好好溝通</b>才能解開。',
+     trap:'先別急著生氣，「聽說」可能是誤會。'},
+    {q:'媽媽下班很累，下列哪一個行動最能表達對媽媽的關心？',
+     opts:['主動擺碗筷、幫忙倒垃圾', '吵著要媽媽陪我玩遊戲', '請媽媽幫我把書包整理好', '告訴媽媽我今天不想寫功課'], a:0,
+     ex:'用<b>實際行動分擔家務</b>，最能表達對家人的關心。',
+     trap:'其他選項都是「要媽媽為我做事」，不是關心她。'}
+  ]},
+  {u:9, name:'學校是個小社會', icon:'🏫', qs:[
+    {q:'全班要完成運動會的班級看板，下列哪一個做法最能發揮合作的力量？',
+     opts:['先討論，依每個人的專長分配工作', '全部交給畫畫最好的人做', '每個人都畫自己想畫的', '等最後一天再一起趕工'], a:0,
+     ex:'<b>溝通討論、依專長分工</b>，每個人都負責一部分，合作才有效率。',
+     trap:'交給一個人雖然畫得好，但不是「合作」，那個人也會太辛苦。'},
+    {q:'拔河比賽輸了，下列哪一個想法最有運動家精神？',
+     opts:['恭喜對手，回去檢討再加強練習', '裁判一定偏心另一班', '都是某某同學沒用力', '以後再也不參加比賽'], a:0,
+     ex:'<b>勝不驕、敗不餒</b>：尊重對手，從失敗中找原因，下次再挑戰。',
+     trap:'怪罪隊友或裁判，不能幫助全班進步。'},
+    {q:'下列哪一句話「沒有」性別刻板印象？',
+     opts:['只要有興趣，男生女生都能當廚師', '男生不可以玩扮家家酒', '女生不適合當工程師', '當護理師是女生的工作'], a:0,
+     ex:'工作和興趣<b>不分男女</b>，只要有能力和興趣，都有公平發展的權利。',
+     trap:'題目問「沒有」刻板印象的，要選尊重每個人選擇的那一句。'},
+    {q:'下列哪一個是學校訂定「不可以在走廊奔跑」這條規定的主要目的？',
+     opts:['避免撞到人發生危險', '讓下課時間變短', '讓老師比較好處罰學生', '讓大家都不能玩'], a:0,
+     ex:'校規是為了讓大家<b>安全、有秩序</b>地在學校學習和生活。',
+     trap:'規範的目的不是處罰，而是保護大家。'},
+    {q:'有同學在校門口不理會導護志工的指揮，自己衝過馬路。下列說法哪一個正確？',
+     opts:['導護志工在保護大家，應該配合指揮', '導護志工不是老師，可以不用聽', '只要跑得夠快就不會有危險', '這是個人的自由，別人管不著'], a:0,
+     ex:'學校裡有很多人<b>為我們服務</b>，導護志工守護大家上放學的安全，要<b>配合指揮、表達感謝</b>。',
+     trap:'「不是老師就不用聽」是錯的，服務人員的提醒也是為了我們的安全。'}
+  ]},
+  {u:10, name:'我可以學更多', icon:'📚', qs:[
+    {q:'想知道「石虎長什麼樣子、身上有什麼花紋」，最適合查哪一種資料？',
+     opts:['動物圖鑑', '國語辭典', '今天的報紙', '漫畫故事書'], a:0,
+     ex:'<b>圖鑑</b>有清楚的圖片和說明，最適合辨認動植物的外形。',
+     trap:'報紙雖然有新消息，但不一定有清楚的動物圖片。'},
+    {q:'小明用 KWL 表探索「颱風」，「颱風來之前要準備什麼？」應該寫在哪一欄？',
+     opts:['W（想知道）', 'K（已經知道）', 'L（學到了）', '哪一欄都可以'], a:0,
+     ex:'這是一個<b>想知道的問題</b>，要寫在 <b>W</b> 欄；找到答案後，學到的事寫在 L 欄。',
+     trap:'問題還沒有答案，所以不能寫在 L（學到了）。'},
+    {q:'兩個網站寫的資料不一樣，下列哪一個做法最恰當？',
+     opts:['看看出處，再找書或專家比較', '選字比較多的那一個', '選最先找到的那一個', '兩個都不要看了'], a:0,
+     ex:'判斷資料的正確性：<b>看出處、多找幾種資料比較</b>，必要時請教老師或專家。',
+     trap:'字多、先找到，都不代表比較正確。'},
+    {q:'下列哪一種資料的內容最新，適合了解最近發生的事？',
+     opts:['報紙', '百科全書', '圖鑑', '字典'], a:0,
+     ex:'<b>報紙</b>天天出刊，內容最新；百科全書、圖鑑、字典適合查比較固定的知識。',
+     trap:'百科全書內容很多，但出版之後就不會天天更新。'},
+    {q:'在圖書館看完書，下列哪一個做法正確？',
+     opts:['放到還書車或指定的地方', '隨便塞進最近的書架', '帶回家不用登記', '留在桌上給別人收'], a:0,
+     ex:'看完的書放到<b>指定的地方</b>，館員才能放回正確的位置，別人也找得到。',
+     trap:'隨便塞進書架，看起來有放回去，其實會讓書「失蹤」。'}
   ]}
 ];
 
@@ -1567,7 +1732,7 @@ const AdvLevel = {
     stars ? (Sound.win(), confetti()) : Sound.shiver();
     const v = await showModal({icon:'🎯', title: stars ? '進階挑戰完成！' : '進階挑戰 再試一次！', center:true,
       html:`${resultHead(stars, this.miss)}<p>${this.qs.length} 題答對 <b>${this.qs.length - this.miss}</b> 題。${stars === 3 ? '考卷上的陷阱題難不倒你！' : '記住剛才的「小心陷阱」提醒，下次就不會被騙了！'}</p>`,
-      buttons:[n < ADV.length ? {label:'下一組進階挑戰 ▶', value:'next'} : {label:'看我的總成績 🏆', value:'next'}, {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
+      buttons:[App.nextBtn('a' + n), {label:'🏠 回關卡選單', value:'home', cls:'wood'}]});
     App.afterAdv(n, v);
   }
 };
@@ -1598,7 +1763,7 @@ const NOTES = [
     <li>⚖️ <b>性別平等</b>：男生可以哭、女生可以踢足球，興趣不分男女！</li>
     <li>🏠 家庭有很多樣子，每一種都是家；分擔家事、<b>感恩回饋</b>家人。</li></ul>
     <div class="star-tip">⭐ 在家、在學校，每個人都有不同的角色和責任，盡力做好就是最棒的小公民！</div>`},
-  {icon:'💡', title:'《打造美好班級》', sub:'第五單元・探究', html:`
+  {icon:'💡', title:'《打造美好班級》', sub:'探究與實作', html:`
     <div class="flow"><span>發現問題</span><i>➔</i><span>找出原因</span><i>➔</i><span>想出方法</span><i>➔</i><span>評估選擇</span><i>➔</i><span>行動與檢討</span></div>
     <ul><li>分清楚：看到的<b>情形</b>、發生的<b>原因</b>、改善的<b>做法</b>。</li>
     <li>選做法要想：<b>做得到嗎？公平嗎？</b>會不會造成新問題？</li>
@@ -1610,8 +1775,7 @@ const Result = {
     const s = Store.get();
     $('trophy').innerHTML = Pix.trophy().replace('<svg', '<svg style="width:110px;height:auto"');
     $('catPix').innerHTML = Pix.cat();
-    const names = [['🎮 班會情境劇', 1], ['🏥 急救特派員', 2], ['🚦 小公民', 3], ...ADV.map(u => [`🎯 ${u.icon} 第${'一二三四五'[u.u - 1]}單元`, 'a' + u.u])];
-    $('resultLevels').innerHTML = names.map(([n, k]) => `<div>${n}<b>${'★'.repeat(s[k] || 0)}${'☆'.repeat(3 - (s[k] || 0))}</b></div>`).join('');
+    $('resultLevels').innerHTML = App.seq().map(k => { const n = s[App.store(k)] || 0; return `<div>${App.info(k).short}<b>${'★'.repeat(n)}${'☆'.repeat(3 - n)}</b></div>`; }).join('');
     $('notes').innerHTML = NOTES.map((n, i) => `<button class="note-card px" data-i="${i}"><span class="n-icon">📒</span>${n.title}<small>${n.sub}・點我閱讀</small></button>`).join('');
     $('notes').querySelectorAll('.note-card').forEach(b => b.addEventListener('click', () => {
       Sound.click(); const n = NOTES[+b.dataset.i];
@@ -1625,22 +1789,40 @@ const Result = {
    ========================================================= */
 const App = {
   current:'lobby',
-  init(){
-    $('advPortals').innerHTML = ADV.map(u => `<button class="portal px adv" data-adv="${u.u}">
-        <span class="p-icon" data-pix="target"></span>
+  /* 關卡代號 ➔ 存星星用的 key（關卡一～三沿用原本的 1、2、3） */
+  store(k){ return {L1:1, L2:2, L3:3}[k] || k; },
+  /* 目前版本、範圍的單元（沒有 kg-ver.js 時用預設版本的全部單元） */
+  units(){ return window.KGVer ? KGVer.units(BOOK) : BOOK.versions[BOOK.defaultVersion]; },
+  /* 依目前版本排好的關卡順序（最後加上綜合關卡「三年級小公民」） */
+  seq(){ const out = []; this.units().forEach(u => u.levels.forEach(k => { if (out.indexOf(k) < 0) out.push(k); })); out.push('L3'); return out; },
+  unitOf(k){ const u = this.units().find(x => x.levels.indexOf(k) >= 0); return u ? `第 ${u.no} 單元 ${u.title}` : '綜合複習'; },
+  info(k){
+    if (k === 'L1') return {pix:'grass', cls:'p1', lv:'動手做', name:'🎮 麥塊班會情境劇', desc:'班會程序與民主素養', short:'🎮 班會情境劇'};
+    if (k === 'L2') return {pix:'cross', cls:'p2', lv:'動手做', name:'🏥 校園急救特派員', desc:'點地圖找處室與幹部', short:'🏥 急救特派員'};
+    if (k === 'L3') return {pix:'light', cls:'p3', lv:'綜合挑戰', name:'🚦 三年級小公民', desc:'學習・班級・家庭・人際紅綠燈', short:'🚦 小公民'};
+    if (TL[k]) return {pix:'light', cls:'p3', lv:'想一想', name:TL[k], desc:`小公民紅綠燈・${L3_POOL.filter(q => q.unit === TL[k]).length} 個情境`, short:`🚦 ${TL[k]}`};
+    const u = ADV[+k.slice(1) - 1];
+    return {pix:'target', cls:'adv', lv:'🎯 進階挑戰', name:`${u.icon} ${u.name}`, desc:'考卷陷阱題 5 題・附詳解', short:`🎯 ${u.icon} ${u.name}`};
+  },
+  portal(k){
+    const f = this.info(k);
+    return `<button class="portal px ${f.cls}" data-key="${k}">
+        <span class="p-icon">${Pix[f.pix]()}</span>
         <span class="p-info">
-          <span class="p-lv adv">🎯 第${'一二三四五'[u.u - 1]}單元・進階挑戰</span>
-          <span class="p-name">${u.icon} ${u.name}</span>
-          <span class="p-desc">考卷陷阱題 5 題・附詳解</span>
-          <span class="p-stars" data-stars="a${u.u}">★★★</span>
+          <span class="p-lv${f.cls === 'adv' ? ' adv' : ''}">${f.lv}</span>
+          <span class="p-name">${f.name}</span>
+          <span class="p-desc">${f.desc}</span>
+          <span class="p-stars" data-stars="${this.store(k)}">★★★</span>
         </span>
-      </button>`).join('');
-    document.querySelectorAll('[data-pix]').forEach(el => el.innerHTML = Pix[el.dataset.pix]());
-    document.querySelectorAll('.portal').forEach(p => p.addEventListener('click', () => { Sound.unlock(); Sound.click(); p.dataset.adv ? this.startAdv(+p.dataset.adv) : this.startLevel(+p.dataset.level); }));
+      </button>`;
+  },
+  init(){
     $('homeBtn').addEventListener('click', () => { Sound.click(); this.go('lobby'); });
     $('resultHome').addEventListener('click', () => { Sound.click(); this.go('lobby'); });
     $('notesBtn').addEventListener('click', () => { Sound.click(); this.go('result'); });
     $('muteBtn').addEventListener('click', e => { e.currentTarget.textContent = Sound.toggle() ? '🔇' : '🔊'; });
+    $('portals').addEventListener('click', e => { const p = e.target.closest('.portal'); if (!p) return; Sound.unlock(); Sound.click(); this.play(p.dataset.key); });
+    window.KGVer && KGVer.bar($('verBar'), BOOK, () => this.renderLobby());
     // 場景尺寸單位（依場景高度縮放人物大小）
     const scene = $('scene');
     new ResizeObserver(() => scene.style.setProperty('--u', scene.clientHeight / 100 + 'px')).observe(scene);
@@ -1651,39 +1833,53 @@ const App = {
     document.querySelectorAll('.screen').forEach(s => s.classList.toggle('active', s.id === id));
     this.current = id;
     $('homeBtn').hidden = id === 'lobby';
-    $('topTitle').textContent = {lobby:'🎒 三年級上學期社會探險島', level1:'🎮 關卡一：麥塊班會情境劇', level2:'🏥 關卡二：校園急救特派員', level3:'🚦 關卡三：三年級小公民', adv:'🎯 進階挑戰（考卷陷阱題）', result:'🏆 全部過關！'}[id];
+    $('topTitle').textContent = {lobby:'🎒 三年級上學期社會探險島', level1:'🎮 關卡一：麥塊班會情境劇', level2:'🏥 關卡二：校園急救特派員', level3:Level3.set ? '🚦 小公民紅綠燈' : '🚦 關卡三：三年級小公民', adv:'🎯 進階挑戰（考卷陷阱題）', result:'🏆 全部過關！'}[id];
     if (id === 'lobby') this.renderLobby();
     if (id === 'result') Result.show();
     $('overlay').classList.remove('open');
     window.scrollTo({top:0});
   },
   renderLobby(){
+    const v = window.KGVer ? KGVer.cur(BOOK).version : BOOK.defaultVersion, pub = {nani:'南一', kang:'康軒', han:'翰林'}[v];
+    $('lobbySub').textContent = `${pub}版三上・選一個傳送門開始冒險，每關最多拿 ★★★！`;
+    $('portals').innerHTML = this.units().map(u => `<h3 class="term-head">📘 第${'一二三四五六'[u.no - 1]}單元　${u.title}</h3>` + u.levels.map(k => this.portal(k)).join('')).join('')
+      + `<h3 class="term-head">🧩 綜合挑戰</h3>` + this.portal('L3');
     const s = Store.get();
     document.querySelectorAll('[data-stars]').forEach(el => el.innerHTML = starHTML(s[el.dataset.stars] || 0));
     $('notesBtn').hidden = !Store.allCleared();
+    window.mountExam && mountExam();
   },
-  startLevel(n){
+  play(k){
+    if (k[0] === 'a') return this.startAdv(+k.slice(1));
+    if (TL[k]) return this.startLevel(3, k);
+    this.startLevel(+k.slice(1));
+  },
+  startLevel(n, set){
     this.go('level' + n);
-    const LV = {1: ['關卡一 麥塊班會情境劇', '第 2 單元 校園規範和班級自治'], 2: ['關卡二 校園急救特派員', '第 3 單元 我的校園和家庭生活'], 3: ['關卡三 三年級小公民', '第 1～4 單元 綜合']}[n];
-    window.KGReport && KGReport.level(LV[0], LV[1]);
-    ({1:Level1, 2:Level2, 3:Level3})[n].start();
+    const name = n === 3 && set ? `🚦 小公民紅綠燈：${TL[set]}` : {1:'關卡一 麥塊班會情境劇', 2:'關卡二 校園急救特派員', 3:'關卡三 三年級小公民'}[n];
+    window.KGReport && KGReport.level(name, this.unitOf(set || 'L' + n));
+    if (n === 3){ Level3.start(set); $('topTitle').textContent = set ? '🚦 小公民紅綠燈' : '🚦 關卡三：三年級小公民'; }
+    else ({1:Level1, 2:Level2})[n].start();
   },
   startAdv(n){
     this.go('adv');
     const u = ADV[n - 1];
-    window.KGReport && KGReport.level(`${n}-🎯 進階挑戰：${u.name}`, `第 ${n} 單元 ${u.name}`);
+    window.KGReport && KGReport.level(`🎯 進階挑戰：${u.name}`, this.unitOf('a' + n));
     AdvLevel.start(n);
   },
-  afterLevel(n, choice){
-    if (choice === 'home') return this.go('lobby');
-    if (n < 3) return this.startLevel(n + 1);
-    this.startAdv(1);
+  /* 結算彈窗的「下一關」按鈕：依目前版本的關卡順序 */
+  nextBtn(k){
+    const q = this.seq(), nx = q[q.indexOf(k) + 1];
+    return nx ? {label:`下一關：${this.info(nx).short} ▶`, value:'next'} : {label:'看我的總成績 🏆', value:'next'};
   },
-  afterAdv(n, choice){
+  after(k, choice){
     if (choice === 'home') return this.go('lobby');
-    if (n < ADV.length) return this.startAdv(n + 1);
+    const q = this.seq(), nx = q[q.indexOf(k) + 1];
+    if (nx) return this.play(nx);
     this.go(Store.allCleared() ? 'result' : 'lobby');
-  }
+  },
+  afterLevel(n, choice){ this.after(typeof n === 'number' ? 'L' + n : n, choice); },
+  afterAdv(n, choice){ this.after('a' + n, choice); }
 };
 
 /* 彩花 */
@@ -1700,10 +1896,12 @@ function confetti(){
 
 App.init();
 </script>
-<script src="grade3-exam-bank.js?v=20261102x"></script>
+<script src="grade3-exam-bank.js?v=20261103v"></script>
 <script src="https://kuog88.github.io/kg-exam.js" defer></script>
 <script>
-window.addEventListener('load', function m() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), EXAM_BANK); else setTimeout(m, 200); });
+/* 月考測驗卷依目前版本、範圍組卷；切換版本或範圍時 App.renderLobby() 會呼叫 mountExam() 重新掛上 */
+function mountExam(){ if (!window.KGExam) return; KGExam.mount(document.getElementById('exam-box'), window.KGVer ? KGVer.examBank(BOOK, EXAM_BANK) : EXAM_BANK); }
+window.addEventListener('load', function m() { if (window.KGExam) mountExam(); else setTimeout(m, 200); });
 </script>
 <script src="https://kuog88.github.io/home-button.js" defer></script>
 <script src="https://kuog88.github.io/bgm.js" defer></script>

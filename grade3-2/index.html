@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>三年級下學期社會・小鎮郵差送信記</title>
-<link rel="stylesheet" href="style.css?v=20261102x">
-<link rel="stylesheet" href="../assets/rwd.css">
+<link rel="stylesheet" href="style.css?v=20261103v">
+<link rel="stylesheet" href="../assets/rwd.css?v=20261103v">
 </head>
 <body>
 <div class="app">
@@ -14,9 +14,9 @@
     <div class="brand">
       <span class="sem-tag">下學期</span>
       <h1>三年級下學期・小鎮郵差送信記</h1>
-      <p class="sub">翰林版社會 3 下</p>
+      <p class="sub" id="verSub">社會 3 下</p>
     </div>
-    <div class="stamp-total" title="收集到的郵戳"><span class="ico">📮</span><b id="totalStars">0</b><small>/54</small></div>
+    <div class="stamp-total" title="收集到的郵戳"><span class="ico">📮</span><b id="totalStars">0</b><small id="maxStars">/54</small></div>
   </header>
 
   <!-- 首頁：小鎮地圖 -->
@@ -25,10 +25,11 @@
       <div class="postman" aria-hidden="true">🧑‍✈️📬</div>
       <div>
         <h2>歡迎來到三下的小鎮！</h2>
-        <p>你是新來的小郵差。小鎮有 6 個街區，每個街區有 3 封信要送：<b>動手做</b>、<b>觀念題</b>、<b>挑戰題</b>。送得越好，郵戳 ⭐ 越多！</p>
+        <p>你是新來的小郵差。小鎮的每個街區就是課本的一個單元，每封信是一個關卡：<b>動手做</b>、<b>觀念題</b>、<b>挑戰題</b>。送得越好，郵戳 ⭐ 越多！</p>
         <p class="note">這是<b>下學期</b>（三下）的內容；上學期的方塊校園冒險請回「選年級」找。</p>
       </div>
     </section>
+    <div id="verBar"></div>
     <section class="town" id="town"></section>
     <section class="exam-sec" aria-label="月考測驗卷"><div id="exam-box"></div></section>
     <p class="foot">
@@ -70,14 +71,21 @@
 
 <div class="toast" id="toast" hidden></div>
 
-<script src="data.js?v=20261102x"></script>
-<script src="game.js?v=20261102x"></script>
-<script src="exam-bank.js?v=20261102x"></script>
+<script src="https://kuog88.github.io/kg-ver.js?v=20261103v"></script>
+<script src="js/book.js?v=20261103v"></script>
+<script src="data.js?v=20261103v"></script>
+<script src="exam-bank.js?v=20261103v"></script>
+<script>
+/* 月考測驗卷依目前版本、範圍組卷；切換版本或範圍時重新掛上 */
+function mountExam() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), window.KGVer ? KGVer.examBank(BOOK, EXAM_BANK) : EXAM_BANK); }
+</script>
+<script src="game.js?v=20261103v"></script>
 <script src="https://kuog88.github.io/kg-exam.js" defer></script>
 <script>
-window.addEventListener('load', function m() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), EXAM_BANK); else setTimeout(m, 200); });
+window.KGVer && KGVer.bar(document.getElementById('verBar'), BOOK, function () { window.G32_REDRAW && G32_REDRAW(); });
+window.addEventListener('load', function m() { if (window.KGExam) mountExam(); else setTimeout(m, 200); });
 </script>
-<script src="../assets/rwd.js"></script>
+<script src="../assets/rwd.js?v=20261103v"></script>
 <script src="https://kuog88.github.io/home-button.js" defer></script>
 <script src="https://kuog88.github.io/bgm.js" defer></script>
 </body>

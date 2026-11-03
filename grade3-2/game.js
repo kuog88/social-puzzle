@@ -11,7 +11,16 @@
   try { stars = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { stars = {}; }
   function saveStars() { try { localStorage.setItem(KEY, JSON.stringify(stars)); } catch (e) {} }
   function getStar(ui, li) { return stars[DATA[ui].id + "-" + li] || 0; }
-  function totalStars() { var t = 0; for (var k in stars) t += stars[k]; return t; }
+
+  // ---------- 三版本：街區＝目前版本的單元，信件＝BOOK levels（「u1-0」＝第一街區第 1 封） ----------
+  function vUnits() { return window.KGVer ? KGVer.units(BOOK) : BOOK.versions[BOOK.defaultVersion]; }
+  function lvRef(code) {
+    var p = code.split("-"), li = +p[1];
+    for (var i = 0; i < DATA.length; i++) if (DATA[i].id === p[0]) return { ui: i, li: li };
+    return null;
+  }
+  function vSeq() { var out = []; vUnits().forEach(function (u, vi) { u.levels.forEach(function (c) { var r = lvRef(c); r.vi = vi; out.push(r); }); }); return out; }
+  function totalStars() { var t = 0; vSeq().forEach(function (r) { t += getStar(r.ui, r.li); }); return t; }
   function starText(n) { return "⭐".repeat(n) + "☆".repeat(3 - n); }
 
   // ---------- 小工具 ----------
@@ -72,7 +81,7 @@
   $("#speakBtn").addEventListener("click", function () { if (speakText) speak(speakText); });
 
   // ---------- 畫面切換 ----------
-  var curUnit = 0, curLevel = 0;
+  var curUnit = 0, curLevel = 0, curVU = 0;
   function show(id) {
     ["home", "unit", "play"].forEach(function (s) { $("#" + s).hidden = s !== id; });
     clearLater(); $("#modal").hidden = true;
@@ -84,32 +93,42 @@
     if (g) { if (g.dataset.go === "home") renderHome(); show(g.dataset.go); }
   });
 
+  var CN = ["", "一", "二", "三", "四", "五", "六"];
   function renderHome() {
+    var vs = vUnits(), seq = vSeq();
     $("#totalStars").textContent = totalStars();
+    $("#maxStars").textContent = "/" + seq.length * 3;
+    var pub = window.KGVer ? KGVer.PUB[KGVer.cur(BOOK).version] : "翰林";
+    $("#verSub").textContent = pub + "版社會 3 下";
     var town = $("#town"); town.innerHTML = "";
-    DATA.forEach(function (u, ui) {
-      var got = 0; u.levels.forEach(function (_, li) { got += getStar(ui, li); });
+    vs.forEach(function (vu, vi) {
+      var refs = vu.levels.map(lvRef), first = DATA[refs[0].ui];
+      var got = 0; refs.forEach(function (r) { got += getStar(r.ui, r.li); });
       var b = el("button", "house");
       b.type = "button";
-      b.style.setProperty("--c", u.color);
-      b.innerHTML = '<span class="inner"><span class="no">第' + u.no + '街區</span><span class="em">' + u.house +
-        '</span><span class="nm">' + esc(u.name) + '</span><span class="stars">郵戳 ' + got + ' / 9</span></span>';
-      b.addEventListener("click", function () { openUnit(ui); });
+      b.style.setProperty("--c", first.color);
+      b.innerHTML = '<span class="inner"><span class="no">第' + CN[vu.no] + '街區</span><span class="em">' + first.house +
+        '</span><span class="nm">' + esc(vu.title) + '</span><span class="stars">郵戳 ' + got + ' / ' + refs.length * 3 + '</span></span>';
+      b.addEventListener("click", function () { openUnit(vi); });
       town.appendChild(b);
     });
+    window.mountExam && mountExam();
   }
+  // 版本／範圍切換列換了版本：回小鎮地圖重畫
+  window.G32_REDRAW = function () { renderHome(); show("home"); };
 
-  function openUnit(ui) {
-    curUnit = ui;
-    var u = DATA[ui];
-    $("#unitHead").innerHTML = '<h2>' + u.house + ' 第' + u.no + '單元　' + esc(u.name) + '</h2><p>' + esc(u.lessons) + '</p>';
+  function openUnit(vi) {
+    curVU = vi;
+    var vu = vUnits()[vi], first = DATA[lvRef(vu.levels[0]).ui];
+    $("#unitHead").innerHTML = '<h2>' + first.house + ' 第' + CN[vu.no] + '單元　' + esc(vu.title) + '</h2><p>' + esc(vu.lessons || "") + '</p>';
     var list = $("#levelList"); list.innerHTML = "";
-    u.levels.forEach(function (lv, li) {
+    vu.levels.forEach(function (code, k) {
+      var r = lvRef(code), lv = DATA[r.ui].levels[r.li];
       var c = el("button", "level-card");
       c.type = "button";
-      c.innerHTML = '<span class="kind k' + (li + 1) + '">第 ' + (li + 1) + ' 封信・' + lv.kind + '</span><h3>' + esc(lv.title) +
-        '</h3><span class="got">' + starText(getStar(ui, li)) + '</span>';
-      c.addEventListener("click", function () { startLevel(ui, li); });
+      c.innerHTML = '<span class="kind k' + (r.li + 1) + '">第 ' + (k + 1) + ' 封信・' + lv.kind + '</span><h3>' + esc(lv.title) +
+        '</h3><span class="got">' + starText(getStar(r.ui, r.li)) + '</span>';
+      c.addEventListener("click", function () { startLevel(r.ui, r.li); });
       list.appendChild(c);
     });
     show("unit");
@@ -123,16 +142,18 @@
   function setProg(f) { $("#progBar").style.width = Math.round(Math.min(1, f) * 100) + "%"; }
   function startLevel(ui, li) {
     curUnit = ui; curLevel = li;
-    var lv = DATA[ui].levels[li];
-    $("#playTitle").textContent = "第" + DATA[ui].no + "單元・" + lv.kind + "：" + lv.title;
+    var lv = DATA[ui].levels[li], code = DATA[ui].id + "-" + li, vs = vUnits();
+    if (!vs[curVU] || vs[curVU].levels.indexOf(code) < 0) vs.forEach(function (u, i) { if (u.levels.indexOf(code) >= 0 && (!vs[curVU] || vs[curVU].levels.indexOf(code) < 0)) curVU = i; });
+    var vu = vs[curVU];
+    $("#playTitle").textContent = "第" + CN[vu.no] + "單元・" + lv.kind + "：" + lv.title;
     setProg(0);
     repTally = null;
-    window.KGReport && KGReport.level(DATA[ui].no + "-" + (li + 1) + " " + lv.kind + "：" + lv.title, "第" + DATA[ui].no + "單元 " + DATA[ui].name);
+    window.KGReport && KGReport.level(vu.no + "-" + (vu.levels.indexOf(code) + 1) + " " + lv.kind + "：" + lv.title, "第" + CN[vu.no] + "單元 " + vu.title);
     var stage = $("#stage"); stage.innerHTML = "";
     show("play");
     RENDER[lv.type](stage, lv, finish);
   }
-  $("#quitBtn").addEventListener("click", function () { openUnit(curUnit); });
+  $("#quitBtn").addEventListener("click", function () { openUnit(curVU); });
 
   function finish(n, text) {
     var key = DATA[curUnit].id + "-" + curLevel;
@@ -144,17 +165,22 @@
     $("#mStamp").textContent = starText(n);
     $("#mTitle").textContent = n === 3 ? "完美送達！" : n === 2 ? "順利送達！" : n === 1 ? "送到了，再接再厲！" : "再試一次！";
     $("#mText").textContent = text || "";
-    var last = curUnit === DATA.length - 1 && curLevel === DATA[curUnit].levels.length - 1;
+    var nx = nextRef(), last = !nx;
     $("#mNext").textContent = last ? "回小鎮地圖" : "下一封信 →";
     $("#modal").hidden = false;
   }
   $("#mAgain").addEventListener("click", function () { $("#modal").hidden = true; startLevel(curUnit, curLevel); });
+  // 下一封信：依目前版本的單元順序
+  function nextRef() {
+    var seq = vSeq();
+    for (var i = 0; i < seq.length; i++) if (seq[i].vi === curVU && seq[i].ui === curUnit && seq[i].li === curLevel) return seq[i + 1] || null;
+    return null;
+  }
   $("#mNext").addEventListener("click", function () {
     $("#modal").hidden = true;
-    var u = curUnit, l = curLevel + 1;
-    if (l >= DATA[u].levels.length) { u++; l = 0; }
-    if (u >= DATA.length) { renderHome(); show("home"); return; }
-    startLevel(u, l);
+    var nx = nextRef();
+    if (!nx) { renderHome(); show("home"); return; }
+    curVU = nx.vi; startLevel(nx.ui, nx.li);
   });
 
   // ---------- 拖曳（滑鼠＋觸控），沒拖動就當作點一下 ----------
@@ -412,7 +438,7 @@
 
   // ---------- 啟動 ----------
   $("#resetBtn").addEventListener("click", function () {
-    if (confirm("確定要清除三年級下學期的郵戳進度嗎？（不影響上學期）")) { stars = {}; saveStars(); renderHome(); }
+    if (confirm("確定要清除三年級下學期的郵戳進度嗎？（不影響上學期，三個版本的進度都會清除）")) { stars = {}; saveStars(); renderHome(); }
   });
   renderHome();
 })();
