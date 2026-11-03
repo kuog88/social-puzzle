@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>四年級下學期社會・熱氣球家鄉巡航（南一四下）</title>
-<link rel="stylesheet" href="style.css?v=20261102x">
-<link rel="stylesheet" href="../assets/rwd.css">
+<title>四年級下學期社會・熱氣球家鄉巡航（四下）</title>
+<link rel="stylesheet" href="style.css?v=20261103v">
+<link rel="stylesheet" href="../assets/rwd.css?v=20261103v">
 </head>
 <body>
 <div class="sky" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span></div>
@@ -16,7 +16,7 @@
       <span class="sem-tag">下學期</span>
       <div class="brand-text">
         <div class="brand-name">四年級下學期・熱氣球家鄉巡航</div>
-        <div class="brand-sub">南一版社會 4 下</div>
+        <div class="brand-sub" id="verSub">社會 4 下</div>
       </div>
     </div>
     <div class="fuel" title="收集到的星星">⭐ <b id="totalStars">0</b><small id="maxStars">/45</small></div>
@@ -32,6 +32,7 @@
         <p class="note">這是<b>四年級下學期</b>的內容；上學期的「家鄉探險隊」請回「選年級」找。</p>
       </div>
     </section>
+    <div id="verBar"></div>
     <section class="route" id="route"></section>
     <section class="exam-sec" aria-label="月考測驗卷"><div id="exam-box"></div></section>
     <p class="foot"><button class="link-btn" id="resetBtn" type="button">清除下學期進度</button></p>
@@ -74,14 +75,23 @@
 
 <div class="toast" id="toast" hidden></div>
 
-<script src="data.js?v=20261102x"></script>
-<script src="game.js?v=20261102x"></script>
-<script src="exam-bank.js?v=20261102x"></script>
+<script src="https://kuog88.github.io/kg-ver.js?v=20261103v"></script>
+<script src="js/book.js?v=20261103v"></script>
+<script src="data.js?v=20261103v"></script>
+<script src="exam-bank.js?v=20261103v"></script>
+<script>
+/* 月考測驗卷依目前版本、範圍組卷；切換版本或範圍時重新掛上 */
+function mountExam() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), window.KGVer ? KGVer.examBank(BOOK, EXAM_BANK) : EXAM_BANK); }
+</script>
+<script src="game.js?v=20261103v"></script>
 <script src="https://kuog88.github.io/kg-exam.js" defer></script>
 <script>
-window.addEventListener('load', function m() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), EXAM_BANK); else setTimeout(m, 200); });
+window.KGVer && KGVer.bar(document.getElementById('verBar'), BOOK, function () { window.G42_REDRAW && G42_REDRAW(); });
 </script>
-<script src="../assets/rwd.js"></script>
+<script>
+window.addEventListener('load', function m() { if (window.KGExam) mountExam(); else setTimeout(m, 200); });
+</script>
+<script src="../assets/rwd.js?v=20261103v"></script>
 <script src="https://kuog88.github.io/home-button.js" defer></script>
 <script src="https://kuog88.github.io/bgm.js" defer></script>
 </body>

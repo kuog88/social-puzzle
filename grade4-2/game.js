@@ -2,7 +2,18 @@
    關卡類型：sort（拖曳或點選分類）、order（依序點選排列）、quiz（選擇題，可附統計圖；boss 關計時） */
 (function () {
   "use strict";
-  var DATA = window.G42_DATA;
+  // 三版本：DATA＝目前版本的單元（BOOK），任務從 G42_DATA 依 id 找出來；星星仍記在任務 id 上
+  var BASE = window.G42_DATA, DATA = [], LV = {};
+  BASE.forEach(function (u) { u.levels.forEach(function (lv) { LV[lv.id] = { lv: lv, u: u }; }); });
+  function rebuild() {
+    var list = window.KGVer ? KGVer.units(BOOK) : BOOK.versions[BOOK.defaultVersion];
+    DATA = list.map(function (b) {
+      var p = LV[b.levels[0]].u, same = b.levels.every(function (id) { return LV[id].u === p; });
+      return { no: b.no, icon: p.icon, color: p.color, station: b.station || p.station, name: b.title,
+        desc: same ? p.desc : p.desc + "（這一站也收錄其他單元的相關任務）", levels: b.levels.map(function (id) { return LV[id].lv; }) };
+    });
+  }
+  rebuild();
   var KEY = "social-g4-2-stars";
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var KIND = { hand: "動手操作", idea: "觀念題", boss: "挑戰題" };
@@ -12,7 +23,7 @@
   try { stars = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { stars = {}; }
   function saveStars() { try { localStorage.setItem(KEY, JSON.stringify(stars)); } catch (e) {} }
   function getStar(id) { return stars[id] || 0; }
-  function totalStars() { var t = 0; for (var k in stars) t += stars[k]; return t; }
+  function totalStars() { var t = 0; DATA.forEach(function (u) { u.levels.forEach(function (lv) { t += getStar(lv.id); }); }); return t; }
   function maxStars() { var t = 0; DATA.forEach(function (u) { t += u.levels.length * 3; }); return t; }
   function starText(n) { return "⭐".repeat(n) + "☆".repeat(3 - n); }
 
@@ -112,7 +123,10 @@
   }
 
   function renderHome() {
+    rebuild();
     updateStarBar();
+    $("#verSub").textContent = (window.KGVer ? KGVer.PUB[KGVer.cur(BOOK).version] : "南一") + "版社會 4 下";
+    window.mountExam && mountExam();
     var box = $("#route"); box.innerHTML = "";
     DATA.forEach(function (u, i) {
       var got = 0; u.levels.forEach(function (lv) { got += getStar(lv.id); });
@@ -419,6 +433,7 @@
   $("#resetBtn").addEventListener("click", function () {
     if (confirm("確定要清除四年級下學期的全部星星嗎？")) { stars = {}; saveStars(); renderHome(); toast("已清除下學期進度"); }
   });
+  window.G42_REDRAW = function () { renderHome(); show("home"); };
   renderHome();
   show("home");
 })();
