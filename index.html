@@ -48,8 +48,6 @@ h1{margin:0;text-align:center;font-size:clamp(26px,6.5vw,46px);font-weight:900;c
 @media (prefers-reduced-motion:reduce){*{animation:none !important}}
 </style>
 
-
-
 <style id="rwd-style">
 /* 手機：年級卡片改成「左邊圖示、右邊文字」的橫條，一頁看得到更多年級 */
 @media (max-width:640px){
@@ -103,6 +101,16 @@ h1{margin:0;text-align:center;font-size:clamp(26px,6.5vw,46px);font-weight:900;c
 </head>
 <body>
   <h1>🗺️ 社會科探險島</h1>
+<!-- 設定精靈 -->
+<section style="margin:6px auto 26px;max-width:880px;padding:0 4px">
+  <p style="text-align:center;font-weight:700;color:#555;margin:0 0 10px">爸爸媽媽先設定一次：選年級、課本版本、學期、要準備的考試，就會帶孩子到對的關卡。</p>
+  <div id="kgv-root"></div>
+  <p style="text-align:center;color:#777;margin:18px 0 0">設定好以後，進到年級頁上方也能隨時換版本和考試範圍。下面也可以直接點年級進去。</p>
+</section>
+<script src="https://kuog88.github.io/kg-ver.js"></script>
+<script>KGVer.wizard(document.getElementById('kgv-root'), {"subject": "social", "name": "社會", "grades": [3, 4, 5, 6], "books": {"3上": "grade3.html", "3下": "grade3-2/", "4上": "grade4/", "4下": "grade4-2/", "5上": "grade5/", "5下": "grade5-2/", "6上": "grade6/", "6下": "grade6-2/"}});</script>
+<!-- /設定精靈 -->
+
   <p class="sub">你是幾年級的探險家？選一個年級出發吧！</p>
 <h2 class="sem up">📘 上學期</h2>
   <div class="grades">
@@ -199,11 +207,6 @@ h1{margin:0;text-align:center;font-size:clamp(26px,6.5vw,46px);font-weight:900;c
   </div>
 <!-- /下學期 -->
 
-
-
-
-
-  
 <script src="https://kuog88.github.io/home-button.js" defer></script>
 <script src="https://kuog88.github.io/bgm.js" defer></script>
 </body>
