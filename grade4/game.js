@@ -95,7 +95,7 @@ function starVerdict(stars, miss){
     : `答錯 ${miss} 次，這次還沒拿到星星。先看看下面的重點，再挑戰一次吧！💪`;
 }
 const starHTML = n => '<b>' + '★'.repeat(n) + '</b>' + '☆'.repeat(3 - n);
-const KIND = { hand: ['🖐️ 動手做', 'k-hand'], idea: ['💡 觀念題', 'k-idea'], boss: ['🔥 挑戰題', 'k-boss'], adv: ['🎯 進階挑戰', 'k-adv'] };
+const KIND = { hand: ['🖐️ 動手做', 'k-hand'], idea: ['💡 觀念題', 'k-idea'], boss: ['🔥 挑戰題', 'k-boss'], adv: ['🎯 進階挑戰', 'k-adv'], game: ['🎮 闖關任務', 'k-game'] };
 
 /* ---------- E. 彈窗 ---------- */
 function showModal({icon = '', title = '', html = '', center = false, buttons = [{label: '好！', value: true}]}){
@@ -426,7 +426,10 @@ const RENDER = {
       judge(ok, cell);
     });
     step();
-  }
+  },
+
+  /* 🎮 闖關任務「地圖王國：迷航救援隊」：內容與流程在 js/map-rescue.js */
+  rescue(lv){ window.MapRescue.run(lv); }
 };
 
 /* ---------- J. 啟動 ---------- */
