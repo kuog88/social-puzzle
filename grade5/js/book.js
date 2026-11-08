@@ -5,7 +5,7 @@ window.BOOK = (function () {
   var U1 = '第一單元 臺灣的位置與先民足跡', U2 = '第二單元 臺灣登上國際舞臺', U3 = '第三單元 成為清帝國的領土', U4 = '第四單元 土地的利用與變遷', U5 = '第五單元 製作小書看見臺灣',
     X1 = '臺灣島的形成與海岸', X2 = '原住民族與漢人的社會', X3 = '生活規範與法律', X4 = '臺灣的物產資源', X5 = '臺灣的氣候與生活';
   function all(u) { return [u + 'l1', u + 'l2', u + 'l3', u + 'l4']; }
-  return { subject: 'social', grade: 5, sem: '上', defaultVersion: 'han', versions: {
+  return { subject: 'social', grade: 5, sem: '上', defaultVersion: 'han', mid: 2, /* 第一次月考只考第 1、2 單元 */ versions: {
     nani: [
       { no: 1, title: '臺灣！我來了', icon: '🗺️', lessons: ['鳥瞰臺灣', '海中誕生的家園', '當人類來到臺灣'], levels: ['u1l1', 'u1l2'].concat(all('x1'), ['u1l3']), bankUnits: [U1, X1] },
       { no: 2, title: '島嶼上的生活樣貌', icon: '🏘️', lessons: ['島嶼上的子民', '島上居民的生活'], levels: all('x2').concat(all('x3')), bankUnits: [X2, X3] },
