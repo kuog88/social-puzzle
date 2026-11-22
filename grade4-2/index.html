@@ -76,14 +76,14 @@
 <div class="toast" id="toast" hidden></div>
 
 <script src="https://kuog88.github.io/kg-ver.js?v=20261103v"></script>
-<script src="js/book.js?v=20261103v"></script>
-<script src="data.js?v=20261103v"></script>
-<script src="exam-bank.js?v=20261122"></script>
+<script src="js/book.js?v=20261123"></script>
+<script src="data.js?v=20261123"></script>
+<script src="exam-bank.js?v=20261123"></script>
 <script>
 /* 月考測驗卷依目前版本、範圍組卷；切換版本或範圍時重新掛上 */
 function mountExam() { if (window.KGExam) KGExam.mount(document.getElementById('exam-box'), window.KGVer ? KGVer.examBank(BOOK, EXAM_BANK) : EXAM_BANK); }
 </script>
-<script src="game.js?v=20261103v"></script>
+<script src="game.js?v=20261123"></script>
 <script src="https://kuog88.github.io/kg-exam.js" defer></script>
 <script>
 window.KGVer && KGVer.bar(document.getElementById('verBar'), BOOK, function () { window.G42_REDRAW && G42_REDRAW(); });
@@ -91,7 +91,7 @@ window.KGVer && KGVer.bar(document.getElementById('verBar'), BOOK, function () {
 <script>
 window.addEventListener('load', function m() { if (window.KGExam) mountExam(); else setTimeout(m, 200); });
 </script>
-<script src="../assets/rwd.js?v=20261103v"></script>
+<script src="../assets/rwd.js?v=20261123"></script>
 <script src="https://kuog88.github.io/home-button.js" defer></script>
 <script src="https://kuog88.github.io/bgm.js" defer></script>
 </body>
